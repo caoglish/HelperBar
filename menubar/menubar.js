@@ -1,3 +1,23 @@
+/*
+**data strcture for the menu tree
+var menu_tree_1={
+	'root':{'id':'menu-function','title':'function','click':function(){}},
+	'list':[
+		{'id':'mi-gotop','title':'go top','click':go_top},
+		{'id':'mi-gobottom','title':'go bottom','click':go_bottom},
+		{'id':'mi-refresh','title':'page refresh','click':page_reload}
+	]
+}
+var menu_tree_list1=[menu_tree_1];
+
+** api: 
+*1. $.showMessage(msg);
+*2. $.tag(tag,options)
+*3.
+*/
+
+
+
 (function( $ ){ 
 	var STATUS_BAR='#status-bar';
 	var STATUS_MENU='#status-menu';
@@ -101,10 +121,6 @@
 		}
 		return tag_ul;
 	}
-	
-	$.showMessage=function(msg){
-		return $(STATUS_MESSAGE).append(msg);
-	}
 
 	$.constructOneMenuTree=function (menu_array)	{
 		var one_menu_tree=$.constructRootMenu(menu_array.root).append($.constructionMenu(menu_array.list));
@@ -117,27 +133,35 @@
 		return one_menu_tree;
 	}
 
-	 $.init_status_bar=function(){
-	 $.addMenuBarStylesheet();//create the style sheets
-	//generate status bar on document.
-	//set the status menu will show on mouse over the statusbar, hide on mouse out
-	$.statusBar().appendTo('body')
-			.hover(function(){
-					$(STATUS_MENU).show();
-				},function(){
-					$(STATUS_MENU).hide('slow');
-				});
-	for(menu_tree in menu_tree_list){
-		$.constructOneMenuTree(menu_tree_list[menu_tree]).appendTo(LIST_MENU);;
-	}
-	//initalize the default appearance of the status bar
-	$(STATUS_MENU).hide();
-	$.showMessage('Menu bar');
-	$(document).dblclick(function(){
-		$(STATUS_BAR).toggle();
-	});
+	 $.init_status_bar=function(menu_tree_list){
+		 $.addMenuBarStylesheet();//create the style sheets
+		//generate status bar on document.
+		//set the status menu will show on mouse over the statusbar, hide on mouse out
+		$.statusBar().appendTo('body')
+				.hover(function(){
+						$(STATUS_MENU).show();
+					},function(){
+						$(STATUS_MENU).hide('slow');
+					});
+		for(menu_tree in menu_tree_list){
+			$.constructOneMenuTree(menu_tree_list[menu_tree]).appendTo(LIST_MENU);;
+		}
+		//initalize the default appearance of the status bar
+		$(STATUS_MENU).hide();
+		$.showMessage('Menu bar');
+		$(document).dblclick(function(){
+			$(STATUS_BAR).toggle();
+		});
 	}
 	
+	$.menubar=function(menu_tree_list){
+		$.init_status_bar(menu_tree_list);
+	}
+	
+	$.showMessage=function(msg){
+		return $(STATUS_MESSAGE).append(msg);
+	}
+
 })( jQuery );
 
 
