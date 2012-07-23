@@ -148,7 +148,8 @@ var menu_tree_list1=[menu_tree_1];
 		}
 		//initalize the default appearance of the status bar
 		$(STATUS_MENU).hide();
-		$.showMessage('Menu bar');
+		var BarTitle=$.tag('div',{text:'Menu bar'});
+		$.showMessage(BarTitle);
 		$(document).dblclick(function(){
 			$(STATUS_BAR).toggle();
 		});
