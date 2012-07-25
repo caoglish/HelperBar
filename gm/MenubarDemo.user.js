@@ -1,20 +1,12 @@
-/*
-**data strcture for the menu tree
-var menu_tree_1={
-	'root':{'id':'menu-function','title':'function','click':function(){}},
-	'list':[
-		{'id':'mi-gotop','title':'go top','click':go_top},
-		{'id':'mi-gobottom','title':'go bottom','click':go_bottom},
-		{'id':'mi-refresh','title':'page refresh','click':page_reload}
-	]
-}
-var menu_tree_list1=[menu_tree_1];
+// ==UserScript==
+// @name        Menu Bar framework
+// @namespace   *
+// @description Greasemonkey plugin development framework, add a useful and functional menu bar in the page.
+// @include     *
+// @require     http://code.jquery.com/jquery.min.js
+// @version     0.1
+// ==/UserScript==
 
-** api: 
-*1. $.showMessage(msg);
-*2. $.tag(tag,options)
-*3.
-*/
 //--------------------------------------------------------------------------
 //-----------------------------------menubar plugin-------------------------
 (function( $ ){ 
@@ -191,4 +183,50 @@ var menu_tree_list1=[menu_tree_1];
 //-----------------------------------menubar plugin-------------------------
 //--------------------------------------------------------------------------
 
+
+//Menu bar setup
+var menu_tree_1={
+	'root':{'id':'menu-function','title':'function','click':function(){}},
+	'list':[
+		{'id':'mi-gotop','title':'go top','click':go_top},
+		{'id':'mi-gobottom','title':'go bottom','click':go_bottom},
+		{'id':'mi-refresh','title':'page refresh','click':page_reload}
+	]
+}
+
+var menu_tree_2={
+	'root':{'id':'menu-demo','title':'demo','click':function(){}},
+	'list':[
+		{'id':'mi-show-message-on-bar','title':'Show Message','click':show_msg_demo},
+		{'id':'mi-alert-demo','title':'alert demo','click':alert_demo}
+	]
+}
+
+var menu_tree_list=[menu_tree_1,menu_tree_2];
+
+$(document).ready(run);
+function run(){
+	$.menubar(menu_tree_list);
+}
+
+function go_top(){
+		$('html, body').animate({ scrollTop: 0 }, 'slow');
+	};
+function go_bottom(){
+		
+		$('html, body').animate({ scrollTop: $(document).height() }, 'slow');
+	};
+function page_reload(){
+	location.reload();
+};
+
+//demo
+function show_msg_demo(){
+	var text=$.tag('div',{style:'color:red',text:'hello,world'});
+	$.showMessage(text);
+}
+
+function alert_demo(){
+	alert('Menu Bar Demo');
+}
 
