@@ -1,3 +1,8 @@
+/*
+development framework, add a useful and functional menu bar in the page.
+@version     0.2
+*/
+
 //$.fn.menubar jquery plugin, create a menubar 
 (function( $ ){
 	//core of menubar
@@ -17,7 +22,7 @@
 								menubar_style:{
 									background_color:'black',
 									opacity:'0.8',
-									font_color:'red',
+									font_color:'white',
 								},
 								menubar_items_style:{
 									background_color:'#111111' ,
@@ -93,7 +98,8 @@
 				'border-radius':'8px',
 				'padding-left':'2px',
 				'margin-left':'1px',
-				'width':'100%'
+				'width':'100%',
+				'text-align':'left'
 				});//create status bar
 
 		var div_status_message=$.tag('div',{id:STATUS_MESSAGE.strip()}); //create status message area

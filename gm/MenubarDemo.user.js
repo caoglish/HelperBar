@@ -4,32 +4,70 @@
 // @description Greasemonkey plugin development framework, add a useful and functional menu bar in the page.
 // @include     *
 // @require     http://code.jquery.com/jquery.min.js
-// @version     0.1
+// @version     0.2
 // ==/UserScript==
 
 //--------------------------------------------------------------------------
 //-----------------------------------menubar plugin-------------------------
-(function( $ ){ 
-	//configuration of plugin
-	var config={
-		bar_title:'Menu Bar',
-		menubar_style:{
-			background_color:'black',
-			opacity:'0.8',
-			font_color:'red',
-		},
-		menubar_items_style:{
-			background_color:'#333333' ,
-			hover_background_color:'#111111',
-			font_color:'#EAFFED',
-		}
-	};
-	
+//$.fn.menubar jquery plugin, create a menubar 
+(function( $ ){
 	//core of menubar
 	var STATUS_BAR='#status-bar';
 	var STATUS_MENU='#status-menu';
 	var LIST_MENU="#list-menu";
 	var STATUS_MESSAGE='#status-message';
+	
+	//(start)Jquery plugin development framework.
+	var settings;
+	var tag_a_css;
+	var methods = {
+		init : function( menu_tree_list ,options ) {
+		
+			 settings= $.extend( true,{
+								bar_title:'Menu Bar',
+								menubar_style:{
+									background_color:'black',
+									opacity:'0.8',
+									font_color:'white',
+								},
+								menubar_items_style:{
+									background_color:'#111111' ,
+									hover_background_color:'#333333',
+									font_color:'#EAFFED',
+							}}, options);//options 
+							
+			tag_a_css={display: 'block',
+					padding: '5px 12px',
+					'text-decoration': 'none',
+					width: '70px',
+					color: settings.menubar_items_style.font_color,
+					'white-space': 'nowrap'};	//tag a style sheet.
+
+			return this.each(function(){
+					jqob_clean.call($(this));//clean this jquery object content and texts
+					convert_status_bar.call($(this));
+					init_status_bar.apply($(this),menu_tree_list);
+			});
+		},
+		msg:function(msg){
+			return this.each(function(){
+					$(this).find(STATUS_MESSAGE).append(msg);
+			});
+		}
+	};
+	
+	$.fn.menubar = function( method ) {
+		 // Method calling logic
+		if ( methods[method] ) {
+		  return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+		} else if ( typeof method === 'object' || ! method ) {
+		  return methods.init.apply( this, arguments );
+		} else {
+		  $.error( 'Method ' +  method + ' does not exist on jQuery.menubar' );
+		}    
+	};
+	//(end)Jquery plugin development framework.
+	//----------------
 	
 	//string methods 
 	String.prototype.strip= function(){
@@ -37,109 +75,120 @@
 		return this.replace(patt,'');
 	};
 	
+	//jquery tag maker
 	$.tag=function(tag,opts){
 		return  $('<'+tag+'/>',opts);
 	};
 	
-	$.addStyle=function(style){
-		var style_area=$('style','head');
-		if(style_area.size()>0){
-			
-			style_area.last().append(style);
-		
-		}else{
-			style_area=$.tag('style',{type:"text/css"}).appendTo('head');
-			style_area.last().append(style);
-		}
-	};
-
-	$.addMenuBarStylesheet=function (){
-		$.addStyle('#status-menu ul{margin: 0;	padding: 0}');
-		$.addStyle('#status-menu ul li{float: left;list-style: none;font: 12px Tahoma, Arial;z-index:9;}');
-		$.addStyle('#status-menu ul li a{display: block;background:'
-					+config.menubar_items_style.background_color
-					+';padding: 5px 12px;text-decoration: none;	;width: 70px;color: '
-					+config.menubar_items_style.font_color
-					+';white-space: nowrap}');
-		$.addStyle('#status-menu ul li > a:hover{	background: '
-					+config.menubar_items_style.hover_background_color
-					+';}');
-		$.addStyle('#status-menu ul li ul{margin: 0;padding: 0;position: absolute;bottom:23px;display:none;;z-index:8;}');
-		$.addStyle('#status-menu ul li ul li{float: none;display: inline;margin:0px;}');
-		$.addStyle('#status-menu ul li ul li a{width: auto;background:'
-					+config.menubar_items_style.background_color
-					+';width: 70px;border-bottom: 1px solid white;}');
-		$.addStyle('#status-menu ul li ul li a:hover{background: '
-					+config.menubar_items_style.hover_background_color
-					+'}');
-	};
+	//Menubar ui Maker
+	function jqob_clean()
+	{
+		jqob = this;
+		jqob.html('')
+			.text('')
+			.attr('id','')
+			.attr('class','')
+			.attr('style','');
+	}
 	
-	$.createRootMenuItem=function(id,title,callback){
-		var tag_a=$.tag('a',{id:id,href:'#',text:title}).click(function(event){
-			event.preventDefault();
-			if(callback) callback.apply();
-		});
-
-		var root_menu_item=$.tag('li').append(tag_a);
-		return root_menu_item;
-	};
-
-	$.createMenuItem=function(id,title,callback){
-		var menu_item=$.tag('li');
-		var tag_a=$.tag('a',{id:id,href:'#',text:title}).click(function(event){
-			event.preventDefault();
-			if(callback) callback.apply();
-		});
-		menu_item.append(tag_a);
-		return menu_item;
-	};
-
-	//status bar
-	$.statusBar = function () {
-		var div_status_bar=$.tag('div',{id:STATUS_BAR.strip()}).css({
+	function convert_status_bar()
+	{	
+		this.attr('id',STATUS_BAR.strip())
+			.css({
 				'position':'fixed',
-				'background-color':config.menubar_style.background_color,
-				'color':config.menubar_style.font_color,
+				'background-color':settings.menubar_style.background_color,
+				'color':settings.menubar_style.font_color,
 				'bottom':'0',
 				'right':'0',
-				'opacity':config.menubar_style.opacity,
+				'opacity':settings.menubar_style.opacity,
 				'border-radius':'8px',
 				'padding-left':'2px',
 				'margin-left':'1px',
-				'width':'100%'
+				'width':'100%',
+				'text-align':'left'
 				});//create status bar
 
 		var div_status_message=$.tag('div',{id:STATUS_MESSAGE.strip()}); //create status message area
-		div_status_bar.append(div_status_message).append($.statusMenu());//construct status bar
-		return div_status_bar;
-	};
-
+		this.append(div_status_message)
+			.append(create_status_menu());
+	}
+	
 	//status menu
-	$.statusMenu = function () {
+	function create_status_menu(){
 		var div_status_menu=$.tag('div',{id:STATUS_MENU.strip()});//create status menu
 		var ul_list_menu=$.tag('ul',{id:LIST_MENU.strip()});//create menu list
+		ul_list_menu.css({	margin: 0,
+							padding: 0});//style sheet;
 		div_status_menu.append(ul_list_menu);//construct status bar
 		return div_status_menu;
-	};
+	}
+	
+	function create_root_menu_item(id,title,callback){
+		var tag_a=$.tag('a',{id:id,href:'#',text:title}).click(function(event){
+			event.preventDefault();
+			if(callback) callback.apply();
+		});
+		
+		tag_a	.css(tag_a_css)
+				.css({background:settings.menubar_items_style.background_color})
+				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
+					function(){$(this).css({background:settings.menubar_items_style.background_color})});//style sheet;
+		
+		
+		
 
-	$.constructRootMenu = function (root_menu){
-		return $.createRootMenuItem(root_menu.id,root_menu.title,root_menu.click);
+		var root_menu_item=$.tag('li')
+							.css({float: 'left',
+									'list-style': 'none',
+									font: '12px Tahoma, Arial',
+									'z-index':'9'})//style sheet
+							.append(tag_a);
+		return root_menu_item;
 	};
+	
+	function create_menu_item(id,title,callback){
+		var menu_item=$.tag('li');
+		 menu_item.css({float: 'none',display: 'inline',margin:'0px'});//css
+		var tag_a=$.tag('a',{id:id,href:'#',text:title}).click(function(event){
+			event.preventDefault();
+			if(callback) callback.apply();
+		});
+		tag_a.css(tag_a_css)
+				.css({background:settings.menubar_items_style.background_color})
+				.css({width: '70px',
+						'border-bottom': '1px solid white'})
+				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
+					function(){$(this).css({background:settings.menubar_items_style.background_color})});//style sheet;
+			;//css
+		menu_item.append(tag_a);
+		return menu_item;
+	};
+	
+	//root_menu must have attribute of id,title,click[function]
+	function construct_root_menu(root_menu){
+		return create_root_menu_item(root_menu.id,root_menu.title,root_menu.click);
+	}
 
-	$.constructionMenu= function(menu_list)
+	function construction_menu(menu_list)
 	{
 		var tag_ul=$.tag('ul');
+		tag_ul.hide().css({margin: '0',
+					padding: '0',
+					position: 'absolute',
+					bottom:'23px',
+					'z-index':'100'});
 		for(menu in menu_list)		{
 			var id=menu_list[menu].id;
 			var title=menu_list[menu].title;
 			var click=menu_list[menu].click;
-			tag_ul.append($.createMenuItem(id,title,click));
+			tag_ul.append(create_menu_item(id,title,click));
 		}
+		console.log(tag_ul);
 		return tag_ul;
 	};
-
-	$.constructOneMenuTree=function (menu_array)	{
-		var one_menu_tree=$.constructRootMenu(menu_array.root).append($.constructionMenu(menu_array.list));
+	
+	function construct_one_menu_tree (menu_array)	{
+		var one_menu_tree=construct_root_menu(menu_array.root).append(construction_menu(menu_array.list));
 		//hover to show and hide the menu items.
 		one_menu_tree.hover(function(){
 					$(this).find('ul').slideDown();
@@ -149,40 +198,46 @@
 		return one_menu_tree;
 	};
 
-	 $.init_status_bar = function(menu_tree_list){
-		 $.addMenuBarStylesheet();//create the style sheets
-		//generate status bar on document.
+	//have a parameter menu_tree_list
+	function init_status_bar (){
+		menu_tree_list=arguments;//get parameter
+		jqob_menubar=this;
 		//set the status menu will show on mouse over the statusbar, hide on mouse out
-		$.statusBar().appendTo('body')
-				.hover(function(){
-						$(STATUS_MENU).show();
-					},function(){
-						$(STATUS_MENU).hide('slow');
-					});
+		jqob_status_menu=jqob_menubar.find(STATUS_MENU);
+		jqob_menubar.hover(function(){
+				jqob_status_menu.show();
+			},function(){
+				jqob_status_menu.hide('slow');
+			});
 		for(menu_tree in menu_tree_list){
-			$.constructOneMenuTree(menu_tree_list[menu_tree]).appendTo(LIST_MENU);
+			construct_one_menu_tree(menu_tree_list[menu_tree]).appendTo(this.find(LIST_MENU));
 		}
 		//initalize the default appearance of the status bar
-		$(STATUS_MENU).hide();
-		var BarTitle=$.tag('div',{text:config.bar_title});
-		$.showMessage(BarTitle);
+		jqob_status_menu.hide();
+		var BarTitle=$.tag('div',{text:settings.bar_title});
+		jqob_menubar.menubar('msg',BarTitle);
 		$(document).dblclick(function(){
-			$(STATUS_BAR).toggle();
+			jqob_menubar.toggle();
 		});
 	};
-	
-	$.menubar=function(menu_tree_list){
-		$.init_status_bar(menu_tree_list);
-	};
-	
-	$.showMessage=function(msg){
-		return $(STATUS_MESSAGE).append(msg);
-	};
+})( jQuery );
 
+//create menubar as Class for the page
+//provide API of Menubar
+(function($){
+	//menubar
+	function menubar(menu_tree_list,options){
+		this._menubar=$.tag('div').appendTo('body').menubar(menu_tree_list,options);
+	};
+		
+	menubar.prototype.msg=function(msg){
+		this._menubar.menubar('msg',msg);
+	}
+	
+	window.menubar =menubar;
 })( jQuery );
 //-----------------------------------menubar plugin-------------------------
 //--------------------------------------------------------------------------
-
 
 //Menu bar setup
 var menu_tree_1={
@@ -205,8 +260,27 @@ var menu_tree_2={
 var menu_tree_list=[menu_tree_1,menu_tree_2];
 
 $(document).ready(run);
+
+
+opts={
+		bar_title:'Menu Bar',
+	menubar_style:{
+		background_color:'blue',
+		opacity:'0.5',
+		font_color:'orange',
+	},
+	menubar_items_style:{
+		background_color:'skyblue' ,
+		hover_background_color:'olive',
+		font_color:'black',
+}};  
+//opts={};							
+							
 function run(){
-	$.menubar(menu_tree_list);
+
+	mb = new menubar(menu_tree_list,opts);
+	
+
 }
 
 function go_top(){
@@ -218,15 +292,18 @@ function go_bottom(){
 	};
 function page_reload(){
 	location.reload();
+	
 };
 
 //demo
 function show_msg_demo(){
 	var text=$.tag('div',{style:'color:red',text:'hello,world'});
-	$.showMessage(text);
+	mb.msg(text);
 }
 
 function alert_demo(){
 	alert('Menu Bar Demo');
 }
+
+
 
