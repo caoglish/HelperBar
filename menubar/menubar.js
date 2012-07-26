@@ -143,9 +143,8 @@
 		});
 		tag_a.css(tag_a_css)
 				.css({background:settings.menubar_items_style.background_color})
-				.css({width: 'auto',
-								  width: '70px',
-									'border-bottom': '1px solid white'})
+				.css({width: '70px',
+						'border-bottom': '1px solid white'})
 				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
 					function(){$(this).css({background:settings.menubar_items_style.background_color})});//style sheet;
 			;//css
