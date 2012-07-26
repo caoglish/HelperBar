@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2
+@version     0.2.1
 */
 
 //$.fn.menubar jquery plugin, create a menubar 
@@ -33,7 +33,7 @@ development framework, add a useful and functional menu bar in the page.
 			tag_a_css={display: 'block',
 					padding: '5px 12px',
 					'text-decoration': 'none',
-					width: '70px',
+					width: '80px',
 					color: settings.menubar_items_style.font_color,
 					'white-space': 'nowrap'};	//tag a style sheet.
 
@@ -46,6 +46,12 @@ development framework, add a useful and functional menu bar in the page.
 		msg:function(msg){
 			return this.each(function(){
 					$(this).find(STATUS_MESSAGE).append(msg);
+			});
+		},
+		
+		clsMsg:function(){
+			return this.each(function(){
+					$(this).find(STATUS_MESSAGE).text(settings.bar_title);
 			});
 		}
 	};
@@ -127,9 +133,6 @@ development framework, add a useful and functional menu bar in the page.
 				.css({background:settings.menubar_items_style.background_color})
 				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
 					function(){$(this).css({background:settings.menubar_items_style.background_color})});//style sheet;
-		
-		
-		
 
 		var root_menu_item=$.tag('li')
 							.css({float: 'left',
@@ -149,7 +152,7 @@ development framework, add a useful and functional menu bar in the page.
 		});
 		tag_a.css(tag_a_css)
 				.css({background:settings.menubar_items_style.background_color})
-				.css({width: '70px',
+				.css({width: '80px',
 						'border-bottom': '1px solid white'})
 				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
 					function(){$(this).css({background:settings.menubar_items_style.background_color})});//style sheet;
@@ -226,6 +229,10 @@ development framework, add a useful and functional menu bar in the page.
 		
 	menubar.prototype.msg=function(msg){
 		this._menubar.menubar('msg',msg);
+	}
+	
+	menubar.prototype.clsMsg=function(){
+		this._menubar.menubar('clsMsg');
 	}
 	
 	window.menubar =menubar;
