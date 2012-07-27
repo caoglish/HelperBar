@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.1
+@version     0.2.2
 */
 
 //$.fn.menubar jquery plugin, create a menubar 
@@ -19,6 +19,7 @@ development framework, add a useful and functional menu bar in the page.
 		
 			 settings= $.extend( true,{
 								bar_title:'Menu Bar',
+								menu_width:'100px',
 								menubar_style:{
 									background_color:'black',
 									opacity:'0.8',
@@ -33,7 +34,7 @@ development framework, add a useful and functional menu bar in the page.
 			tag_a_css={display: 'block',
 					padding: '5px 12px',
 					'text-decoration': 'none',
-					width: '80px',
+					width: settings.menu_width,
 					color: settings.menubar_items_style.font_color,
 					'white-space': 'nowrap'};	//tag a style sheet.
 
@@ -106,7 +107,7 @@ development framework, add a useful and functional menu bar in the page.
 				'margin-left':'1px',
 				'width':'100%',
 				'text-align':'left'
-				});//create status bar
+				});//create status bar//css: #status-bar
 
 		var div_status_message=$.tag('div',{id:STATUS_MESSAGE.strip()}); //create status message area
 		this.append(div_status_message)
@@ -118,7 +119,7 @@ development framework, add a useful and functional menu bar in the page.
 		var div_status_menu=$.tag('div',{id:STATUS_MENU.strip()});//create status menu
 		var ul_list_menu=$.tag('ul',{id:LIST_MENU.strip()});//create menu list
 		ul_list_menu.css({	margin: 0,
-							padding: 0});//style sheet;
+							padding: 0});//css: #status-menu ul
 		div_status_menu.append(ul_list_menu);//construct status bar
 		return div_status_menu;
 	}
@@ -132,30 +133,29 @@ development framework, add a useful and functional menu bar in the page.
 		tag_a	.css(tag_a_css)
 				.css({background:settings.menubar_items_style.background_color})
 				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
-					function(){$(this).css({background:settings.menubar_items_style.background_color})});//style sheet;
+					function(){$(this).css({background:settings.menubar_items_style.background_color})});//css:#status-menu ul li a
 
 		var root_menu_item=$.tag('li')
 							.css({float: 'left',
 									'list-style': 'none',
 									font: '12px Tahoma, Arial',
-									'z-index':'9'})//style sheet
+									'z-index':'100'})//css:#status-menu ul li
 							.append(tag_a);
 		return root_menu_item;
 	};
 	
 	function create_menu_item(id,title,callback){
 		var menu_item=$.tag('li');
-		 menu_item.css({float: 'none',display: 'inline',margin:'0px'});//css
+		 menu_item.css({float: 'none',display: 'inline',margin:'0px'});//css:#status-menu ul li ul li
 		var tag_a=$.tag('a',{id:id,href:'#',text:title}).click(function(event){
 			event.preventDefault();
 			if(callback) callback.apply();
 		});
 		tag_a.css(tag_a_css)
 				.css({background:settings.menubar_items_style.background_color})
-				.css({width: '80px',
-						'border-bottom': '1px solid white'})
+				.css({'border-bottom': '1px solid white'})
 				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
-					function(){$(this).css({background:settings.menubar_items_style.background_color})});//style sheet;
+					function(){$(this).css({background:settings.menubar_items_style.background_color})});//css:#status-menu ul li ul li a
 			;//css
 		menu_item.append(tag_a);
 		return menu_item;
@@ -173,7 +173,7 @@ development framework, add a useful and functional menu bar in the page.
 					padding: '0',
 					position: 'absolute',
 					bottom:'23px',
-					'z-index':'100'});
+					'z-index':'100'});//css:#status-menu ul li ul
 		for(menu in menu_list)		{
 			var id=menu_list[menu].id;
 			var title=menu_list[menu].title;
@@ -219,21 +219,26 @@ development framework, add a useful and functional menu bar in the page.
 	};
 })( jQuery );
 
-//create menubar as Class for the page
-//provide API of Menubar
+//create Helper Bar as Class for the page
+//provide API of Helper Bar
 (function($){
 	//menubar
-	function menubar(menu_tree_list,options){
+	function HelperBar(menu_tree_list,options){
 		this._menubar=$.tag('div').appendTo('body').menubar(menu_tree_list,options);
 	};
 		
-	menubar.prototype.msg=function(msg){
+	HelperBar.prototype.msg=function(msg){
+		this.cls();
 		this._menubar.menubar('msg',msg);
 	}
 	
-	menubar.prototype.clsMsg=function(){
+	HelperBar.prototype.cls=function(){
 		this._menubar.menubar('clsMsg');
 	}
 	
-	window.menubar =menubar;
+	HelperBar.prototype.addmsg=function(msg){
+		this._menubar.menubar('msg',msg);
+	}
+	
+	window.HelperBar =HelperBar;
 })( jQuery );
