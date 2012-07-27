@@ -12,13 +12,13 @@ var menu_tree_2={
 	'root':{'id':'menu-demo','title':'demo','click':function(){}},
 	'list':[
 		{'id':'mi-show-message-on-bar','title':'Show Message','click':show_msg_demo},
-		{'id':'mi-warning','title':'warning','click':warning_demo},
-		{'id':'mi-log','title':'log','click':log_demo},
 		{'id':'mi-show-color-message-on-bar','title':'Show Color Message','click':show_color_msg_demo},
 		{'id':'mi-show-style-message-on-bar','title':'Show Style Message','click':show_style_msg_demo},
-		{'id':'mi-alert-demo','title':'alert demo','click':alert_demo},
-		{'id':'mi-cls-message','title':'clear msg demo','click':cls_msg_demo},
-		{'id':'mi-add-message','title':'add msg demo','click':add_msg_demo}
+		{'id':'mi-warning','title':'warning','click':warning_demo},
+		{'id':'mi-log','title':'log','click':log_demo},
+		{'id':'mi-alert-demo','title':'get current msg on the bar','click':alert_demo},
+		{'id':'mi-add-message','title':'add msg demo','click':add_msg_demo},
+		{'id':'mi-cls-message','title':'clear msg','click':cls_msg_demo},
 	]
 }
 var menu_tree_3={
@@ -28,19 +28,21 @@ var menu_tree_3={
 var menu_tree_list=[menu_tree_1,menu_tree_2,menu_tree_3];
 
 opts={
-		bar_title:'Menu Bar',
-		menu_width:'86px',
+		bar_title:'Helper Bar Demo',
+		menu_width:'140px',
+		warning_size:'50px',
+		warning_color:'red',
 		menubar_style:{
 			background_color:'black',
 			opacity:'0.8',
-			font_color:'red',
+			font_color:'white',
 		},
 		menubar_items_style:{
 			background_color:'#111111' ,
 			hover_background_color:'#333333',
 			font_color:'#EAFFED',
 	}};
-opts={bar_title:'Helper Bar Demo',}
+
 
 var bar;
 $(run);
@@ -77,7 +79,7 @@ function log_demo(){
 }
 
 function alert_demo(){
-	alert('menubar demo - message on Bar: ' + bar.msg());
+	alert('get message on Bar: ' + bar.msg());
 }
 
 function cls_msg_demo(){

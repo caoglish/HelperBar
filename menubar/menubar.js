@@ -53,23 +53,24 @@ development framework, add a useful and functional menu bar in the page.
 					$(this).find(STATUS_TITLE).append(title);
 			});
 		},
-		msg:function(msg){
-			return this.each(function(){
-					$(this).find(STATUS_MESSAGE).append(msg);
-			});
-		},
-		getSettings:function(msg){
-			return settings;
-		},
-		getMsg:function(){
-			return this.find(STATUS_MESSAGE).html();
-			
+		
+		html:function(html){
+			if( arguments.length == 0){
+				return this.find(STATUS_MESSAGE).html();
+			}else{
+				return this.each(function(){
+							$(this).find(STATUS_MESSAGE).html(html);
+					});
+			}
 		},
 		
-		clsMsg:function(){
+		append:function(text){
 			return this.each(function(){
-					$(this).find(STATUS_MESSAGE).text('').html('');
+					$(this).find(STATUS_MESSAGE).append(text);
 			});
+		},
+		getSettings:function(){
+			return settings;
 		}
 	};
 	
@@ -245,13 +246,25 @@ development framework, add a useful and functional menu bar in the page.
 		this._settings=this._menubar.menubar('getSettings');
 	};
 	
+	HelperBar.prototype.append = function(text){
+		this._menubar.menubar('append',text);
+	}
+	
+	HelperBar.prototype.html =function(html){
+	    if(arguments.length != 0){
+			this._menubar.menubar('html',html);
+		}else{
+			return this._menubar.menubar('html');
+		}
+	}
+	
 	HelperBar.prototype.addmsg=function(msg,style){
 		if(typeof style === 'string'){
 			msg=$.tag('span',{style:'color:'+style}).html(msg);
 		}else if(typeof style === 'object'){
 			msg=$.tag('span').css(style).html(msg);
 		}
-			this._menubar.menubar('msg',msg);
+			this.append(msg);
 	}
 	
 		
@@ -261,7 +274,7 @@ development framework, add a useful and functional menu bar in the page.
 			this.cls();
 			this.addmsg(msg,style);
 		}else{
-			return this._menubar.menubar('getMsg');
+			return $(this._menubar.menubar('html')).text();
 		}
 	}
 	
@@ -276,12 +289,11 @@ development framework, add a useful and functional menu bar in the page.
 	}
 	
 	HelperBar.prototype.cls=function(){
-		this._menubar.menubar('clsMsg');
+		this.html('');
 	}
 		
 	HelperBar.prototype.title=function(msg){
 		this._menubar.menubar('title',msg);
 	}
-	
 	window.HelperBar =HelperBar;
 })( jQuery );
