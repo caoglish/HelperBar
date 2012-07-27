@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.2
+@version     0.2.3
 */
 
 //$.fn.menubar jquery plugin, create a menubar 
@@ -10,6 +10,7 @@ development framework, add a useful and functional menu bar in the page.
 	var STATUS_MENU='#status-menu';
 	var LIST_MENU="#list-menu";
 	var STATUS_MESSAGE='#status-message';
+	var STATUS_TITLE='#status-title';
 	
 	//(start)Jquery plugin development framework.
 	var settings;
@@ -20,6 +21,8 @@ development framework, add a useful and functional menu bar in the page.
 			 settings= $.extend( true,{
 								bar_title:'Menu Bar',
 								menu_width:'100px',
+								warning_size:'50px',
+								warning_color:'red',
 								menubar_style:{
 									background_color:'black',
 									opacity:'0.8',
@@ -44,15 +47,28 @@ development framework, add a useful and functional menu bar in the page.
 					init_status_bar.apply($(this),menu_tree_list);
 			});
 		},
+		
+		title:function(title){
+			return this.each(function(){
+					$(this).find(STATUS_TITLE).append(title);
+			});
+		},
 		msg:function(msg){
 			return this.each(function(){
 					$(this).find(STATUS_MESSAGE).append(msg);
 			});
 		},
+		getSettings:function(msg){
+			return settings;
+		},
+		getMsg:function(){
+			return this.find(STATUS_MESSAGE).html();
+			
+		},
 		
 		clsMsg:function(){
 			return this.each(function(){
-					$(this).find(STATUS_MESSAGE).text(settings.bar_title);
+					$(this).find(STATUS_MESSAGE).text('').html('');
 			});
 		}
 	};
@@ -109,8 +125,11 @@ development framework, add a useful and functional menu bar in the page.
 				'text-align':'left'
 				});//create status bar//css: #status-bar
 
+		var div_status_title=$.tag('div',{id:STATUS_TITLE.strip()}); //create status title area
 		var div_status_message=$.tag('div',{id:STATUS_MESSAGE.strip()}); //create status message area
-		this.append(div_status_message)
+		
+		this.append(div_status_title)
+			.append(div_status_message)
 			.append(create_status_menu());
 	}
 	
@@ -180,7 +199,6 @@ development framework, add a useful and functional menu bar in the page.
 			var click=menu_list[menu].click;
 			tag_ul.append(create_menu_item(id,title,click));
 		}
-		console.log(tag_ul);
 		return tag_ul;
 	};
 	
@@ -211,8 +229,7 @@ development framework, add a useful and functional menu bar in the page.
 		}
 		//initalize the default appearance of the status bar
 		jqob_status_menu.hide();
-		var BarTitle=$.tag('div',{text:settings.bar_title});
-		jqob_menubar.menubar('msg',BarTitle);
+		jqob_menubar.menubar('title',settings.bar_title);
 		$(document).dblclick(function(){
 			jqob_menubar.toggle();
 		});
@@ -225,19 +242,45 @@ development framework, add a useful and functional menu bar in the page.
 	//menubar
 	function HelperBar(menu_tree_list,options){
 		this._menubar=$.tag('div').appendTo('body').menubar(menu_tree_list,options);
+		this._settings=this._menubar.menubar('getSettings');
 	};
+	
+	HelperBar.prototype.addmsg=function(msg,style){
+		if(typeof style === 'string'){
+			msg=$.tag('span',{style:'color:'+style}).html(msg);
+		}else if(typeof style === 'object'){
+			msg=$.tag('span').css(style).html(msg);
+		}
+			this._menubar.menubar('msg',msg);
+	}
+	
 		
-	HelperBar.prototype.msg=function(msg){
-		this.cls();
-		this._menubar.menubar('msg',msg);
+	HelperBar.prototype.msg=function(msg,style){
+		if(arguments.length != 0)
+		{
+			this.cls();
+			this.addmsg(msg,style);
+		}else{
+			return this._menubar.menubar('getMsg');
+		}
+	}
+	
+	HelperBar.prototype.log=function(msg){
+		msg=$.tag('div').html(msg);;
+		this.addmsg(msg);
+	}
+	
+	HelperBar.prototype.warn=function(msg){
+		var style={color:this._settings.warning_color,'font-size':this._settings.warning_size};
+		this.addmsg(msg,style);
 	}
 	
 	HelperBar.prototype.cls=function(){
 		this._menubar.menubar('clsMsg');
 	}
-	
-	HelperBar.prototype.addmsg=function(msg){
-		this._menubar.menubar('msg',msg);
+		
+	HelperBar.prototype.title=function(msg){
+		this._menubar.menubar('title',msg);
 	}
 	
 	window.HelperBar =HelperBar;
