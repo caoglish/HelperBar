@@ -79,7 +79,7 @@ function log_demo(){
 }
 
 function alert_demo(){
-	alert('get message on Bar: ' + bar.msg());
+	alert('get message on Bar: ' + bar.html());
 }
 
 function cls_msg_demo(){
