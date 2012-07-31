@@ -1,4 +1,4 @@
-var TXT_ABOUT_INFO='<strong>Helper Bar Framework.<br/> Version:'+HelperBar.prototype.version()+'<br/>Designer: Caoglish</strong>';
+var TXT_ABOUT_INFO='<strong>Helper Bar Framework.<br/> Version:'+HelperBar.version()+'<br/>Designer: Caoglish</strong>';
 //Menu bar setup
 var menu_tree_1={
 	'root':{'id':'menu-function','title':'function','click':function(){}},
@@ -47,7 +47,7 @@ opts={
 var bar;
 $(run);
 function run(){
-	bar = new HelperBar(menu_tree_list,opts);
+	bar = HelperBar.getbar(menu_tree_list,opts)//new HelperBar(menu_tree_list,opts);
 }
 
 function go_top(){
@@ -97,7 +97,7 @@ function about(){
 	var text=$.tag('div',{style:'color:white'}).html(TXT_ABOUT_INFO);
 	bar.msg(text);
 	opts={bar_title:'Helper Bar Recreating'};
-	bar =new HelperBar(menu_tree_list,opts);
+	bar = HelperBar.getbar(menu_tree_list,opts);
 	
 }
 

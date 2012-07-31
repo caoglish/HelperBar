@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.3
+@version     0.2.4
 */
 
 //$.fn.menubar jquery plugin, create a menubar 
@@ -297,8 +297,28 @@ development framework, add a useful and functional menu bar in the page.
 	}
 	
 	HelperBar.prototype.version = function(){
-		return '0.2.3';
+		return '0.2.4';
 	}
 	
-	window.HelperBar =HelperBar;
+	window.HelperBar =(function(){
+			var instantiated;
+			function init(menu_tree_list,options){
+				return new HelperBar(menu_tree_list,options);
+			}
+			
+			return {
+					getbar:function(menu_tree_list,options){
+							if (!instantiated){
+								instantiated = init(menu_tree_list,options);
+							}
+							return instantiated; 
+						
+						},
+					version:function(){
+						return HelperBar.prototype.version();
+					
+					}
+					
+			}
+	})();;
 })( jQuery );
