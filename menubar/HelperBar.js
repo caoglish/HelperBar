@@ -274,7 +274,7 @@ development framework, add a useful and functional menu bar in the page.
 			this.cls();
 			this.addmsg(msg,style);
 		}else{
-			return $(this._menubar.menubar('html')).text();
+			return $(this.html()).text();
 		}
 	}
 	
@@ -295,5 +295,10 @@ development framework, add a useful and functional menu bar in the page.
 	HelperBar.prototype.title=function(msg){
 		this._menubar.menubar('title',msg);
 	}
+	
+	HelperBar.prototype.version = function(){
+		return '0.2.3';
+	}
+	
 	window.HelperBar =HelperBar;
 })( jQuery );
