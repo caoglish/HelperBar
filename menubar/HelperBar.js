@@ -266,7 +266,6 @@ development framework, add a useful and functional menu bar in the page.
 		}
 			this.append(msg);
 	}
-	
 		
 	HelperBar.prototype.msg=function(msg,style){
 		if(arguments.length != 0)
@@ -312,13 +311,10 @@ development framework, add a useful and functional menu bar in the page.
 								instantiated = init(menu_tree_list,options);
 							}
 							return instantiated; 
-						
 						},
 					version:function(){
 						return HelperBar.prototype.version();
-					
 					}
-					
 			}
 	})();;
 })( jQuery );
