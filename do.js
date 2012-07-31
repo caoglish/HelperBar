@@ -9,14 +9,15 @@ var menu_tree_1={
 	]
 }
 var menu_tree_2={
-	'root':{'id':'menu-demo','title':'demo','click':function(){}},
+	'root':{'id':'menu-demo','title':'API Demo','click':function(){}},
 	'list':[
 		{'id':'mi-show-message-on-bar','title':'Show Message','click':show_msg_demo},
 		{'id':'mi-show-color-message-on-bar','title':'Show Color Message','click':show_color_msg_demo},
 		{'id':'mi-show-style-message-on-bar','title':'Show Style Message','click':show_style_msg_demo},
 		{'id':'mi-warning','title':'warning','click':warning_demo},
 		{'id':'mi-log','title':'log','click':log_demo},
-		{'id':'mi-alert-demo','title':'get current msg on the bar','click':alert_demo},
+		{'id':'mi-alert-demo','title':'get msg on the bar','click':alert_demo},
+		{'id':'mi-alert-html-demo','title':'get html on the bar','click':alert_html_demo},
 		{'id':'mi-add-message','title':'add msg demo','click':add_msg_demo},
 		{'id':'mi-cls-message','title':'clear msg','click':cls_msg_demo},
 	]
@@ -47,7 +48,7 @@ opts={
 var bar;
 $(run);
 function run(){
-	bar = HelperBar.getbar(menu_tree_list,opts)//new HelperBar(menu_tree_list,opts);
+	bar = HelperBar.getbar(menu_tree_list,opts)//singleton start
 }
 
 function go_top(){
@@ -82,6 +83,10 @@ function alert_demo(){
 	alert('get message on Bar: ' + bar.msg());
 }
 
+function alert_html_demo(){
+	alert('get message on Bar: ' + bar.html());
+}
+
 function cls_msg_demo(){
 	bar.cls();
 }
@@ -93,15 +98,13 @@ function add_msg_demo(){
 	bar.addmsg(msg,{color:'skyblue','font-size':'50px'});
 }
 
+
+
 function about(){
 	var text=$.tag('div',{style:'color:white'}).html(TXT_ABOUT_INFO);
 	bar.msg(text);
-	opts={bar_title:'Helper Bar Recreating'};
-	bar = HelperBar.getbar(menu_tree_list,opts);
-	
 }
 
 function warning_demo(){
 	bar.warn('!!warning demo!!');
 }
-
