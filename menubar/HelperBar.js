@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.4
+@version     0.2.5
 */
 
 //$.fn.menubar jquery plugin, create a menubar 
@@ -217,7 +217,7 @@ development framework, add a useful and functional menu bar in the page.
 
 	//have a parameter menu_tree_list
 	function init_status_bar (){
-		menu_tree_list=arguments;//get parameter
+		var menu_tree_list=arguments;//get parameter
 		var jqob_menubar=this;
 		//set the status menu will show on mouse over the statusbar, hide on mouse out
 		var jqob_status_menu=jqob_menubar.find(STATUS_MENU);
@@ -250,11 +250,13 @@ development framework, add a useful and functional menu bar in the page.
 	
 	HelperBar.prototype.append = function(text){
 		this._menubar.menubar('append',text);
+		return this;
 	}
 	
 	HelperBar.prototype.html =function(html){
 	    if(arguments.length != 0){
 			this._menubar.menubar('html',html);
+			return this;
 		}else{
 			return this._menubar.menubar('html');
 		}
@@ -267,13 +269,14 @@ development framework, add a useful and functional menu bar in the page.
 			msg=$.tag('span').css(style).html(msg);
 		}
 			this.append(msg);
+			return this;
 	}
 		
 	HelperBar.prototype.msg=function(msg,style){
 		if(arguments.length != 0)
 		{
 			this.cls();
-			this.addmsg(msg,style);
+			return this.addmsg(msg,style);
 		}else{
 			return $(this.html()).text();
 		}
@@ -281,24 +284,26 @@ development framework, add a useful and functional menu bar in the page.
 	
 	HelperBar.prototype.log=function(msg){
 		msg=$.tag('div').html(msg);;
-		this.addmsg(msg);
+		return this.addmsg(msg);
 	}
 	
 	HelperBar.prototype.warn=function(msg){
 		var style={color:this._settings.warning_color,'font-size':this._settings.warning_size};
-		this.addmsg(msg,style);
+		return this.addmsg(msg,style);
 	}
 	
 	HelperBar.prototype.cls=function(){
 		this.html('');
+		return this;
 	}
 		
-	HelperBar.prototype.title=function(msg){
-		this._menubar.menubar('title',msg);
+	HelperBar.prototype.title=function(text){
+		this._menubar.menubar('title',text);
+		return this;
 	}
 	
 	HelperBar.prototype.version = function(){
-		return '0.2.4';
+		return '0.2.5';
 	}
 	
 	window.HelperBar =(function(){
