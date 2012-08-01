@@ -5,6 +5,7 @@ development framework, add a useful and functional menu bar in the page.
 
 //$.fn.menubar jquery plugin, create a menubar 
 (function( $ ){
+	  "use strict";
 	//core of menubar
 	var STATUS_BAR='#status-bar';
 	var STATUS_MENU='#status-menu';
@@ -101,7 +102,7 @@ development framework, add a useful and functional menu bar in the page.
 	//Menubar ui Maker
 	function jqob_clean()
 	{
-		jqob = this;
+		var jqob = this;
 		jqob.html('')
 			.text('')
 			.attr('id','')
@@ -194,7 +195,7 @@ development framework, add a useful and functional menu bar in the page.
 					position: 'absolute',
 					bottom:'23px',
 					'z-index':'100'});//css:#status-menu ul li ul
-		for(menu in menu_list)		{
+		for(var menu in menu_list)		{
 			var id=menu_list[menu].id;
 			var title=menu_list[menu].title;
 			var click=menu_list[menu].click;
@@ -217,15 +218,15 @@ development framework, add a useful and functional menu bar in the page.
 	//have a parameter menu_tree_list
 	function init_status_bar (){
 		menu_tree_list=arguments;//get parameter
-		jqob_menubar=this;
+		var jqob_menubar=this;
 		//set the status menu will show on mouse over the statusbar, hide on mouse out
-		jqob_status_menu=jqob_menubar.find(STATUS_MENU);
+		var jqob_status_menu=jqob_menubar.find(STATUS_MENU);
 		jqob_menubar.hover(function(){
 				jqob_status_menu.show();
 			},function(){
 				jqob_status_menu.hide('slow');
 			});
-		for(menu_tree in menu_tree_list){
+		for(var menu_tree in menu_tree_list){
 			construct_one_menu_tree(menu_tree_list[menu_tree]).appendTo(this.find(LIST_MENU));
 		}
 		//initalize the default appearance of the status bar
@@ -240,6 +241,7 @@ development framework, add a useful and functional menu bar in the page.
 //create Helper Bar as Class for the page
 //provide API of Helper Bar
 (function($){
+	  "use strict";
 	//menubar
 	function HelperBar(menu_tree_list,options){
 		this._menubar=$.tag('div').appendTo('body').menubar(menu_tree_list,options);

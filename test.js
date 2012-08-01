@@ -1,3 +1,11 @@
+var MESSAGE_DIV='#status-message';
+var jqob_msg;
+$(loading);
+function loading(){
+	jqob_msg=$(MESSAGE_DIV);
+}
+
+
 module("Module A:Sring function");
 test("String.strip()", function() {
    var testStringDot='.hello';
@@ -13,15 +21,15 @@ test("String.strip()", function() {
 
 module("Module B: Jquery function");
 
-test('$.tag', function() {
-   var testTag1=$.tag('div');
+test('$.tag', function( ) {
+  var testTag1=$.tag('div');
    var testTag2=$.tag('a',{id:'a',href:'#',text:'abc'});
    var testTag3=$.tag('div',{id:'div',class:'tag',text:'divdiv'});
    var testTag4=$.tag('div',{id:'div',href:'#',text:'divdiv'});
 	
-   deepEqual(testTag1['0'],document.createElement('div'),'only one parameter');
+  deepEqual(testTag1['0'],document.createElement('div'),'only one parameter');
    deepEqual(testTag2,$('<a>',{id:'a',href:'#',text:'abc'}),'<a> with attributes' );
-   deepEqual(testTag3,$('<div>',{id:'div',class:'tag',text:'divdiv'}),'<div> with attributes'  );
+deepEqual(testTag3,$('<div>',{id:'div',class:'tag',text:'divdiv'}),'<div> with attributes'  );
    deepEqual(testTag4,$('<div>',{id:'div',href:'#',text:'divdiv'}),'<div> with attributes' );
 });
 
@@ -29,7 +37,7 @@ module("Module C: Helper Bar Test");
 
 
 function testBarMsg(expected,testMssage){
-	equal( bar.html() , expected , testMssage );
+	equal( jqob_msg.html() , expected , testMssage );
 }
 
 test('bar.cls()', function(){
@@ -39,7 +47,7 @@ test('bar.cls()', function(){
 	bar.html('first');
 	bar.append($.tag('tag').html(bar.html()));
 	bar.append('second');
-	ok(bar.html().toString().length>0,'message on the bar:'+bar.html());
+	ok(jqob_msg.html().toString().length>0,'message on the bar:'+bar.html());
 	
 	bar.cls();
 	testBarMsg( '' , "clear text on the bar after bar.html() set a text" );
