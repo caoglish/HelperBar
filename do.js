@@ -41,12 +41,12 @@
 			menubar_style:{
 				background_color:'black',
 				opacity:'0.8',
-				font_color:'white',
+				font_color:'white'
 			},
 			menubar_items_style:{
 				background_color:'#111111' ,
 				hover_background_color:'#333333',
-				font_color:'#EAFFED',
+				font_color:'#EAFFED'
 		}};
 
 
