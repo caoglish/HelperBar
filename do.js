@@ -2,7 +2,7 @@
 	 "use strict";
 	var TXT_ABOUT_INFO='<strong>Helper Bar Framework.<br/> Version:'+HelperBar.version()+'<br/>Designer: Caoglish</strong>';
 	//Menu bar setup
-	var menu_tree_1={
+	var menuTreeFunction={
 		'root':{'id':'menu-function','title':'function'},
 		'list':[
 			{'id':'mi-gotop','title':'go top','click':go_top},
@@ -10,7 +10,7 @@
 			{'id':'mi-refresh','title':'page refresh','click':page_reload}
 		]
 	}
-	var menu_tree_2={
+	var menuTreeDemo={
 		'root':{'id':'menu-demo','title':'API Demo'},
 		'list':[
 			{'id':'mi-show-message-on-bar','title':'Show Message => bar.msg(text)','click':show_msg_demo},
@@ -27,11 +27,11 @@
 			{'id':'mi-cls-message','title':'clear msg => bar.cls()','click':cls_msg_demo}
 		]
 	}
-	var menu_tree_3={
+	var menuTreeAbout={
 		'root':{'id':'mi-about','title':'about','click':about},
 		'list':[]
 	}
-	var menu_tree_list=[menu_tree_1,menu_tree_2,menu_tree_3];
+	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuTreeAbout];
 
 	var opts={
 			bar_title:'Helper Bar Demo',
@@ -51,7 +51,7 @@
 	
 	$(run);
 	function run(){
-		window.bar = HelperBar.getbar(menu_tree_list,opts)//singleton start
+		window.bar = HelperBar.getbar(menuTreeList,opts)//singleton start
 		demo_interface();
 	}
 	
