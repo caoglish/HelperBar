@@ -5,7 +5,7 @@ development framework, add a useful and functional menu bar in the page.
 
 //$.fn.menubar jquery plugin, create a menubar 
 (function( $ ){
-	  "use strict";
+	"use strict";
 	//core of menubar
 	var STATUS_BAR='#status-bar';
 	var STATUS_MENU='#status-menu';
@@ -18,8 +18,7 @@ development framework, add a useful and functional menu bar in the page.
 	var tag_a_css;
 	var methods = {
 		init : function( menu_tree_list ,options ) {
-		
-			 settings= $.extend( true,{
+			settings= $.extend( true,{
 								bar_title:'Menu Bar',
 								menu_width:'100px',
 								warning_size:'50px',
@@ -56,7 +55,7 @@ development framework, add a useful and functional menu bar in the page.
 		},
 		
 		html:function(html){
-			if( arguments.length == 0){
+			if( arguments.length ===0){
 				return this.find(STATUS_MESSAGE).html();
 			}else{
 				return this.each(function(){
@@ -76,13 +75,13 @@ development framework, add a useful and functional menu bar in the page.
 	};
 	
 	$.fn.menubar = function( method ) {
-		 // Method calling logic
+		// Method calling logic
 		if ( methods[method] ) {
-		  return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
 		} else if ( typeof method === 'object' || ! method ) {
-		  return methods.init.apply( this, arguments );
+			return methods.init.apply( this, arguments );
 		} else {
-		  $.error( 'Method ' +  method + ' does not exist on jQuery.menubar' );
+			$.error( 'Method ' +  method + ' does not exist on jQuery.menubar' );
 		}    
 	};
 	//(end)Jquery plugin development framework.
@@ -148,13 +147,15 @@ development framework, add a useful and functional menu bar in the page.
 	function create_root_menu_item(id,title,callback){
 		var tag_a=$.tag('a',{id:id,href:'#',text:title}).click(function(event){
 			event.preventDefault();
-			if(callback) callback.apply();
+			if(callback) {callback.apply();}
 		});
 		
-		tag_a	.css(tag_a_css)
-				.css({background:settings.menubar_items_style.background_color})
-				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
-					function(){$(this).css({background:settings.menubar_items_style.background_color})});//css:#status-menu ul li a
+		tag_a.css(tag_a_css)
+			.css({background:settings.menubar_items_style.background_color})
+			.hover(	
+					function(){$(this).css({background:settings.			menubar_items_style.hover_background_color});},
+					function(){$(this).css({background:settings.			menubar_items_style.background_color});}
+				);//css:#status-menu ul li a
 
 		var root_menu_item=$.tag('li')
 							.css({float: 'left',
@@ -163,24 +164,25 @@ development framework, add a useful and functional menu bar in the page.
 									'z-index':'100'})//css:#status-menu ul li
 							.append(tag_a);
 		return root_menu_item;
-	};
+	}
 	
 	function create_menu_item(id,title,callback){
 		var menu_item=$.tag('li');
-		 menu_item.css({float: 'none',display: 'inline',margin:'0px'});//css:#status-menu ul li ul li
+		menu_item.css({float: 'none',display: 'inline',margin:'0px'});//css:#status-menu ul li ul li
 		var tag_a=$.tag('a',{id:id,href:'#',text:title}).click(function(event){
 			event.preventDefault();
-			if(callback) callback.apply();
+			if(callback) {callback.apply();}
 		});
 		tag_a.css(tag_a_css)
 				.css({background:settings.menubar_items_style.background_color})
 				.css({'border-bottom': '1px solid white'})
-				.hover(	function(){$(this).css({background:settings.menubar_items_style.	hover_background_color})},
-					function(){$(this).css({background:settings.menubar_items_style.background_color})});//css:#status-menu ul li ul li a
-			;//css
+				.hover(	
+					function(){$(this).css({background:settings.menubar_items_style.hover_background_color});},
+					function(){$(this).css({background:settings.menubar_items_style.background_color});}
+					);//css:#status-menu ul li ul li a
 		menu_item.append(tag_a);
 		return menu_item;
-	};
+	}
 	
 	//root_menu must have attribute of id,title,click[function]
 	function construct_root_menu(root_menu){
@@ -195,14 +197,14 @@ development framework, add a useful and functional menu bar in the page.
 					position: 'absolute',
 					bottom:'23px',
 					'z-index':'100'});//css:#status-menu ul li ul
-		for(var menu in menu_list)		{
+		for(var menu in menu_list){
 			var id=menu_list[menu].id;
 			var title=menu_list[menu].title;
 			var click=menu_list[menu].click;
 			tag_ul.append(create_menu_item(id,title,click));
 		}
 		return tag_ul;
-	};
+	}
 	
 	function construct_one_menu_tree (menu_array)	{
 		var one_menu_tree=construct_root_menu(menu_array.root).append(construction_menu(menu_array.list));
@@ -213,7 +215,7 @@ development framework, add a useful and functional menu bar in the page.
 					$(this).find('ul').slideUp();
 			});
 		return one_menu_tree;
-	};
+	}
 
 	//have a parameter menu_tree_list
 	function init_status_bar (){
@@ -235,32 +237,32 @@ development framework, add a useful and functional menu bar in the page.
 		$(document).dblclick(function(){
 			jqob_menubar.toggle();
 		});
-	};
+	}
 })( jQuery );
 
 //create Helper Bar as Class for the page
 //provide API of Helper Bar
 (function($){
-	  "use strict";
+	"use strict";
 	//menubar
 	function HelperBar(menu_tree_list,options){
 		this._menubar=$.tag('div').appendTo('body').menubar(menu_tree_list,options);
 		this._settings=this._menubar.menubar('getSettings');
-	};
+	}
 	
 	HelperBar.prototype.append = function(text){
 		this._menubar.menubar('append',text);
 		return this;
-	}
+	};
 	
 	HelperBar.prototype.html =function(html){
-	    if(arguments.length != 0){
+		if(arguments.length !== 0){
 			this._menubar.menubar('html',html);
 			return this;
 		}else{
 			return this._menubar.menubar('html');
 		}
-	}
+	};
 	
 	HelperBar.prototype.addmsg=function(msg,style){
 		if(typeof style === 'string'){
@@ -270,60 +272,60 @@ development framework, add a useful and functional menu bar in the page.
 		}
 			this.append(msg);
 			return this;
-	}
+	};
 		
 	HelperBar.prototype.msg=function(msg,style){
-		if(arguments.length != 0)
+		if(arguments.length !== 0)
 		{
 			this.cls();
 			return this.addmsg(msg,style);
 		}else{
 			return $(this.html()).text();
 		}
-	}
+	};
 	
 	HelperBar.prototype.log=function(msg){
-		msg=$.tag('div').html(msg);;
+		msg=$.tag('div').html(msg);
 		return this.addmsg(msg);
-	}
+	};
 	
 	HelperBar.prototype.warn=function(msg){
 		var style={color:this._settings.warning_color,'font-size':this._settings.warning_size};
 		return this.addmsg(msg,style);
-	}
+	};
 	
 	HelperBar.prototype.cls=function(){
 		this.html('');
 		return this;
-	}
+	};
 		
 	HelperBar.prototype.title=function(text){
 		this._menubar.menubar('title',text);
 		return this;
-	}
+	};
 	
 	HelperBar.prototype.show=function(speed){
-		if(speed==undefined){
+		if(speed===undefined){
 			this._menubar.show();
 		}
 		else{
 			this._menubar.slideDown(speed);
 		}
 		return this;
-	}
+	};
 	
 	HelperBar.prototype.hide=function(speed){
-	if(speed==undefined){
+	if(speed===undefined){
 			this._menubar.hide();
 		}else{
 			this._menubar.slideUp(speed);
 		}
 		return this;
-	}
+	};
 	
 	HelperBar.prototype.version = function(){
 		return '0.2.6';
-	}
+	};
 	
 	window.HelperBar =(function(){
 			var instantiated;
@@ -342,5 +344,5 @@ development framework, add a useful and functional menu bar in the page.
 						return HelperBar.prototype.version();
 					}
 			}
-	})();;
+	})();
 })( jQuery );
