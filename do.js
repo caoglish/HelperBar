@@ -48,19 +48,17 @@
 				hover_background_color:'#333333',
 				font_color:'#EAFFED'
 		}};
-
-
-	var bar;
+	
 	$(run);
 	function run(){
-		bar = HelperBar.getbar(menu_tree_list,opts)//singleton start
+		window.bar = HelperBar.getbar(menu_tree_list,opts)//singleton start
+		demo_interface();
 	}
-
+	
 	function go_top(){
 			$('html, body').animate({ scrollTop: 0 }, 'slow');
 		};
 	function go_bottom(){
-			
 			$('html, body').animate({ scrollTop: $(document).height() }, 'slow');
 		};
 	function page_reload(){
@@ -141,5 +139,20 @@
 	function about(){
 		var text=$.tag('div',{style:'color:white'}).html(TXT_ABOUT_INFO);
 		bar.msg(text);
+	}
+	
+	function demo_interface(){
+		$.tag('button').appendTo('body').text('hide("slow")').click(function(){
+			bar.hide('slow');
+		});
+		$.tag('button').appendTo('body').text('show("slow")').click(function(){
+			bar.show('slow');
+		});
+		$.tag('button').appendTo('body').text('hide()').click(function(){
+			bar.hide();
+		});
+		$.tag('button').appendTo('body').text('show()').click(function(){
+			bar.show();
+		});
 	}
 })( jQuery );

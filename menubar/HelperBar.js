@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.5
+@version     0.2.6
 */
 
 //$.fn.menubar jquery plugin, create a menubar 
@@ -302,8 +302,27 @@ development framework, add a useful and functional menu bar in the page.
 		return this;
 	}
 	
+	HelperBar.prototype.show=function(speed){
+		if(speed==undefined){
+			this._menubar.show();
+		}
+		else{
+			this._menubar.slideDown(speed);
+		}
+		return this;
+	}
+	
+	HelperBar.prototype.hide=function(speed){
+	if(speed==undefined){
+			this._menubar.hide();
+		}else{
+			this._menubar.slideUp(speed);
+		}
+		return this;
+	}
+	
 	HelperBar.prototype.version = function(){
-		return '0.2.5';
+		return '0.2.6';
 	}
 	
 	window.HelperBar =(function(){
