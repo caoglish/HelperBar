@@ -265,39 +265,34 @@ development framework, add a useful and functional menu bar in the page.
 		//hide mode selection: all, onBar, notOnBar,notOnMenu,noHide
 		var jqob_menubar= this;
 		if(settings.hide_mode=='all'){
-			$(document).dblclick(function (e) {
+			$(document).dblclick(function (e){
 				jqob_menubar.toggle();
 			});
 		}else if(settings.hide_mode=='onBar'){
 			$(document).dblclick(function (e) {
 				var event_area=$(e.target).parents(STATUS_BAR);
-				console.log(event_area);
 				if (event_area[0] == jqob_menubar[0]){
 					jqob_menubar.hide();
 				}else{
 					jqob_menubar.show();
 				}
-				
 			});
 		}else if(settings.hide_mode=='notOnBar'){
 			 $(document).dblclick(function (e) {
 				var event_area=$(e.target).parents(STATUS_BAR);
-				if (event_area[0] == jqob_menubar[0]){
-				}else{
+				if (event_area[0] != jqob_menubar[0]){
 					jqob_menubar.toggle();
 				}
             });
 		}else if(settings.hide_mode=='notOnMenu'){
 			 $(document).dblclick(function (e) {
 				var event_area=$(e.target).parents(STATUS_BAR);
-				if (event_area[0] == jqob_menubar[0]&&e.target.nodeName == 'A'){
-				}else{
+				if (!(event_area[0] == jqob_menubar[0]&&e.target.nodeName == 'A')){
 					jqob_menubar.toggle();
 				}
             });
 		}else  if(settings.hide_mode=='noHide'){
-			
-		}else{}
+		}else{$.error('Wrong Type of Hide Mode');}
 	}
 
     //have a parameter menu_tree_list
@@ -420,11 +415,9 @@ development framework, add a useful and functional menu bar in the page.
 
     window.HelperBar = (function () {
         var instantiated;
-
         function init(menu_tree_list, options) {
             return new HelperBar(menu_tree_list, options);
         }
-
         return {
             getbar: function (menu_tree_list, options) {
                 if (!instantiated) {
