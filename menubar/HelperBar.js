@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.6
+@version     0.2.7
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
@@ -22,6 +22,7 @@ development framework, add a useful and functional menu bar in the page.
                 menu_width: '100px',
                 warning_size: '50px',
 				safe_mode:'safe',
+				hide_mode:'notOnMenu',
                 warning_color: 'red',
                 menubar_style: {
                     background_color: 'black',
@@ -257,6 +258,47 @@ development framework, add a useful and functional menu bar in the page.
         });
         return one_menu_tree;
     }
+	
+	
+	//hide_mode
+	function select_hide_mode(){
+		//hide mode selection: all, onBar, notOnBar,notOnMenu,noHide
+		var jqob_menubar= this;
+		if(settings.hide_mode=='all'){
+			$(document).dblclick(function (e) {
+				jqob_menubar.toggle();
+			});
+		}else if(settings.hide_mode=='onBar'){
+			$(document).dblclick(function (e) {
+				var event_area=$(e.target).parents(STATUS_BAR);
+				console.log(event_area);
+				if (event_area[0] == jqob_menubar[0]){
+					jqob_menubar.hide();
+				}else{
+					jqob_menubar.show();
+				}
+				
+			});
+		}else if(settings.hide_mode=='notOnBar'){
+			 $(document).dblclick(function (e) {
+				var event_area=$(e.target).parents(STATUS_BAR);
+				if (event_area[0] == jqob_menubar[0]){
+				}else{
+					jqob_menubar.toggle();
+				}
+            });
+		}else if(settings.hide_mode=='notOnMenu'){
+			 $(document).dblclick(function (e) {
+				var event_area=$(e.target).parents(STATUS_BAR);
+				if (event_area[0] == jqob_menubar[0]&&e.target.nodeName == 'A'){
+				}else{
+					jqob_menubar.toggle();
+				}
+            });
+		}else  if(settings.hide_mode=='noHide'){
+			
+		}else{}
+	}
 
     //have a parameter menu_tree_list
     function init_status_bar() {
@@ -275,9 +317,7 @@ development framework, add a useful and functional menu bar in the page.
         //initalize the default appearance of the status bar
         jqob_status_menu.hide();
         jqob_menubar.menubar('title', settings.bar_title);
-        $(document).dblclick(function () {
-            jqob_menubar.toggle();
-        });
+		select_hide_mode.call(jqob_menubar);//select hide mode
     }
 })(jQuery);
 
@@ -375,7 +415,7 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.version = function () {
-        return '0.2.6';
+        return '0.2.7';
     };
 
     window.HelperBar = (function () {

@@ -38,6 +38,7 @@
 			menu_width:'230px',
 			warning_size:'50px',
 			warning_color:'red',
+			//hide_mode:'notOnBar',
 			//safe_mode:'unsafe',
 			menubar_style:{
 				background_color:'black',
@@ -144,17 +145,18 @@
 	}
 	
 	function demo_interface(){
-		$.tag('button').appendTo('body').text('hide("slow")').click(function(){
-			bar.hide('slow');
-		});
-		$.tag('button').appendTo('body').text('show("slow")').click(function(){
-			bar.show('slow');
-		});
-		$.tag('button').appendTo('body').text('hide()').click(function(){
+		$.tag('div',{id:'helperbar-demo'}).appendTo('body').html($.tag('h1').text('Helper Bar API Demo Button(no included in framework)').css('color','yellow')).css({opacity: '0.5',width:'100%',position:'fixed',top:0,background:'black'});
+		$.tag('button').prependTo('#helperbar-demo').text('hide()').click(function(){
 			bar.hide();
 		});
-		$.tag('button').appendTo('body').text('show()').click(function(){
+		$.tag('button').prependTo('#helperbar-demo').text('show()').click(function(){
 			bar.show();
+		});
+		$.tag('button').prependTo('#helperbar-demo').text('hide("slow")').click(function(){
+			bar.hide('slow');
+		});
+		$.tag('button').prependTo('#helperbar-demo').text('show("slow")').click(function(){
+			bar.show('slow');
 		});
 	}
 })( jQuery );
