@@ -21,6 +21,7 @@ development framework, add a useful and functional menu bar in the page.
                 bar_title: 'Menu Bar',
                 menu_width: '100px',
                 warning_size: '50px',
+				safe_mode:'safe',
                 warning_color: 'red',
                 menubar_style: {
                     background_color: 'black',
@@ -284,23 +285,30 @@ development framework, add a useful and functional menu bar in the page.
 //provide API of Helper Bar
 (function ($) {
     "use strict";
-    //menubar
+    var _menubar;
+	var _settings;
+	
     function HelperBar(menu_tree_list, options) {
-        this._menubar = $.tag('div').appendTo('body').menubar(menu_tree_list, options);
-        this._settings = this._menubar.menubar('getSettings');
+		_menubar= $.tag('div').appendTo('body').menubar(menu_tree_list, options);
+
+		_settings = _menubar.menubar('getSettings');
+		if(_settings.safe_mode=='unsafe'){
+			this.getMenuBar=function(){return _menubar;};
+			this.getSettings=function(){return _settings;};
+		}
     }
 
     HelperBar.prototype.append = function (text) {
-        this._menubar.menubar('append', text);
+        _menubar.menubar('append', text);
         return this;
     };
 
     HelperBar.prototype.html = function (html) {
         if (arguments.length !== 0) {
-            this._menubar.menubar('html', html);
+            _menubar.menubar('html', html);
             return this;
         } else {
-            return this._menubar.menubar('html');
+            return _menubar.menubar('html');
         }
     };
 
@@ -332,8 +340,8 @@ development framework, add a useful and functional menu bar in the page.
 
     HelperBar.prototype.warn = function (msg) {
         var style = {
-            color: this._settings.warning_color,
-            'font-size': this._settings.warning_size
+            color: _settings.warning_color,
+            'font-size': _settings.warning_size
         };
         return this.addmsg(msg, style);
     };
@@ -344,24 +352,24 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.title = function (text) {
-        this._menubar.menubar('title', text);
+        _menubar.menubar('title', text);
         return this;
     };
 
     HelperBar.prototype.show = function (speed) {
         if (speed === undefined) {
-            this._menubar.show();
+            _menubar.show();
         } else {
-            this._menubar.slideDown(speed);
+            _menubar.slideDown(speed);
         }
         return this;
     };
 
     HelperBar.prototype.hide = function (speed) {
         if (speed === undefined) {
-            this._menubar.hide();
+            _menubar.hide();
         } else {
-            this._menubar.slideUp(speed);
+            _menubar.slideUp(speed);
         }
         return this;
     };

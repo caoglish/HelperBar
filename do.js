@@ -53,6 +53,7 @@
 	function run(){
 		window.bar = HelperBar.getbar(menuTreeList,opts)//singleton start
 		demo_interface();
+		console.log(bar.getMenuBar());
 	}
 	
 	function go_top(){
