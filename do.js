@@ -38,6 +38,7 @@
 			menu_width:'230px',
 			warning_size:'50px',
 			warning_color:'red',
+			//safe_mode:'unsafe',
 			menubar_style:{
 				background_color:'black',
 				opacity:'0.8',
@@ -53,7 +54,7 @@
 	function run(){
 		window.bar = HelperBar.getbar(menuTreeList,opts)//singleton start
 		demo_interface();
-		console.log(bar.getMenuBar());
+		//console.log(bar.getMenuBar());
 	}
 	
 	function go_top(){
