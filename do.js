@@ -140,8 +140,14 @@
 	}
 
 	function about(){
-		var text=$.tag('div',{style:'color:white'}).html(TXT_ABOUT_INFO);
+		var text=$.tag('div',{style:'color:white'})
+			.html(TXT_ABOUT_INFO)
+			.click(function(){
+				$(this).remove();
+				bar.cls();
+			});;
 		bar.msg(text);
+
 	}
 	
 	function demo_interface(){

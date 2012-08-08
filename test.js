@@ -96,7 +96,7 @@ test('bar.html()', function () {
 
 
 test('bar.append()', function () {
-    //bar.cls();
+    bar.cls();
     bar.append('abc');
 
     testBarMsg('abc', "append a string");

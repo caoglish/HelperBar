@@ -116,7 +116,7 @@ development framework, add a useful and functional menu bar in the page.
             'bottom': '0',
             'right': '0',
             'opacity': settings.menubar_style.opacity,
-            'border-radius': '8px',
+            'border-radius': '0px 26px 0px 0px',
             'padding-left': '2px',
             'margin-left': '1px',
             'width': '100%',
