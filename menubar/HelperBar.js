@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.7
+@version     0.2.8
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
@@ -20,10 +20,11 @@ development framework, add a useful and functional menu bar in the page.
             settings = $.extend(true, {
                 bar_title: 'Menu Bar',
                 menu_width: '100px',
-                warning_size: '50px',
-				safe_mode:'safe',
+                safe_mode:'safe',
 				hide_mode:'notOnMenu',
+				warning_size: '50px',
                 warning_color: 'red',
+				warning_mode:'append',
                 menubar_style: {
                     background_color: 'black',
                     opacity: '0.8',
@@ -55,6 +56,12 @@ development framework, add a useful and functional menu bar in the page.
         title: function (title) {
             return this.each(function () {
                 $(this).find(STATUS_TITLE).append(title);
+            });
+        },
+		
+		clsTitle: function () {
+            return this.each(function () {
+                $(this).find(STATUS_TITLE).html('');
             });
         },
 
@@ -327,9 +334,12 @@ development framework, add a useful and functional menu bar in the page.
 		_menubar= $.tag('div').appendTo('body').menubar(menu_tree_list, options);
 
 		_settings = _menubar.menubar('getSettings');
-		if(_settings.safe_mode=='unsafe'){
+		if(_settings.safe_mode=='safe'){
+		}else if(_settings.safe_mode=='unsafe'){
 			this.getMenuBar=function(){return _menubar;};
 			this.getSettings=function(){return _settings;};
+		}else{
+			$.error('no this type of safe mode.');
 		}
     }
 
@@ -369,16 +379,27 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.log = function (msg) {
-        msg = $.tag('div').html(msg);
+        
         return this.addmsg(msg);
     };
 
     HelperBar.prototype.warn = function (msg) {
-        var style = {
-            color: _settings.warning_color,
-            'font-size': _settings.warning_size
-        };
-        return this.addmsg(msg, style);
+		var style = {
+				color: _settings.warning_color,
+				'font-size': _settings.warning_size
+			};
+		//style = $.extend();
+        if(_settings.warning_mode==='append'){
+			 return this.addmsg(msg, style);
+		}else if(_settings.warning_mode==='log'){
+			msg = $.tag('div').html(msg);
+			return this.addmsg(msg, style);
+		}else if(_settings.warning_mode==='clean'){
+			return this.msg(msg, style);
+		}else{$.error('no this type of warning mode');}
+		
+		
+       
     };
 
     HelperBar.prototype.cls = function () {
@@ -408,9 +429,16 @@ development framework, add a useful and functional menu bar in the page.
         }
         return this;
     };
+	
+	HelperBar.prototype.clsTitle = function () {
+		_menubar.menubar('clsTitle');
+		this.title(_settings.bar_title);
+		
+        return this;
+    };
 
     HelperBar.prototype.version = function () {
-        return '0.2.7';
+        return '0.2.8';
     };
 
     window.HelperBar = (function () {
