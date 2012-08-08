@@ -379,7 +379,7 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.log = function (msg) {
-        
+        msg = $.tag('div').html(msg);
         return this.addmsg(msg);
     };
 
