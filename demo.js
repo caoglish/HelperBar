@@ -23,6 +23,7 @@
 			{'id':'mi-add-message','title':'add msg demo => bar.addmsg(text,style)','click':add_msg_demo},
 			{'id':'mi-html','title':'html demo => bar.html(html)','click':html_demo},
 			{'id':'mi-append','title':'append msg => bar.append(html)','click':append_demo},
+			{'id':'mi-open-url','title':'open url =>bar.open(url)','click':open_url_demo},
 			{'id':'mi-chaining','title':'chaining Demo','click':chaining_demo},
 			{'id':'mi-title','title':'append title =>bar.title(text)','click':title_demo},
 			{'id':'mi-cls-title','title':'clear title =>bar.clsTitle(text)','click':cls_title_demo},
@@ -41,6 +42,7 @@
 			warning_size:'50px',
 			warning_color:'red',
 			warning_mode:'append',
+			//border_radius:'86px',
 			//hide_mode:'notOnBar',
 			//safe_mode:'safe',
 			menubar_style:{
@@ -160,6 +162,11 @@
 	
 	function title_demo(){
 		bar.title(create_title('bar.title(text)'));
+	}
+	
+	function open_url_demo(){
+		bar.title(create_title('bar.open(url,mode)'));
+		bar.open('http://www.google.com','new');
 	}
 
 	function about(){

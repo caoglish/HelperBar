@@ -1,16 +1,17 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.8
+@version     0.2.8a
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
     "use strict";
     //core of menubar
     var STATUS_BAR = '#status-bar';
-    var STATUS_MENU = '#status-menu';
-    var LIST_MENU = "#list-menu";
+	var STATUS_TITLE = '#status-title';
     var STATUS_MESSAGE = '#status-message';
-    var STATUS_TITLE = '#status-title';
+	var STATUS_MENU = '#status-menu';
+    var LIST_MENU = "#list-menu";
+    
 
     //(start)Jquery plugin development framework.
     var settings;
@@ -18,13 +19,14 @@ development framework, add a useful and functional menu bar in the page.
     var methods = {
         init: function (menu_tree_list, options) {
             settings = $.extend(true, {
-                bar_title: 'Menu Bar',
+                bar_title: 'Helper Bar',
                 menu_width: '100px',
                 safe_mode:'safe',
 				hide_mode:'notOnMenu',
 				warning_size: '50px',
                 warning_color: 'red',
 				warning_mode:'append',
+				border_radius:'56px',
                 menubar_style: {
                     background_color: 'black',
                     opacity: '0.8',
@@ -123,7 +125,7 @@ development framework, add a useful and functional menu bar in the page.
             'bottom': '0',
             'right': '0',
             'opacity': settings.menubar_style.opacity,
-            'border-radius': '0px 26px 0px 0px',
+            'border-radius': '0px '+settings.border_radius+' 0px 0px',
             'padding-left': '2px',
             'margin-left': '1px',
             'width': '100%',
@@ -211,6 +213,7 @@ development framework, add a useful and functional menu bar in the page.
                 callback.apply();
             }
         });
+		
         tag_a.css(tag_a_css).css({
             background: settings.menubar_items_style.background_color
         }).css({
@@ -388,7 +391,6 @@ development framework, add a useful and functional menu bar in the page.
 				color: _settings.warning_color,
 				'font-size': _settings.warning_size
 			};
-		//style = $.extend();
         if(_settings.warning_mode==='append'){
 			 return this.addmsg(msg, style);
 		}else if(_settings.warning_mode==='log'){
@@ -397,9 +399,6 @@ development framework, add a useful and functional menu bar in the page.
 		}else if(_settings.warning_mode==='clean'){
 			return this.msg(msg, style);
 		}else{$.error('no this type of warning mode');}
-		
-		
-       
     };
 
     HelperBar.prototype.cls = function () {
@@ -409,6 +408,18 @@ development framework, add a useful and functional menu bar in the page.
 
     HelperBar.prototype.title = function (text) {
         _menubar.menubar('title', text);
+        return this;
+    };
+	
+	HelperBar.prototype.open = function (url,mode) {
+		mode = mode||'self';
+		if(mode==='new'){
+			window.open(url,'_blank');
+		}else if(mode==='self'){
+			window.open(url,'_self');			
+		}else{
+			window.open(url);	
+		}
         return this;
     };
 
@@ -433,12 +444,11 @@ development framework, add a useful and functional menu bar in the page.
 	HelperBar.prototype.clsTitle = function () {
 		_menubar.menubar('clsTitle');
 		this.title(_settings.bar_title);
-		
-        return this;
+	    return this;
     };
 
     HelperBar.prototype.version = function () {
-        return '0.2.8';
+        return '0.2.8a';
     };
 
     window.HelperBar = (function () {
