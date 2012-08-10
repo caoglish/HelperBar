@@ -41,7 +41,7 @@
 			menu_width:'230px',
 			warning_size:'50px',
 			warning_color:'red',
-			warning_mode:'append',
+			warning_mode:'log',
 			//border_radius:'86px',
 			//hide_mode:'notOnBar',
 			//safe_mode:'safe',
@@ -165,7 +165,7 @@
 	}
 	
 	function open_url_demo(){
-		bar.title(create_title('bar.open(url,mode)'));
+		bar.clsTitle().title(create_title('bar.open(url,mode)'));
 		bar.open('http://www.google.com','new');
 	}
 

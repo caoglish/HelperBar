@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.8
+@version     0.2.9a
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
@@ -333,10 +333,13 @@ development framework, add a useful and functional menu bar in the page.
     "use strict";
     var _menubar;
     var _settings;
-
+	
+	function _makeTagMsg(tag,text,style){
+		return style?$.tag(tag).html(text).css(style):$.tag(tag).html(text);
+	}
+	
     function HelperBar(menu_tree_list, options) {
         _menubar = $.tag('div').appendTo('body').menubar(menu_tree_list, options);
-
         _settings = _menubar.menubar('getSettings');
         if (_settings.safe_mode == 'safe') {} else if (_settings.safe_mode == 'unsafe') {
             this.getMenuBar = function () {
@@ -366,11 +369,10 @@ development framework, add a useful and functional menu bar in the page.
 
     HelperBar.prototype.addmsg = function (msg, style) {
         if (typeof style === 'string') {
-            msg = $.tag('span', {
-                style: 'color:' + style
-            }).html(msg);
+            msg = _makeTagMsg('span',msg,{color:style});
         } else if (typeof style === 'object') {
-            msg = $.tag('span').css(style).html(msg);
+            msg = _makeTagMsg('span',msg,style);
+			
         }
         this.append(msg);
         return this;
@@ -386,7 +388,7 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.log = function (msg) {
-        msg = $.tag('div').html(msg);
+        msg = _makeTagMsg('div',msg);
         return this.addmsg(msg);
     };
 
@@ -398,10 +400,10 @@ development framework, add a useful and functional menu bar in the page.
         if (_settings.warning_mode === 'append') {
             return this.addmsg(msg, style);
         } else if (_settings.warning_mode === 'log') {
-            msg = $.tag('div').html(msg);
-            return this.addmsg(msg, style);
+            msg = _makeTagMsg('div',msg,style);
+            return this.append(msg);
         } else if (_settings.warning_mode === 'clean') {
-            return this.msg(msg, style);
+			 return this.msg(msg, style);
         } else {
             $.error('no this type of warning mode');
         }
@@ -454,7 +456,7 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.version = function () {
-        return '0.2.8';
+        return '0.2.9a';
     };
 
     window.HelperBar = (function () {

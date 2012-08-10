@@ -6,6 +6,10 @@ function loading() {
     jqob_msg = $(MESSAGE_DIV);
 }
 
+function markTagMsg(tag,text,style){
+ return style?$.tag(tag).css(style).html(text):$.tag(tag).html(text);
+}
+
 module("Module A:Sring function");
 test("String.strip()", function () {
     var testStringDot = '.hello';
@@ -110,10 +114,10 @@ test('bar.msg()', function () {
 	bar.msg('abcddidididididifajsd;fklajsdfkljasdf;jkasd;fjkl;kl;sdjf;l');
 	testBarMsg('abcddidididididifajsd;fklajsdfkljasdf;jkasd;fjkl;kl;sdjf;l', "bar.msg(text)");
 	bar.msg("abcddidididididifajsd;fklajsdfkljasdf;jkasd;fjkl;kl;sdjf;l",'red');
-	testBarMsg("<span style=\"color:red\">abcddidididididifajsd;fklajsdfkljasdf;jkasd;fjkl;kl;sdjf;l</span>",'bar.msg(text,"red")');
+	mm=markTagMsg('span',"abcddidididididifajsd;fklajsdfkljasdf;jkasd;fjkl;kl;sdjf;l",{color:'red'});
+	testBarMsg(markTagMsg('div',mm).html(),'bar.msg(text,"red")');
 	bar.msg('bar.msg(text,color)',{color:'red','font-size':'x-large'});
-	var expected=$.tag('div').html($.tag('span').css({color:'red','font-size':'x-large'}).html('bar.msg(text,color)'));
-	//console.log(expected);
-	testBarMsg(expected.html(),'bar.msg(text,color)');
+	var m1=markTagMsg('span','bar.msg(text,color)',{color:'red','font-size':'x-large'});
+	testBarMsg(markTagMsg('div',m1).html(),'bar.msg(text,color)');
 	
 });
