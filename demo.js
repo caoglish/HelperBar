@@ -46,6 +46,7 @@
 			warning_mode:'log',
 			bar_foot:'I am foot',
 			foot_mode:'show',
+			foot_size:'1px',
 			//border_radius:'86px',
 			//hide_mode:'notOnBar',
 			//safe_mode:'safe',

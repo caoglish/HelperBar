@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.9a
+@version     0.2.9b
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
@@ -13,7 +13,6 @@ development framework, add a useful and functional menu bar in the page.
     var STATUS_MENU = '#status-menu';
     var LIST_MENU = "#list-menu";
 
-
     //(start)Jquery plugin development framework.
     var settings;
     var tag_a_css;
@@ -23,6 +22,7 @@ development framework, add a useful and functional menu bar in the page.
                 bar_title: 'Helper Bar',
 				bar_foot:'',
 				foot_mode:'hide',
+				foot_size:'6px',
                 menu_width: '100px',
                 safe_mode: 'safe',
                 hide_mode: 'notOnMenu',
@@ -155,6 +155,7 @@ development framework, add a useful and functional menu bar in the page.
 		var div_status_footer = $.tag('div', {
             id: STATUS_FOOTER.strip()
         }); //create status footer area
+		if(settings.foot_size!=='none'){div_status_footer.css('font-size',settings.foot_size);}
 
         this.append(div_status_title).append(div_status_message).append(div_status_footer).append(create_status_menu());
     }
@@ -489,10 +490,8 @@ development framework, add a useful and functional menu bar in the page.
         return this;
     };
 
-   
-
     HelperBar.prototype.version = function () {
-        return '0.2.9a';
+        return '0.2.9b';
     };
 
     window.HelperBar = (function () {
