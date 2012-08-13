@@ -9,6 +9,7 @@ development framework, add a useful and functional menu bar in the page.
     var STATUS_BAR = '#status-bar';
     var STATUS_TITLE = '#status-title';
     var STATUS_MESSAGE = '#status-message';
+	var STATUS_FOOTER = '#status-footer';
     var STATUS_MENU = '#status-menu';
     var LIST_MENU = "#list-menu";
 
@@ -20,6 +21,8 @@ development framework, add a useful and functional menu bar in the page.
         init: function (menu_tree_list, options) {
             settings = $.extend(true, {
                 bar_title: 'Helper Bar',
+				bar_foot:'',
+				foot_mode:'show',
                 menu_width: '100px',
                 safe_mode: 'safe',
                 hide_mode: 'notOnMenu',
@@ -63,7 +66,18 @@ development framework, add a useful and functional menu bar in the page.
 
         clsTitle: function () {
             return this.each(function () {
-                $(this).find(STATUS_TITLE).html('');
+                $(this).find(STATUS_TITLE).empty();
+            });
+        },
+	    foot: function (text) {
+            return this.each(function () {
+                $(this).find(STATUS_FOOTER).append(text);
+            });
+        },
+
+        clsFoot: function () {
+            return this.each(function () {
+                $(this).find(STATUS_FOOTER).empty();
             });
         },
 
@@ -138,8 +152,11 @@ development framework, add a useful and functional menu bar in the page.
         var div_status_message = $.tag('div', {
             id: STATUS_MESSAGE.strip()
         }); //create status message area
+		var div_status_footer = $.tag('div', {
+            id: STATUS_FOOTER.strip()
+        }); //create status footer area
 
-        this.append(div_status_title).append(div_status_message).append(create_status_menu());
+        this.append(div_status_title).append(div_status_message).append(div_status_footer).append(create_status_menu());
     }
 
     //status menu
@@ -190,7 +207,8 @@ development framework, add a useful and functional menu bar in the page.
             float: 'left',
             'list-style': 'none',
             font: '12px Tahoma, Arial',
-            'z-index': '100'
+            'z-index': '100',
+			'margin': '0px'
         }) //css:#status-menu ul li
         .append(tag_a);
         return root_menu_item;
@@ -310,11 +328,15 @@ development framework, add a useful and functional menu bar in the page.
     function init_status_bar() {
         var menu_tree_list = arguments; //get parameter
         var jqob_menubar = this;
-        //set the status menu will show on mouse over the statusbar, hide on mouse out
+		//set the status menu will show on mouse over the statusbar, hide on mouse out
         var jqob_status_menu = jqob_menubar.find(STATUS_MENU);
+		var jqob_footer=jqob_menubar.find(STATUS_FOOTER);
         jqob_menubar.hover(function () {
+		    if(settings.foot_mode === 'hide' ) jqob_footer.show();
             jqob_status_menu.show();
+			
         }, function () {
+			if(settings.foot_mode === 'hide' ) jqob_footer.hide('slow');
             jqob_status_menu.hide('slow');
         });
         for (var menu_tree in menu_tree_list) {
@@ -322,7 +344,9 @@ development framework, add a useful and functional menu bar in the page.
         }
         //initalize the default appearance of the status bar
         jqob_status_menu.hide();
+		 if(settings.foot_mode === 'hide' ) jqob_footer.hide();
         jqob_menubar.menubar('title', settings.bar_title);
+		jqob_menubar.menubar('foot', settings.bar_foot);
         select_hide_mode.call(jqob_menubar); //select hide mode
     }
 })(jQuery);
@@ -418,6 +442,22 @@ development framework, add a useful and functional menu bar in the page.
         _menubar.menubar('title', text);
         return this;
     };
+	
+	HelperBar.prototype.clsTitle = function () {
+        _menubar.menubar('clsTitle');
+        this.title(_settings.bar_title);
+        return this;
+    };
+	
+	HelperBar.prototype.foot = function (text) {
+        _menubar.menubar('foot', text);
+        return this;
+    };
+	
+	HelperBar.prototype.clsFoot = function () {
+        _menubar.menubar('clsFoot');
+        return this;
+    };
 
     HelperBar.prototype.open = function (url, mode) {
         mode = mode || 'self';
@@ -449,11 +489,7 @@ development framework, add a useful and functional menu bar in the page.
         return this;
     };
 
-    HelperBar.prototype.clsTitle = function () {
-        _menubar.menubar('clsTitle');
-        this.title(_settings.bar_title);
-        return this;
-    };
+   
 
     HelperBar.prototype.version = function () {
         return '0.2.9a';

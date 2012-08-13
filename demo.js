@@ -26,7 +26,9 @@
 			{'id':'mi-open-url','title':'open url =>bar.open(url)','click':open_url_demo},
 			{'id':'mi-chaining','title':'chaining Demo','click':chaining_demo},
 			{'id':'mi-title','title':'append title =>bar.title(text)','click':title_demo},
+			{'id':'mi-title','title':'append foot =>bar.foot(text)','click':foot_demo},
 			{'id':'mi-cls-title','title':'clear title =>bar.clsTitle(text)','click':cls_title_demo},
+			{'id':'mi-cls-foot','title':'clear foot =>bar.clsFoot(text)','click':cls_foot_demo},
 			{'id':'mi-cls-message','title':'clear msg => bar.cls()','click':cls_msg_demo}
 		]
 	}
@@ -42,6 +44,8 @@
 			warning_size:'50px',
 			warning_color:'red',
 			warning_mode:'log',
+			bar_foot:'I am foot',
+			foot_mode:'show',
 			//border_radius:'86px',
 			//hide_mode:'notOnBar',
 			//safe_mode:'safe',
@@ -60,8 +64,11 @@
 	function run(){
 		window.bar = HelperBar.getbar(menuTreeList,opts)//singleton start
 		demo_interface();
-		bar.title('abc');
-		bar.clsTitle();
+		
+		$(document).mousemove(function(e){ 
+           bar.clsFoot().foot("[X: " + e.pageX + "][Y: " + e.pageY+']');
+		});
+		
 	}
 	
 	function go_top(){
@@ -167,6 +174,14 @@
 	function open_url_demo(){
 		bar.clsTitle().title(create_title('bar.open(url,mode)'));
 		bar.open('http://www.google.com','new');
+	}
+	
+	function foot_demo(){
+		bar.foot('footer:').foot(create_title('bar.foot(text)'));
+	}
+	
+	function cls_foot_demo(){
+		bar.clsFoot();
 	}
 
 	function about(){
