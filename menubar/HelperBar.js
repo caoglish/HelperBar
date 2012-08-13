@@ -22,7 +22,7 @@ development framework, add a useful and functional menu bar in the page.
             settings = $.extend(true, {
                 bar_title: 'Helper Bar',
 				bar_foot:'',
-				foot_mode:'show',
+				foot_mode:'hide',
                 menu_width: '100px',
                 safe_mode: 'safe',
                 hide_mode: 'notOnMenu',
