@@ -7,6 +7,7 @@
 		'list':[
 			{'id':'mi-gotop','title':'go top','click':go_top},
 			{'id':'mi-gobottom','title':'go bottom','click':go_bottom},
+			{'id':'mi-mouse-position','title':'mouse position','click':mouse_position},
 			{'id':'mi-refresh','title':'page refresh','click':page_reload}
 		]
 	}
@@ -46,7 +47,7 @@
 			warning_mode:'log',
 			bar_foot:'I am foot',
 			foot_mode:'show',
-			foot_size:'1px',
+			foot_size:'8px',
 			//border_radius:'86px',
 			//hide_mode:'notOnBar',
 			//safe_mode:'safe',
@@ -65,11 +66,6 @@
 	function run(){
 		window.bar = HelperBar.getbar(menuTreeList,opts)//singleton start
 		demo_interface();
-		
-		$(document).mousemove(function(e){ 
-           bar.clsFoot().foot("[X: " + e.pageX + "][Y: " + e.pageY+']');
-		});
-		
 	}
 	
 	function go_top(){
@@ -194,7 +190,21 @@
 				bar.cls().clsTitle();
 			});;
 		bar.msg(text);
-
+	}
+	
+	var mp_handler=function (e){ bar.clsFoot().foot("[X: " + e.pageX + "][Y: " + e.pageY+']');}
+	function mouse_position(){
+		console.log($.data(document,'toggle'));
+		var mouse_position_on = $.data(document,'toggle')||'0';
+		
+		if(mouse_position_on =='1'){
+			$(document).off('mousemove',mp_handler);
+			$.data(document,'toggle',0);
+			bar.clsFoot();
+		 }else{
+			$(document).on('mousemove',mp_handler);
+			$.data(document,'toggle',1);
+		 }
 	}
 	
 	function create_title(title){
@@ -217,3 +227,5 @@
 		});
 	}
 })( jQuery );
+
+
