@@ -128,7 +128,7 @@ development framework, add a useful and functional menu bar in the page.
     //Menubar ui Maker
     function jqob_clean() {
         var jqob = this;
-        jqob.html('').text('').attr('id', '').attr('class', '').attr('style', '');
+        jqob.empty().removeAttr('id', '').removeAttr('class').removeAttr('style');
     }
 
     function convert_status_bar() {
