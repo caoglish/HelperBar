@@ -45,7 +45,7 @@
 			warning_size:'50px',
 			warning_color:'red',
 			warning_mode:'log',
-			bar_foot:'I am foot',
+			bar_foot:'verions:'+HelperBar.version(),
 			foot_mode:'show',
 			foot_size:'8px',
 			//border_radius:'86px',
