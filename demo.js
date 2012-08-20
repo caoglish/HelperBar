@@ -40,27 +40,24 @@
 	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuTreeAbout];
 
 	var opts={
-			bar_title:'Helper Bar Demo',
-			menu_width:'230px',
-			warning_size:'50px',
-			warning_color:'red',
-			warning_mode:'log',
-			bar_foot:'verions:'+HelperBar.version(),
-			foot_mode:'show',
-			foot_size:'8px',
-			//border_radius:'86px',
-			//hide_mode:'notOnBar',
-			//safe_mode:'safe',
-			menubar_style:{
-				background_color:'black',
-				opacity:'0.8',
-				font_color:'white'
-			},
-			menubar_items_style:{
-				background_color:'#111111' ,
-				hover_background_color:'#333333',
-				font_color:'#EAFFED'
-		}};
+				bar_title:'Helper Bar Demo',
+				bar_foot:'verions:'+HelperBar.version(),
+				foot_mode:'show',
+				foot_size:'8px',
+                safe_mode: 'safe',
+                hide_mode: 'notOnMenu',
+				border_radius: '86px',
+                warn_size:'32px',
+				warn_color:'yellow',
+				warn_mode:'log',
+                bar_bg_color: 'black',
+                bar_opacity: '0.8',
+                bar_font_color: 'white',
+				menu_width:'230px',
+                menu_bg_color: '#111111',
+                menu_hover_bg_color: '#222222',
+                menu_font_color: '#EAFFED'
+		};
 	
 	$(run);
 	function run(){

@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.2.9
+@version     0.3.0a
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
@@ -26,20 +26,16 @@ development framework, add a useful and functional menu bar in the page.
                 menu_width: '100px',
                 safe_mode: 'safe',
                 hide_mode: 'notOnMenu',
-                warning_size: '50px',
-                warning_color: 'red',
-                warning_mode: 'append',
+                warn_size: '50px', //used be warning_size
+                warn_color: 'red', //used be warning_color
+                warn_mode: 'append', //used be warning_mode
                 border_radius: '56px',
-                menubar_style: {
-                    background_color: 'black',
-                    opacity: '0.8',
-                    font_color: 'white'
-                },
-                menubar_items_style: {
-                    background_color: '#111111',
-                    hover_background_color: '#333333',
-                    font_color: '#EAFFED'
-                }
+                bar_bg_color: 'black',//menubar_style.background_color
+                bar_opacity: '0.8',//menubar_style.opacity
+                bar_font_color: 'white',//menubar_style.font_color
+                menu_bg_color: '#111111',//menubar_items_style.background_color
+                menu_hover_bg_color: '#333333',//menubar_items_style.hover_background_color
+                menu_font_color: '#EAFFED'//menubar_items_style.font_color
             }, options); //options 
 
             tag_a_css = {
@@ -47,7 +43,7 @@ development framework, add a useful and functional menu bar in the page.
                 padding: '5px 12px',
                 'text-decoration': 'none',
                 width: settings.menu_width,
-                color: settings.menubar_items_style.font_color,
+                color: settings.menu_font_color,
                 'white-space': 'nowrap'
             }; //tag a style sheet.
 
@@ -134,11 +130,11 @@ development framework, add a useful and functional menu bar in the page.
     function convert_status_bar() {
         this.attr('id', STATUS_BAR.strip()).css({
             'position': 'fixed',
-            'background-color': settings.menubar_style.background_color,
-            'color': settings.menubar_style.font_color,
+            'background-color': settings.bar_bg_color,
+            'color': settings.bar_font_color,
             'bottom': '0',
             'right': '0',
-            'opacity': settings.menubar_style.opacity,
+            'opacity': settings.bar_opacity,
             'border-radius': '0px ' + settings.border_radius + ' 0px 0px',
             'padding-left': '2px',
             'margin-left': '1px',
@@ -189,18 +185,18 @@ development framework, add a useful and functional menu bar in the page.
         });
 
         tag_a.css(tag_a_css).css({
-            background: settings.menubar_items_style.background_color
+            background: settings.menu_bg_color
         }).hover(
 
         function () {
             $(this).css({
-                background: settings.menubar_items_style.hover_background_color
+                background: settings.menu_hover_bg_color.hover_background_color
             });
         },
 
         function () {
             $(this).css({
-                background: settings.menubar_items_style.background_color
+                background: settings.menu_bg_color
             });
         }); //css:#status-menu ul li a
 
@@ -234,20 +230,20 @@ development framework, add a useful and functional menu bar in the page.
         });
 
         tag_a.css(tag_a_css).css({
-            background: settings.menubar_items_style.background_color
+            background: settings.menu_bg_color
         }).css({
             'border-bottom': '1px solid white'
         }).hover(
 
         function () {
             $(this).css({
-                background: settings.menubar_items_style.hover_background_color
+                background: settings.menu_hover_bg_color
             });
         },
 
         function () {
             $(this).css({
-                background: settings.menubar_items_style.background_color
+                background: settings.menu_bg_color
             });
         }); //css:#status-menu ul li ul li a
         menu_item.append(tag_a);
@@ -419,15 +415,15 @@ development framework, add a useful and functional menu bar in the page.
 
     HelperBar.prototype.warn = function (msg) {
         var style = {
-            color: _settings.warning_color,
-            'font-size': _settings.warning_size
+            color: _settings.warn_color,
+            'font-size': _settings.warn_size
         };
-        if (_settings.warning_mode === 'append') {
+        if (_settings.warn_mode === 'append') {
             return this.addmsg(msg, style);
-        } else if (_settings.warning_mode === 'log') {
+        } else if (_settings.warn_mode === 'log') {
             msg = _makeTagMsg('div',msg,style);
             return this.append(msg);
-        } else if (_settings.warning_mode === 'clean') {
+        } else if (_settings.warn_mode === 'clean') {
 			 return this.msg(msg, style);
         } else {
             $.error('no this type of warning mode');
@@ -491,7 +487,7 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.version = function () {
-        return '0.2.9';
+        return '0.3.0a';
     };
 
     window.HelperBar = (function () {
