@@ -25,6 +25,7 @@ development framework, add a useful and functional menu bar in the page.
 				foot_size:'6px',
                 menu_width: '100px',
                 safe_mode: 'safe',
+				menu_separator_color: 'black',
                 hide_mode: 'notOnMenu',
                 warn_size: '50px', //used be warning_size
                 warn_color: 'red', //used be warning_color
@@ -205,7 +206,8 @@ development framework, add a useful and functional menu bar in the page.
             'list-style': 'none',
             font: '12px Tahoma, Arial',
             'z-index': '100',
-			'margin': '0px'
+			'margin': '0px',
+			'border-left':'1px solid '+settings.menu_separator_color
         }) //css:#status-menu ul li
         .append(tag_a);
         return root_menu_item;
@@ -232,7 +234,7 @@ development framework, add a useful and functional menu bar in the page.
         tag_a.css(tag_a_css).css({
             background: settings.menu_bg_color
         }).css({
-            'border-bottom': '1px solid white'
+            'border-bottom': '1px solid '+settings.menu_separator_color
         }).hover(
 
         function () {

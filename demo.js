@@ -53,16 +53,18 @@
                 bar_bg_color: 'black',
                 bar_opacity: '0.8',
                 bar_font_color: 'white',
-				menu_width:'230px',
+				menu_width:'auto',
                 menu_bg_color: '#111111',
-                menu_hover_bg_color: '#222222',
-                menu_font_color: '#EAFFED'
+                menu_hover_bg_color: '#333333',
+                menu_font_color: '#EAFFED',
+				menu_separator_color: 'black'
 		};
 	
 	$(run);
 	function run(){
 		window.bar = HelperBar.getbar(menuTreeList,opts)//singleton start
 		demo_interface();
+		
 	}
 	
 	function go_top(){
