@@ -23,20 +23,20 @@ development framework, add a useful and functional menu bar in the page.
 				bar_foot:'',
 				foot_mode:'hide',
 				foot_size:'6px',
-                menu_width: 'auto',
                 safe_mode: 'safe',
-				menu_separator_color: 'black',
                 hide_mode: 'notOnMenu',
-                warn_size: '50px', //used be warning_size
-                warn_color: 'red', //used be warning_color
-                warn_mode: 'append', //used be warning_mode
+                warn_size: '50px', 
+                warn_color: 'red', 
+                warn_mode: 'append', 
                 border_radius: '56px',
-                bar_bg_color: 'black',//menubar_style.background_color
-                bar_opacity: '0.8',//menubar_style.opacity
-                bar_font_color: 'white',//menubar_style.font_color
-                menu_bg_color: '#111111',//menubar_items_style.background_color
-                menu_hover_bg_color: '#333333',//menubar_items_style.hover_background_color
-                menu_font_color: '#EAFFED'//menubar_items_style.font_color
+                bar_bg_color: 'black',
+                bar_opacity: '0.8',
+                bar_font_color: 'white',
+				menu_width: 'auto',
+				menu_separator_color: 'black',
+                menu_bg_color: '#111111',
+                menu_hover_bg_color: '#333333',
+                menu_font_color: '#EAFFED'
             }, options); //options 
 
             tag_a_css = {

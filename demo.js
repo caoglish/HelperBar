@@ -124,8 +124,8 @@
 		
 		var opts3={
 			bar_title:'Helper Bar Demo(blue)',
-			bar_foot:'[foot_mode:hide][foot_size:26px][menu_width:330px]',
-			foot_size:'26px',
+			bar_foot:'Blue Theme Demo',
+			foot_size:'86px',
 			foot_mode:'hide',
 			menu_width:'260px',
 			border_radius: '10px',
