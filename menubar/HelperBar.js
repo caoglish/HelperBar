@@ -23,7 +23,7 @@ development framework, add a useful and functional menu bar in the page.
 				bar_foot:'',
 				foot_mode:'hide',
 				foot_size:'6px',
-                menu_width: '100px',
+                menu_width: 'auto',
                 safe_mode: 'safe',
 				menu_separator_color: 'black',
                 hide_mode: 'notOnMenu',

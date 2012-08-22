@@ -1,5 +1,31 @@
+(function(){
+	window.optSet=(function(){
+		var ITEM_OPTSET='optset';
+
+		return { set:function(opt){
+				localStorage.setItem(ITEM_OPTSET,opt);
+			},
+			init:function(opt){
+				localStorage.removeItem(ITEM_OPTSET);
+				var value=opt||0;
+				this.set(value);
+			},
+			get:function(){
+				return localStorage.getItem(ITEM_OPTSET);
+			},
+			
+		
+		}
+	
+	})();
+}());
+
+
 (function( $ ){
 	 "use strict";
+	//var options_switch = localStorage.getItem('options_switch')||0;
+	//console.log(options_switch);
+	 
 	var TXT_ABOUT_INFO='<strong>Helper Bar Framework[Version:'+HelperBar.version()+']<br/>Jquery[Version:'+$().jquery+']<br/>Designer: Caoglish</strong>';
 	//Menu bar setup
 	var menuTreeFunction={
@@ -33,14 +59,29 @@
 			{'id':'mi-cls-message','title':'clear msg => bar.cls()','click':cls_msg_demo}
 		]
 	}
+	
+	var menuOptionsDemo={
+		'root':{'id':'mi-options','title':'custom options demo'},
+		'list':[
+			{'id':'mi-opt-default','title':'default(no custom options)','click':opt_default_demo},
+			{'id':'mi-opt-custom-black','title':'custom(black)','click':opt_customize_black_demo},
+			{'id':'mi-opt-custom-pink','title':'custom(pink)','click':opt_customize_pink_demo},
+			{'id':'mi-opt-custom-pink','title':'custom(blue)','click':opt_customize_blue_demo}
+		]
+	}
+	
+	
+	
 	var menuTreeAbout={
 		'root':{'id':'mi-about','title':'about','click':about},
 		'list':[]
 	}
-	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuTreeAbout];
-
-	var opts={
-				bar_title:'Helper Bar Demo',
+	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuOptionsDemo,menuTreeAbout];
+	
+	
+	var optsDefault={};
+	var opts1={
+				bar_title:'Helper Bar Demo(black)',
 				bar_foot:'verions:'+HelperBar.version(),
 				foot_mode:'show',
 				foot_size:'8px',
@@ -59,12 +100,54 @@
                 menu_font_color: '#EAFFED',
 				menu_separator_color: 'black'
 		};
-	
+		
+		var opts2={
+				bar_title:'Helper Bar Demo(Pink)',
+				bar_foot:'verions:'+HelperBar.version(),
+				foot_mode:'show',
+				foot_size:'8px',
+                safe_mode: 'safe',
+                hide_mode: 'notOnMenu',
+				border_radius: '86px',
+                warn_size:'32px',
+				warn_color:'black',
+				warn_mode:'log',
+                bar_bg_color: 'pink',
+                bar_opacity: '0.8',
+                bar_font_color: '#005500',
+				menu_width:'230px',
+                menu_bg_color: '#ff00cc',
+                menu_hover_bg_color: '#ff33cc',
+                menu_font_color: 'yellow',
+				menu_separator_color: 'yellow'
+		};
+		
+		var opts3={
+			bar_title:'Helper Bar Demo(blue)',
+			bar_foot:'[foot_mode:hide][foot_size:26px][menu_width:330px]',
+			foot_size:'26px',
+			foot_mode:'hide',
+			menu_width:'260px',
+			border_radius: '10px',
+			bar_bg_color: 'blue',
+			bar_font_color: 'gray',
+			menu_bg_color: 'Navy',
+			menu_font_color: 'yellow',
+			menu_hover_bg_color: 'gray',
+			
+			menu_separator_color: 'green'
+		};
+
+		var optionsList=[optsDefault,opts1,opts2,opts3];
+		
 	$(run);
 	function run(){
-		window.bar = HelperBar.getbar(menuTreeList,opts)//singleton start
-		demo_interface();
+		if(optSet.get()==undefined){
+			optSet.init(1);
+		}
 		
+		window.bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
+		demo_interface();
 	}
 	
 	function go_top(){
@@ -179,10 +262,35 @@
 	function cls_foot_demo(){
 		bar.clsFoot();
 	}
-
+	
+	//options demo
+	function opt_default_demo(){
+		optSet.set(0);
+		location.reload();
+	}
+	
+	function opt_customize_black_demo(){
+		optSet.set(1);
+		location.reload();
+	}
+	
+	function opt_customize_pink_demo(){
+		optSet.set(2);
+		location.reload();
+	}
+	
+	function opt_customize_blue_demo(){
+		optSet.set(3);
+		location.reload();
+	}
+	
+	
+	
+	
+	//about 
 	function about(){
 		bar.clsTitle().cls().title(create_title('about'));
-		var text=$.tag('div',{style:'color:white'})
+		var text=$.tag('div',{style:optionsList[optSet.get()].bar_font_color})
 			.html(TXT_ABOUT_INFO)
 			.click(function(){
 				$(this).remove();
