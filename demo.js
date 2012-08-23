@@ -1,6 +1,6 @@
 (function(){
 	window.optSet=(function(){
-		var ITEM_OPTSET='optset';
+		var ITEM_OPTSET='HelperBar_optset';
 
 		return { set:function(opt){
 				localStorage.setItem(ITEM_OPTSET,opt);
@@ -334,5 +334,3 @@
 		});
 	}
 })( jQuery );
-
-

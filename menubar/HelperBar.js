@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.3.0b
+@version     0.3.0
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
@@ -16,6 +16,7 @@ development framework, add a useful and functional menu bar in the page.
     //(start)Jquery plugin development framework.
     var settings;
     var tag_a_css;
+	var font_style={'font-family':'arial,sans-serif','font-size':'100%'};//make font style consistent
     var methods = {
         init: function (menu_tree_list, options) {
             settings = $.extend(true, {
@@ -38,7 +39,7 @@ development framework, add a useful and functional menu bar in the page.
                 menu_hover_bg_color: '#333333',
                 menu_font_color: '#EAFFED'
             }, options); //options 
-
+			
             tag_a_css = {
                 display: 'block',
                 padding: '5px 12px',
@@ -47,7 +48,7 @@ development framework, add a useful and functional menu bar in the page.
                 color: settings.menu_font_color,
                 'white-space': 'nowrap'
             }; //tag a style sheet.
-
+			tag_a_css=$.extend(tag_a_css,font_style);
             return this.each(function () {
                 jqob_clean.call($(this)); //clean this jquery object content and texts
                 convert_status_bar.call($(this));
@@ -66,7 +67,7 @@ development framework, add a useful and functional menu bar in the page.
                 $(this).find(STATUS_TITLE).empty();
             });
         },
-	    foot: function (text) {
+		foot: function (text) {
             return this.each(function () {
                 $(this).find(STATUS_FOOTER).append(text);
             });
@@ -142,16 +143,17 @@ development framework, add a useful and functional menu bar in the page.
             'width': '100%',
             'text-align': 'left'
         }); //create status bar//css: #status-bar
-
+		
+		
         var div_status_title = $.tag('div', {
             id: STATUS_TITLE.strip()
-        }); //create status title area
+        }).css(font_style); //create status title area
         var div_status_message = $.tag('div', {
             id: STATUS_MESSAGE.strip()
-        }); //create status message area
+        }).css(font_style); //create status message area
 		var div_status_footer = $.tag('div', {
             id: STATUS_FOOTER.strip()
-        }); //create status footer area
+        }).css(font_style); //create status footer area
 		if(settings.foot_size!=='none'){div_status_footer.css('font-size',settings.foot_size);}
 
         this.append(div_status_title).append(div_status_message).append(div_status_footer).append(create_status_menu());
@@ -202,6 +204,8 @@ development framework, add a useful and functional menu bar in the page.
         }); //css:#status-menu ul li a
 
         var root_menu_item = $.tag('li').css({
+			'padding':'0px',
+			'background':'',
             float: 'left',
             'list-style': 'none',
             font: '12px Tahoma, Arial',
@@ -216,6 +220,8 @@ development framework, add a useful and functional menu bar in the page.
     function create_menu_item(id, title, callback) {
         var menu_item = $.tag('li');
         menu_item.css({
+			'padding':'0px',
+			'background':'',
             float: 'none',
             display: 'inline',
             margin: '0px'
@@ -291,34 +297,35 @@ development framework, add a useful and functional menu bar in the page.
     function select_hide_mode() {
         //hide mode selection: all, onBar, notOnBar,notOnMenu,noHide
         var jqob_menubar = this;
-        if (settings.hide_mode == 'all') {
-            $(document).dblclick(function (e) {
+        if (settings.hide_mode === 'all') {
+            $(document).dblclick(function () {
                 jqob_menubar.toggle();
             });
-        } else if (settings.hide_mode == 'onBar') {
+        } else if (settings.hide_mode === 'onBar') {
             $(document).dblclick(function (e) {
                 var event_area = $(e.target).parents(STATUS_BAR);
-                if (event_area[0] == jqob_menubar[0]) {
+                if (event_area[0] === jqob_menubar[0]) {
                     jqob_menubar.hide();
                 } else {
                     jqob_menubar.show();
                 }
             });
-        } else if (settings.hide_mode == 'notOnBar') {
+        } else if (settings.hide_mode === 'notOnBar') {
             $(document).dblclick(function (e) {
                 var event_area = $(e.target).parents(STATUS_BAR);
-                if (event_area[0] != jqob_menubar[0]) {
+                if (event_area[0] !== jqob_menubar[0]) {
                     jqob_menubar.toggle();
                 }
             });
-        } else if (settings.hide_mode == 'notOnMenu') {
+        } else if (settings.hide_mode === 'notOnMenu') {
             $(document).dblclick(function (e) {
                 var event_area = $(e.target).parents(STATUS_BAR);
-                if (!(event_area[0] == jqob_menubar[0] && e.target.nodeName == 'A')) {
+                if (!(event_area[0] === jqob_menubar[0] && e.target.nodeName === 'A')) {
                     jqob_menubar.toggle();
                 }
             });
-        } else if (settings.hide_mode == 'noHide') {} else {
+        } else if (settings.hide_mode === 'noHide') {
+		} else {
             $.error('Wrong Type of Hide Mode');
         }
     }
@@ -330,23 +337,23 @@ development framework, add a useful and functional menu bar in the page.
 		//set the status menu will show on mouse over the statusbar, hide on mouse out
         var jqob_status_menu = jqob_menubar.find(STATUS_MENU);
 		var jqob_footer=jqob_menubar.find(STATUS_FOOTER);
-        jqob_menubar.hover(function () {
-		    if(settings.foot_mode === 'hide' ) jqob_footer.show();
+		jqob_menubar.hover(function () {
+			if(settings.foot_mode === 'hide' ) {jqob_footer.show();}
             jqob_status_menu.show();
 			
         }, function () {
-			if(settings.foot_mode === 'hide' ) jqob_footer.hide('slow');
+			if(settings.foot_mode === 'hide' ) {jqob_footer.hide('slow');}
             jqob_status_menu.hide('slow');
         });
         for (var menu_tree in menu_tree_list) {
             construct_one_menu_tree(menu_tree_list[menu_tree]).appendTo(this.find(LIST_MENU));
         }
         //initalize the default appearance of the status bar
-        jqob_status_menu.hide();
-		 if(settings.foot_mode === 'hide' ) jqob_footer.hide();
-        jqob_menubar.menubar('title', settings.bar_title);
+		jqob_status_menu.hide();
+		if(settings.foot_mode === 'hide' ) {jqob_footer.hide();}
+		jqob_menubar.menubar('title', settings.bar_title);
 		jqob_menubar.menubar('foot', settings.bar_foot);
-        select_hide_mode.call(jqob_menubar); //select hide mode
+		select_hide_mode.call(jqob_menubar); //select hide mode
     }
 })(jQuery);
 
@@ -364,12 +371,12 @@ development framework, add a useful and functional menu bar in the page.
     function HelperBar(menu_tree_list, options) {
         _menubar = $.tag('div').appendTo('body').menubar(menu_tree_list, options);
         _settings = _menubar.menubar('getSettings');
-        if (_settings.safe_mode == 'safe') {} else if (_settings.safe_mode == 'unsafe') {
+        if (_settings.safe_mode === 'safe') {} else if (_settings.safe_mode === 'unsafe') {
             this.getMenuBar = function () {
-                return _menubar;
+				return _menubar;
             };
             this.getSettings = function () {
-                return _settings;
+				return _settings;
             };
         } else {
             $.error('no this type of safe mode.');
@@ -426,7 +433,7 @@ development framework, add a useful and functional menu bar in the page.
             msg = _makeTagMsg('div',msg,style);
             return this.append(msg);
         } else if (_settings.warn_mode === 'clean') {
-			 return this.msg(msg, style);
+			return this.msg(msg, style);
         } else {
             $.error('no this type of warning mode');
         }
@@ -489,7 +496,7 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.version = function () {
-        return '0.3.0b';
+        return '0.3.0';
     };
 
     window.HelperBar = (function () {
@@ -508,6 +515,6 @@ development framework, add a useful and functional menu bar in the page.
             version: function () {
                 return HelperBar.prototype.version();
             }
-        }
+        };
     })();
 })(jQuery);
