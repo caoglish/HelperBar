@@ -1,28 +1,27 @@
-(function(){
-	window.optSet=(function(){
-		var ITEM_OPTSET='HelperBar_optset';
+(function () {
+    "use strict";
+    window.optSet = (function () {
+        var ITEM_OPTSET = 'HelperBar_optset';
 
-		return { set:function(opt){
-				localStorage.setItem(ITEM_OPTSET,opt);
-			},
-			init:function(opt){
-				localStorage.removeItem(ITEM_OPTSET);
-				var value=opt||0;
-				this.set(value);
-			},
-			get:function(){
-				return localStorage.getItem(ITEM_OPTSET);
-			}
-		};
-	})();
+        return {
+            set: function (opt) {
+                localStorage.setItem(ITEM_OPTSET, opt);
+            },
+            init: function (opt) {
+                localStorage.removeItem(ITEM_OPTSET);
+                var value = opt || 0;
+                this.set(value);
+            },
+            get: function () {
+                return localStorage.getItem(ITEM_OPTSET);
+            }
+        };
+    })();
 }());
 
-
 (function( $ ){
-	 "use strict";
-	//var options_switch = localStorage.getItem('options_switch')||0;
-	//console.log(options_switch);
-	 
+	"use strict";
+	var bar; 
 	var TXT_ABOUT_INFO='<strong>Helper Bar Framework[Version:'+HelperBar.version()+']<br/>Jquery[Version:'+$().jquery+']<br/>Designer: Caoglish</strong>';
 	//Menu bar setup
 	var menuTreeFunction={
@@ -33,7 +32,7 @@
 			{'id':'mi-mouse-position','title':'mouse position','click':mouse_position},
 			{'id':'mi-refresh','title':'page refresh','click':page_reload}
 		]
-	}
+	};
 	var menuTreeDemo={
 		'root':{'id':'menu-demo','title':'API Demo'},
 		'list':[
@@ -55,7 +54,7 @@
 			{'id':'mi-cls-foot','title':'clear foot =>bar.clsFoot(text)','click':cls_foot_demo},
 			{'id':'mi-cls-message','title':'clear msg => bar.cls()','click':cls_msg_demo}
 		]
-	}
+	};
 	
 	var menuOptionsDemo={
 		'root':{'id':'mi-options','title':'custom options demo'},
@@ -65,17 +64,13 @@
 			{'id':'mi-opt-custom-pink','title':'custom(pink)','click':opt_customize_pink_demo},
 			{'id':'mi-opt-custom-pink','title':'custom(blue)','click':opt_customize_blue_demo}
 		]
-	}
-	
-	
+	};
 	
 	var menuTreeAbout={
 		'root':{'id':'mi-about','title':'about','click':about},
 		'list':[]
-	}
+	};
 	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuOptionsDemo,menuTreeAbout];
-	
-	
 	var optsDefault={};
 	var opts1={
 				bar_title:'Helper Bar Demo(black)',
@@ -134,28 +129,25 @@
 			
 			menu_separator_color: 'green'
 		};
-
 		var optionsList=[optsDefault,opts1,opts2,opts3];
-		
 	$(run);
 	function run(){
-		if(optSet.get()==undefined){
+		if(optSet.get()===undefined){
 			optSet.init(1);
 		}
-		
-		window.bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
+		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
 		demo_interface();
 	}
 	
 	function go_top(){
 			$('html, body').animate({ scrollTop: 0 }, 'slow');
-		};
+		}
 	function go_bottom(){
 			$('html, body').animate({ scrollTop: $(document).height() }, 'slow');
-		};
+		}
 	function page_reload(){
 		location.reload();
-	};
+	}
 
 	//demo
 	function show_msg_demo(){
@@ -236,7 +228,6 @@
 			.append('</ul>')
 			.title('')
 			.warn('<br/> check the demo source code: chaining_demo() ');
-			;
 	}
 	
 	function cls_title_demo(){
@@ -280,10 +271,6 @@
 		optSet.set(3);
 		location.reload();
 	}
-	
-	
-	
-	
 	//about 
 	function about(){
 		bar.clsTitle().cls().title(create_title('about'));
@@ -292,23 +279,22 @@
 			.click(function(){
 				$(this).remove();
 				bar.cls().clsTitle();
-			});;
+			});
 		bar.msg(text);
 	}
 	
-	var mp_handler=function (e){ bar.clsFoot().foot("[X: " + e.pageX + "][Y: " + e.pageY+']');}
+	var mp_handler=function (e){ bar.clsFoot().foot("[X: " + e.pageX + "][Y: " + e.pageY+']');};
 	function mouse_position(){
-		console.log($.data(document,'toggle'));
 		var mouse_position_on = $.data(document,'toggle')||'0';
 		
-		if(mouse_position_on =='1'){
+		if(mouse_position_on ==='1'){
 			$(document).off('mousemove',mp_handler);
 			$.data(document,'toggle',0);
 			bar.clsFoot();
-		 }else{
+		}else{
 			$(document).on('mousemove',mp_handler);
 			$.data(document,'toggle',1);
-		 }
+		}
 	}
 	
 	function create_title(title){

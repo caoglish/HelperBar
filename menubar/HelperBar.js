@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.3.0
+@version     0.3.1a
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
@@ -496,7 +496,7 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.version = function () {
-        return '0.3.0';
+        return '0.3.1a';
     };
 
     window.HelperBar = (function () {
