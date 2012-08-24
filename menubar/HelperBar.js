@@ -141,6 +141,7 @@ development framework, add a useful and functional menu bar in the page.
             'padding-left': '2px',
             'margin-left': '1px',
             'width': '100%',
+			'z-index': '99999',
             'text-align': 'left'
         }); //create status bar//css: #status-bar
 		
@@ -209,7 +210,6 @@ development framework, add a useful and functional menu bar in the page.
             float: 'left',
             'list-style': 'none',
             font: '12px Tahoma, Arial',
-            'z-index': '100',
 			'margin': '0px',
 			'border-left':'1px solid '+settings.menu_separator_color
         }) //css:#status-menu ul li

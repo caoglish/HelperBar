@@ -12,11 +12,8 @@
 			},
 			get:function(){
 				return localStorage.getItem(ITEM_OPTSET);
-			},
-			
-		
-		}
-	
+			}
+		};
 	})();
 }());
 
