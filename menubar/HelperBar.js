@@ -6,17 +6,17 @@ development framework, add a useful and functional menu bar in the page.
 (function ($) {
     "use strict";
     //core of menubar
-    var STATUS_BAR = '#status-bar';
-    var STATUS_TITLE = '#status-title';
-    var STATUS_MESSAGE = '#status-message';
-	var STATUS_FOOTER = '#status-footer';
-    var STATUS_MENU = '#status-menu';
-    var LIST_MENU = "#list-menu";
+    var STATUS_BAR = '#helper-bar-7cad339b0b08db99561c640461d00a07';
+    var STATUS_TITLE = '#status-title-7cad339';
+    var STATUS_MESSAGE = '#status-message-7cad339';
+	var STATUS_FOOTER = '#status-footer-7cad339';
+    var STATUS_MENU = '#status-menu-7cad339';
+    var LIST_MENU = "#list-menu-7cad339";
 
     //(start)Jquery plugin development framework.
     var settings;
-    var tag_a_css;
-	var font_style={'font-family':'arial,sans-serif','font-size':'100%'};//make font style consistent
+	//private css settings.
+    var tag_a_css,font_style,bar_basic_style,root_menu_style,menu_style,menu_ul_style;//all css style variable.
     var methods = {
         init: function (menu_tree_list, options) {
             settings = $.extend(true, {
@@ -37,18 +37,11 @@ development framework, add a useful and functional menu bar in the page.
 				menu_separator_color: 'black',
                 menu_bg_color: '#111111',
                 menu_hover_bg_color: '#333333',
-                menu_font_color: '#EAFFED'
+                font_family: 'Arial,Helvetica,Sans-Serif',
+				menu_font_color: '#EAFFED'
             }, options); //options 
-			
-            tag_a_css = {
-                display: 'block',
-                padding: '5px 12px',
-                'text-decoration': 'none',
-                width: settings.menu_width,
-                color: settings.menu_font_color,
-                'white-space': 'nowrap'
-            }; //tag a style sheet.
-			tag_a_css=$.extend(tag_a_css,font_style);
+			manage_css();//manage all css stylesheet
+           
             return this.each(function () {
                 jqob_clean.call($(this)); //clean this jquery object content and texts
                 convert_status_bar.call($(this));
@@ -126,11 +119,12 @@ development framework, add a useful and functional menu bar in the page.
     //Menubar ui Maker
     function jqob_clean() {
         var jqob = this;
-        jqob.empty().removeAttr('id', '').removeAttr('class').removeAttr('style');
+        jqob.empty().removeAttr('id').removeAttr('class').removeAttr('style');
     }
-
-    function convert_status_bar() {
-        this.attr('id', STATUS_BAR.strip()).css({
+	
+	function manage_css(){
+		font_style={'font-family':settings.font_family,'font-size':'100%'};
+		bar_basic_style={
             'position': 'fixed',
             'background-color': settings.bar_bg_color,
             'color': settings.bar_font_color,
@@ -142,8 +136,46 @@ development framework, add a useful and functional menu bar in the page.
             'margin-left': '1px',
             'width': '100%',
 			'z-index': '99999',
+			'line-height': 'normal',
             'text-align': 'left'
-        }); //create status bar//css: #status-bar
+        };//css: #helper-bar-nnnnnnnnnnnnnn
+		
+		var menu_basic_style={
+			'padding':'0px',
+			'background':'',
+			'list-style': 'none',
+            'margin': '0px'
+        };//basic style for both menu and root menu
+		
+		menu_ul_style={
+            'margin': '0',
+           'padding': '0',
+            'position': 'absolute',
+            'bottom': '23px'
+        };
+		
+		menu_style=$.extend({},menu_style,menu_basic_style,{	
+						'display': 'inline'
+					 });//css:#status-menu ul li ul li
+
+		root_menu_style=$.extend({},menu_basic_style,{	
+						  'float': 'left',
+						  'border-left':'1px solid '+settings.menu_separator_color
+					});//css:#status-menu ul li
+
+		tag_a_css ={
+                'display': 'block',
+                'padding': '5px 12px',
+                'text-decoration': 'none',
+                'width': settings.menu_width,
+                'color': settings.menu_font_color,
+                'white-space': 'nowrap'
+            }; //tag a style sheet.
+		bar_basic_style=$.extend(bar_basic_style,font_style);
+	}
+
+    function convert_status_bar() {
+        this.attr('id', STATUS_BAR.strip()).css(bar_basic_style); //create status bar//css: #helper-bar-nnnnnnnnnnnnnn
 		
 		
         var div_status_title = $.tag('div', {
@@ -204,28 +236,14 @@ development framework, add a useful and functional menu bar in the page.
             });
         }); //css:#status-menu ul li a
 
-        var root_menu_item = $.tag('li').css({
-			'padding':'0px',
-			'background':'',
-            float: 'left',
-            'list-style': 'none',
-            font: '12px Tahoma, Arial',
-			'margin': '0px',
-			'border-left':'1px solid '+settings.menu_separator_color
-        }) //css:#status-menu ul li
+        var root_menu_item = $.tag('li').css(root_menu_style) //css:#status-menu ul li
         .append(tag_a);
         return root_menu_item;
     }
 
     function create_menu_item(id, title, callback) {
         var menu_item = $.tag('li');
-        menu_item.css({
-			'padding':'0px',
-			'background':'',
-            float: 'none',
-            display: 'inline',
-            margin: '0px'
-        }); //css:#status-menu ul li ul li
+        menu_item.css(menu_style); //css:#status-menu ul li ul li
         var tag_a = $.tag('a', {
             id: id,
             href: '#',
@@ -265,13 +283,7 @@ development framework, add a useful and functional menu bar in the page.
 
     function construction_menu(menu_list) {
         var tag_ul = $.tag('ul');
-        tag_ul.hide().css({
-            margin: '0',
-            padding: '0',
-            position: 'absolute',
-            bottom: '23px',
-            'z-index': '100'
-        }); //css:#status-menu ul li ul
+        tag_ul.hide().css(menu_ul_style); //css:#status-menu ul li ul
         for (var menu in menu_list) {
             var id = menu_list[menu].id;
             var title = menu_list[menu].title;

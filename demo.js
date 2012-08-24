@@ -111,7 +111,8 @@
                 menu_bg_color: '#ff00cc',
                 menu_hover_bg_color: '#ff33cc',
                 menu_font_color: 'yellow',
-				menu_separator_color: 'yellow'
+				menu_separator_color: 'yellow',
+				font_family:'MuseoLight,Arial,Helvetica,Sans-Serif'
 		};
 		
 		var opts3={
