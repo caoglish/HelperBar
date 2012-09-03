@@ -287,14 +287,13 @@
 	var mp_handler=function (e){ bar.clsFoot().foot("[X: " + e.pageX + "][Y: " + e.pageY+']');};
 	function mouse_position(){
 		var mouse_position_on = $.data(document,'toggle')||'0';
-		
 		if(mouse_position_on ==='1'){
 			$(document).off('mousemove',mp_handler);
-			$.data(document,'toggle',0);
+			$.data(document,'toggle','0');
 			bar.clsFoot();
 		}else{
 			$(document).on('mousemove',mp_handler);
-			$.data(document,'toggle',1);
+			$.data(document,'toggle','1');
 		}
 	}
 	
