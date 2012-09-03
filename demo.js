@@ -133,7 +133,7 @@
 		var optionsList=[optsDefault,opts1,opts2,opts3];
 	$(run);
 	function run(){
-		if(optSet.get()===undefined){
+		if(optSet.get()===undefined||optSet.get()===null){
 			optSet.init(1);
 		}
 		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
