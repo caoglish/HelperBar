@@ -1,17 +1,18 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.3.1
+@version     0.3.2a
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
     "use strict";
-    //core of menubar
+	
+	//core of menubar
     var STATUS_BAR = '#helper-bar-7cad339b0b08db99561c640461d00a07';
-    var STATUS_TITLE = '#status-title-7cad339';
-    var STATUS_MESSAGE = '#status-message-7cad339';
-	var STATUS_FOOTER = '#status-footer-7cad339';
-    var STATUS_MENU = '#status-menu-7cad339';
-    var LIST_MENU = "#list-menu-7cad339";
+    var STATUS_TITLE = '#status-title';
+    var STATUS_MESSAGE = '#status-message';
+	var STATUS_FOOTER = '#status-footer';
+    var STATUS_MENU = '#status-menu';
+    var LIST_MENU = "#list-menu";
 
     //(start)Jquery plugin development framework.
     var settings;
@@ -115,6 +116,8 @@ development framework, add a useful and functional menu bar in the page.
     $.tag = function (tag, opts) {
         return $('<' + tag + '/>', opts);
     };
+	
+	
 
     //Menubar ui Maker
     function jqob_clean() {
@@ -450,6 +453,29 @@ development framework, add a useful and functional menu bar in the page.
             $.error('no this type of warning mode');
         }
     };
+	
+	//add in version 0.3.2a
+	HelperBar.prototype.clickClsMsg = function (msg, style,func) {
+		if(typeof style  === 'function') func = style;
+		
+        var message=$.tag('div')
+			.html(msg)
+			.click(function(){
+				$(this).remove();
+				if(typeof func === "function") func.call(message);
+			});
+			
+		if(typeof style  === 'number') {
+			message.css({'font-size':style});
+		}else if(typeof style  === 'string') {
+			message.css({'color':style});
+		}else if(typeof style  === 'object'){
+			message.css(style);
+		}else{
+			message.css({'font-size':'100%'});
+		}
+		this.msg(message);
+    };
 
     HelperBar.prototype.cls = function () {
         this.html('');
@@ -508,7 +534,7 @@ development framework, add a useful and functional menu bar in the page.
     };
 
     HelperBar.prototype.version = function () {
-        return '0.3.1';
+        return '0.3.2a';
     };
 
     window.HelperBar = (function () {

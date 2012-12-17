@@ -25,49 +25,49 @@
 	var TXT_ABOUT_INFO='<strong>Helper Bar Framework[Version:'+HelperBar.version()+']<br/>Jquery[Version:'+$().jquery+']<br/>Designer: Caoglish</strong>';
 	//Menu bar setup
 	var menuTreeFunction={
-		'root':{'id':'menu-function','title':'function'},
+		'root':{'title':'function'},
 		'list':[
-			{'id':'mi-gotop','title':'go top','click':go_top},
-			{'id':'mi-gobottom','title':'go bottom','click':go_bottom},
-			{'id':'mi-mouse-position','title':'mouse position','click':mouse_position},
-			{'id':'mi-refresh','title':'page refresh','click':page_reload}
+			{'title':'go top','click':go_top},
+			{'title':'go bottom','click':go_bottom},
+			{'title':'mouse position','click':mouse_position},
+			{'title':'page refresh','click':page_reload}
 		]
 	};
 	var menuTreeDemo={
-		'root':{'id':'menu-demo','title':'API Demo'},
+		'root':{'id':'mi-API-Demo','title':'API Demo'},
 		'list':[
-			{'id':'mi-show-message-on-bar','title':'Show Message => bar.msg(text)','click':show_msg_demo},
-			{'id':'mi-show-color-message-on-bar','title':'Show Color Message => bar.msg(text,color)','click':show_color_msg_demo},
-			{'id':'mi-show-style-message-on-bar','title':'Show Style Message => bar.msg(text,style)','click':show_style_msg_demo},
-			{'id':'mi-warning','title':'warning => bar.warn(text)','click':warning_demo},
-			{'id':'mi-log','title':'log => bar.log(text)','click':log_demo},
-			{'id':'mi-alert-demo','title':'get msg on the bar => bar.msg()','click':alert_demo},
-			{'id':'mi-alert-html-demo','title':'get html on the bar => bar.html()','click':alert_html_demo},
-			{'id':'mi-add-message','title':'add msg demo => bar.addmsg(text,style)','click':add_msg_demo},
-			{'id':'mi-html','title':'html demo => bar.html(html)','click':html_demo},
-			{'id':'mi-append','title':'append msg => bar.append(html)','click':append_demo},
-			{'id':'mi-open-url','title':'open url =>bar.open(url)','click':open_url_demo},
-			{'id':'mi-chaining','title':'chaining Demo','click':chaining_demo},
-			{'id':'mi-title','title':'append title =>bar.title(text)','click':title_demo},
-			{'id':'mi-title','title':'append foot =>bar.foot(text)','click':foot_demo},
-			{'id':'mi-cls-title','title':'clear title =>bar.clsTitle(text)','click':cls_title_demo},
-			{'id':'mi-cls-foot','title':'clear foot =>bar.clsFoot(text)','click':cls_foot_demo},
-			{'id':'mi-cls-message','title':'clear msg => bar.cls()','click':cls_msg_demo}
+			{'title':'Show Message => bar.msg(text)','click':show_msg_demo},
+			{'title':'Show Color Message => bar.msg(text,color)','click':show_color_msg_demo},
+			{'title':'Show Style Message => bar.msg(text,style)','click':show_style_msg_demo},
+			{'title':'warning => bar.warn(text)','click':warning_demo},
+			{'title':'log => bar.log(text)','click':log_demo},
+			{'title':'get msg on the bar => bar.msg()','click':alert_demo},
+			{'title':'get html on the bar => bar.html()','click':alert_html_demo},
+			{'title':'add msg demo => bar.addmsg(text,style)','click':add_msg_demo},
+			{'title':'html demo => bar.html(html)','click':html_demo},
+			{'title':'append msg => bar.append(html)','click':append_demo},
+			{'title':'open url =>bar.open(url)','click':open_url_demo},
+			{'title':'chaining Demo','click':chaining_demo},
+			{'title':'append title =>bar.title(text)','click':title_demo},
+			{'title':'append foot =>bar.foot(text)','click':foot_demo},
+			{'title':'clear title =>bar.clsTitle(text)','click':cls_title_demo},
+			{'title':'clear foot =>bar.clsFoot(text)','click':cls_foot_demo},
+			{'title':'clear msg => bar.cls()','click':cls_msg_demo}
 		]
 	};
 	
 	var menuOptionsDemo={
-		'root':{'id':'mi-options','title':'custom options demo'},
+		'root':{'title':'custom options demo'},
 		'list':[
-			{'id':'mi-opt-default','title':'default(no custom options)','click':opt_default_demo},
-			{'id':'mi-opt-custom-black','title':'custom(black)','click':opt_customize_black_demo},
-			{'id':'mi-opt-custom-pink','title':'custom(pink)','click':opt_customize_pink_demo},
-			{'id':'mi-opt-custom-pink','title':'custom(blue)','click':opt_customize_blue_demo}
+			{'title':'default(no custom options)','click':opt_default_demo},
+			{'title':'custom(black)','click':opt_customize_black_demo},
+			{'title':'custom(pink)','click':opt_customize_pink_demo},
+			{'title':'custom(blue)','click':opt_customize_blue_demo}
 		]
 	};
 	
 	var menuTreeAbout={
-		'root':{'id':'mi-about','title':'about','click':about},
+		'root':{'title':'about','click':about},
 		'list':[]
 	};
 	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuOptionsDemo,menuTreeAbout];
@@ -275,13 +275,9 @@
 	//about 
 	function about(){
 		bar.clsTitle().cls().title(create_title('about'));
-		var text=$.tag('div',{style:optionsList[optSet.get()].bar_font_color})
-			.html(TXT_ABOUT_INFO)
-			.click(function(){
-				$(this).remove();
-				bar.cls().clsTitle();
-			});
-		bar.msg(text);
+		bar.clickClsMsg(TXT_ABOUT_INFO,18,function(){
+			bar.cls().clsTitle();
+		});
 	}
 	
 	var mp_handler=function (e){ bar.clsFoot().foot("[X: " + e.pageX + "][Y: " + e.pageY+']');};
