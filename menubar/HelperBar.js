@@ -17,7 +17,7 @@ development framework, add a useful and functional menu bar in the page.
     //(start)Jquery plugin development framework.
     var settings;
 	//private css settings.
-    var tag_a_css,font_style,bar_basic_style,root_menu_style,menu_style,menu_ul_style;//all css style variable.
+    var tag_a_css,font_style,bar_basic_style,root_menu_style,menu_style,menu_ul_style,css_fix;//all css style variable.
     var methods = {
         init: function (menu_tree_list, options) {
             settings = $.extend(true, {
@@ -116,8 +116,6 @@ development framework, add a useful and functional menu bar in the page.
     $.tag = function (tag, opts) {
         return $('<' + tag + '/>', opts);
     };
-	
-	
 
     //Menubar ui Maker
     function jqob_clean() {
@@ -126,7 +124,8 @@ development framework, add a useful and functional menu bar in the page.
     }
 	
 	function manage_css(){
-		font_style={'font-family':settings.font_family,'font-size':'100%'};
+		font_style={'font-family':settings.font_family
+					,'font-size':'100%'};
 		bar_basic_style={
             'position': 'fixed',
             'background-color': settings.bar_bg_color,
@@ -135,6 +134,7 @@ development framework, add a useful and functional menu bar in the page.
             'right': '0',
             'opacity': settings.bar_opacity,
             'border-radius': '0px ' + settings.border_radius + ' 0px 0px',
+			'padding':'0px',
             'padding-left': '2px',
             'margin-left': '1px',
             'width': '100%',
@@ -174,7 +174,8 @@ development framework, add a useful and functional menu bar in the page.
                 'color': settings.menu_font_color,
                 'white-space': 'nowrap'
             }; //tag a style sheet.
-		bar_basic_style=$.extend(bar_basic_style,font_style);
+		bar_basic_style=$.extend({},bar_basic_style,font_style);
+		css_fix={'padding':'0px'};
 	}
 
     function convert_status_bar() {
@@ -183,13 +184,13 @@ development framework, add a useful and functional menu bar in the page.
 		
         var div_status_title = $.tag('div', {
             id: STATUS_TITLE.strip()
-        }).css(font_style); //create status title area
+        }).css(css_fix).css(font_style); //create status title area
         var div_status_message = $.tag('div', {
             id: STATUS_MESSAGE.strip()
-        }).css(font_style); //create status message area
+        }).css(css_fix).css(font_style); //create status message area
 		var div_status_footer = $.tag('div', {
             id: STATUS_FOOTER.strip()
-        }).css(font_style); //create status footer area
+        }).css(css_fix).css(font_style); //create status footer area
 		if(settings.foot_size!=='none'){div_status_footer.css('font-size',settings.foot_size);}
 
         this.append(div_status_title).append(div_status_message).append(div_status_footer).append(create_status_menu());
@@ -199,7 +200,7 @@ development framework, add a useful and functional menu bar in the page.
     function create_status_menu() {
         var div_status_menu = $.tag('div', {
             id: STATUS_MENU.strip()
-        }); //create status menu
+        }).css(css_fix); //create status menu
         var ul_list_menu = $.tag('ul', {
             id: LIST_MENU.strip()
         }); //create menu list
@@ -344,7 +345,7 @@ development framework, add a useful and functional menu bar in the page.
             $.error('Wrong Type of Hide Mode');
         }
     }
-
+	
     //have a parameter menu_tree_list
     function init_status_bar() {
         var menu_tree_list = arguments; //get parameter
