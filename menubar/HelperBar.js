@@ -34,21 +34,21 @@ development framework, add a useful and functional menu bar in the page.
 	var barBuilder = {
 		convert_status_bar:function($object) {
 			$object.attr('id', _.cropFirstSymbol(STATUS_BAR)).css(cssManager.bar_basic_style); //create status bar//css: #helper-bar-nnnnnnnnnnnnnn
-			var div_status_title = $.tag('div', {
+			var $div_status_title = $.tag('div', {
 				id: _.cropFirstSymbol(STATUS_TITLE)
 			}).css(cssManager.menu_basic_style).css(cssManager.font_style); //create status title area
-			var div_status_message = $.tag('div', {
+			var $div_status_message = $.tag('div', {
 				id: _.cropFirstSymbol(STATUS_MESSAGE)
 			}).css(cssManager.menu_basic_style).css(cssManager.font_style); //create status message area
-			var div_status_footer = $.tag('div', {
+			var $div_status_message = $.tag('div', {
 				id: _.cropFirstSymbol(STATUS_FOOTER)
 			}).css(cssManager.menu_basic_style).css(cssManager.font_style); //create status footer area
-			if(settings.foot_size!=='none'){div_status_footer.css('font-size',settings.foot_size);}
-			$object.append(div_status_title).append(div_status_message).append(div_status_footer).append(this.create_status_menu());
+			if(settings.foot_size!=='none'){$div_status_message.css('font-size',settings.foot_size);}
+			$object.append($div_status_title).append($div_status_message).append($div_status_message).append(this.create_status_menu());
 		},
 	//status menu
 		create_status_menu:function() {
-			var div_status_menu = $.tag('div', {
+			var $div_status_menu = $.tag('div', {
 				id: _.cropFirstSymbol(STATUS_MENU)
 			}).css(cssManager.menu_basic_style); //create status menu
 			var ul_list_menu = $.tag('ul', {
@@ -58,11 +58,11 @@ development framework, add a useful and functional menu bar in the page.
 				margin: 0,
 				padding: 0
 			}); //css: #status-menu ul
-			div_status_menu.append(ul_list_menu); //construct status bar
-			return div_status_menu;
+			$div_status_menu.append(ul_list_menu); //construct status bar
+			return $div_status_menu;
 		},
 		create_root_menu_item:function(id, title, callback) {
-			var tag_a = $.tag('a', {
+			var $tag_a = $.tag('a', {
 				id: id,
 				href: '#',
 				text: title
@@ -73,7 +73,7 @@ development framework, add a useful and functional menu bar in the page.
 				}
 			});
 
-			tag_a.css(cssManager.tag_a_css).css({
+			$tag_a.css(cssManager.tag_a_css).css({
 				background: settings.menu_bg_color
 			}).hover(
 				function () {
@@ -87,14 +87,14 @@ development framework, add a useful and functional menu bar in the page.
 					});
 			}); //css:#status-menu ul li a
 
-			var root_menu_item = $.tag('li').css(cssManager.root_menu_style) //css:#status-menu ul li
-			.append(tag_a);
-			return root_menu_item;
+			var $root_menu_item = $.tag('li').css(cssManager.root_menu_style) //css:#status-menu ul li
+			.append($tag_a);
+			return $root_menu_item;
 		},
 		create_menu_item:function(id, title, callback) {
 			var menu_item = $.tag('li');
 			menu_item.css(cssManager.menu_style); //css:#status-menu ul li ul li
-			var tag_a = $.tag('a', {
+			var $tag_a = $.tag('a', {
 				id: id,
 				href: '#',
 				text: title
@@ -105,7 +105,7 @@ development framework, add a useful and functional menu bar in the page.
 				}
 			});
 
-			tag_a.css(cssManager.tag_a_css).css({
+			$tag_a.css(cssManager.tag_a_css).css({
 				background: settings.menu_bg_color
 			}).css({
 				'border-bottom': '1px solid '+settings.menu_separator_color
@@ -120,7 +120,7 @@ development framework, add a useful and functional menu bar in the page.
 						background: settings.menu_bg_color
 					});
 			}); //css:#status-menu ul li ul li a
-			menu_item.append(tag_a);
+			menu_item.append($tag_a);
 			return menu_item;
 		},
 		//root_menu must have attribute of id,title,click[function]
@@ -128,15 +128,15 @@ development framework, add a useful and functional menu bar in the page.
 			return this.create_root_menu_item(root_menu.id, root_menu.title, root_menu.click);
 		},
 		 construction_menu:function(menu_list) {
-			var tag_ul = $.tag('ul');
-			tag_ul.hide().css(cssManager.menu_ul_style); //css:#status-menu ul li ul
+			var $tag_ul = $.tag('ul');
+			$tag_ul.hide().css(cssManager.menu_ul_style); //css:#status-menu ul li ul
 			for (var menu in menu_list) {
 				var id = menu_list[menu].id;
 				var title = menu_list[menu].title;
 				var click = menu_list[menu].click;
-				tag_ul.append(this.create_menu_item(id, title, click));
+				$tag_ul.append(this.create_menu_item(id, title, click));
 			}
-			return tag_ul;
+			return $tag_ul;
 		},
 	   construct_one_menu_tree:function(menu_array) {
 			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construction_menu(menu_array.list));

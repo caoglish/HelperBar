@@ -74,7 +74,7 @@
 	var optsDefault={};
 	var opts1={
 				bar_title:'Helper Bar Demo(black)',
-				//bar_foot:'verions:'+HelperBar.version(),
+				bar_foot:'verions:'+HelperBar.version(),
 				foot_mode:'show',
 				foot_size:'8px',
                 safe_mode: 'safe',
@@ -95,7 +95,7 @@
 		
 		var opts2={
 				bar_title:'Helper Bar Demo(Pink)',
-				//bar_foot:'verions:'+HelperBar.version(),
+				bar_foot:'verions:'+HelperBar.version(),
 				foot_mode:'show',
 				foot_size:'8px',
                 safe_mode: 'safe',
@@ -137,7 +137,7 @@
 			optSet.init(1);
 		}
 		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
-		//demo_interface();
+		demo_interface();
 	}
 	
 	function go_top(){
