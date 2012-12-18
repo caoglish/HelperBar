@@ -40,11 +40,11 @@ development framework, add a useful and functional menu bar in the page.
 			var $div_status_message = $.tag('div', {
 				id: _.cropFirstSymbol(STATUS_MESSAGE)
 			}).css(cssManager.menu_basic_style).css(cssManager.font_style); //create status message area
-			var $div_status_message = $.tag('div', {
+			var $div_status_footer = $.tag('div', {
 				id: _.cropFirstSymbol(STATUS_FOOTER)
 			}).css(cssManager.menu_basic_style).css(cssManager.font_style); //create status footer area
-			if(settings.foot_size!=='none'){$div_status_message.css('font-size',settings.foot_size);}
-			$object.append($div_status_title).append($div_status_message).append($div_status_message).append(this.create_status_menu());
+			if(settings.foot_size!=='none'){$div_status_footer.css('font-size',settings.foot_size);}
+			$object.append($div_status_title).append($div_status_message).append($div_status_footer).append(this.create_status_menu());
 		},
 	//status menu
 		create_status_menu:function() {
