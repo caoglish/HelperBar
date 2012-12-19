@@ -517,9 +517,8 @@ development framework, add a useful and functional menu bar in the page.
 			menu_array.root=root;
 		},
 		setMenu:function(menuList){
-			if(this.menu_tree_list.length ===0 ) this.menu_tree_list= $.merge([],menuList);
+			if(!this.hasMenu() ) this.menu_tree_list= $.merge([],menuList);
 			else $.error('Menu have been created');
-			console.log(menuList);
 		},
 		resetMenu:function(){
 			this.menu_tree_list=[];
@@ -541,7 +540,7 @@ development framework, add a useful and functional menu bar in the page.
 		addMenuItem:function(title,click){
 			if (title !== undefined){
 				var item = {"title":title,"click":click};
-				if (this.menu_tree_list.length ===0) $.error("no Menu Tree.");
+				if (!this.hasMenu()) $.error("no Menu Tree.");
 				var list=this.menu_tree_list[this.menu_tree_list.length-1]["list"];
 				list.push(item);
 			}else {
@@ -551,11 +550,16 @@ development framework, add a useful and functional menu bar in the page.
 		getMenu:function(){
 			return this.menu_tree_list;
 		},
+		hasMenu:function(){
+			return this.menu_tree_list.length >0 ? true:false;
+		},
 		build:function(menu_tree_list){
 			if(typeof menu_tree_list === 'object' ){
 				var menu_tree=jQuery.extend(true, {}, menu_tree_list);
-			}else if(menu_tree_list){
+			}else if(menu_tree_list==true){
 				var menu_tree= this.menu_tree_list;
+			}else{
+				$.error('build() no such argv.');
 			}
 	
 			for (var menu_tree_index in menu_tree) {
