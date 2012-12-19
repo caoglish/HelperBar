@@ -137,6 +137,7 @@
 			optSet.init(1);
 		}
 		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
+		console.log(menuTreeList);
 		demo_interface();
 	}
 	

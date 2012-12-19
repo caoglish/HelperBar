@@ -156,10 +156,10 @@ development framework, add a useful and functional menu bar in the page.
 				root = menu_array.list.pop();
 			}
 			menu_array.root=root;
-			return menu_array;
+
 		},
-	   construct_one_menu_tree:function(menu_array) {console.log(menu_array['root']);
-			menu_array=this.rebuild_menu_tree(menu_array);console.log(menu_array['root']);
+	   construct_one_menu_tree:function(menu_array) {
+			this.rebuild_menu_tree(menu_array);
 			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construction_menu(menu_array.list));
 			//hover to show and hide the menu items.
 			one_menu_tree.hover(function () {
@@ -207,7 +207,7 @@ development framework, add a useful and functional menu bar in the page.
 		//init menubar with mneu_tree_list. init functions and behaviors of menubar.
 		 init_status_bar:function($menubar,menu_tree_list) {
 			this.original_menu_tree=jQuery.extend(true, {}, menu_tree_list);//keep the tree record.
-			this.menu_tree=menu_tree_list;//keep the rebuilded tree record.
+			this.menu_tree=jQuery.extend(true, {}, menu_tree_list);//keep the rebuilded tree record.
 			//set the status menu will show on mouse over the statusbar, hide on mouse out
 			var $status_menu = $menubar.find(STATUS_MENU);
 			var $footer=$menubar.find(STATUS_FOOTER);
@@ -218,8 +218,8 @@ development framework, add a useful and functional menu bar in the page.
 				if(settings.foot_mode === 'hide' ) {$footer.hide('slow');}
 				$status_menu.hide('slow');
 			});
-			for (var menu_tree in menu_tree_list) {
-				this.construct_one_menu_tree(menu_tree_list[menu_tree]).appendTo($menubar.find(LIST_MENU));
+			for (var menu_tree in this.menu_tree) {
+				this.construct_one_menu_tree(this.menu_tree[menu_tree]).appendTo($menubar.find(LIST_MENU));
 			}
 			//initalize the default appearance of the status bar
 			$status_menu.hide();
@@ -311,7 +311,7 @@ development framework, add a useful and functional menu bar in the page.
                 _.jqobClean($(this)); //clean this jquery object content and texts
                 barBuilder.convert_status_bar($(this));
                 barBuilder.init_status_bar($(this), menu_tree_list);
-				console.log(barBuilder);
+
             });
         },
        title: function (title) {
