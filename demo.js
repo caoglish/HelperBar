@@ -25,8 +25,9 @@
 	var TXT_ABOUT_INFO='<strong>Helper Bar Framework[Version:'+HelperBar.version()+']<br/>Jquery[Version:'+$().jquery+']<br/>Designer: Caoglish</strong>';
 	//Menu bar setup
 	var menuTreeFunction={
-		'root':{'title':'function'},
+		'root':'first',
 		'list':[
+			{'title':'function'},
 			{'title':'go top','click':go_top},
 			{'title':'go bottom','click':go_bottom},
 			{'title':'mouse position','click':mouse_position},
@@ -57,18 +58,17 @@
 	};
 	
 	var menuOptionsDemo={
-		'root':{'title':'custom options demo'},
 		'list':[
 			{'title':'default(no custom options)','click':opt_default_demo},
 			{'title':'custom(black)','click':opt_customize_black_demo},
 			{'title':'custom(pink)','click':opt_customize_pink_demo},
-			{'title':'custom(blue)','click':opt_customize_blue_demo}
+			{'title':'custom(blue)','click':opt_customize_blue_demo},
+			{'title':'custom options demo'}
 		]
 	};
 	
 	var menuTreeAbout={
-		'root':{'title':'about','click':about},
-		'list':[]
+		'root':{'title':'about','click':about}
 	};
 	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuOptionsDemo,menuTreeAbout];
 	var optsDefault={};
