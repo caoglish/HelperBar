@@ -557,7 +557,8 @@ development framework, add a useful and functional menu bar in the page.
 			if(typeof menu_tree_list === 'object' ){
 				var menu_tree=jQuery.extend(true, {}, menu_tree_list);
 			}else if(menu_tree_list==true){
-				var menu_tree= this.menu_tree_list;
+				if(this.hasMenu) var menu_tree= this.menu_tree_list;
+				else $.error('menu is empty');
 			}else{
 				$.error('build() no such argv.');
 			}
