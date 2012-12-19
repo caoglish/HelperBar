@@ -75,20 +75,20 @@
 		'root':{'title':'about','click':about}
 	};
 	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuOptionsDemo,menuTreeAbout];
-	var Menu_Tree_array=HelperBar
-			.setMenu(menuTreeList)
-			.resetMenu()
-			.addMenuTree()
-			.addMenuItem('1',function(){console.log('addMenuItem');})
-			.addMenuItem('2',function(){console.log('addMenuItem');})
-			.addMenuItem('3',function(){console.log('addMenuItem');})
-			.addMenuTree('root-addMenuTree(title,click)',function(){console.log('addMenuTree');})
-			.addMenuItem('1',function(){console.log('addMenuItem');})
-			.addMenuItem('2',function(){console.log('addMenuItem');})
-			.addMenuItem('3',function(){console.log('addMenuItem');})
-			.mergeMenu(menuTreeList)
-			.mergeMenuTo(menuTreeList)
-			.getMenu();
+	var Menu_Tree_array=HelperBar.menu
+			.set(menuTreeList)
+			.reset()
+			.addTree()
+			.addItem('1',function(){bar.log('addMenuItem1.1');})
+			.addItem('2',function(){bar.log('addMenuItem1.2');})
+			.addItem('3',function(){bar.log('addMenuItem1.3');})
+			.addTree('root-addMenuTree(title,click)',function(){console.log('addMenuTree');})
+			.addItem('1',function(){bar.log('addMenuItem2.1');})
+			.addItem('2',function(){bar.log('addMenuItem2.2');})
+			.addItem('3',function(){bar.log('addMenuItem2.3');})
+			.merge(menuTreeList)
+			.mergeTo(menuTreeList)
+			.get();
 
 	var optsDefault={};
 	var opts1={
@@ -155,10 +155,17 @@
 			optSet.init(1);
 		}
 		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSet.get()]);//singleton start
-		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
-		//bar = HelperBar.build(optionsList[optSet.get()]);//singleton start
-
+		//bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
+		bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
 		demo_interface();
+		
+		var a=HelperBar.menu.get();console.log(a);
+		var a=HelperBar.menu.get();console.log(a);
+		
+		var b=HelperBar.menu.build();console.log(b);
+		var b=HelperBar.menu.build();console.log(b);
+		var a=HelperBar.menu.get();console.log(a);
+		var b=HelperBar.menu.build();console.log(b);
 	}
 	
 	function go_top(){

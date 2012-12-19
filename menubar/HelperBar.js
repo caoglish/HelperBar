@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.4.0b
+@version     0.4.0a1
 */
 //$.fn.menubar jquery plugin, create a menubar 
 (function ($) {
@@ -516,30 +516,30 @@ development framework, add a useful and functional menu bar in the page.
 			}
 			menu_array.root=root;
 		},
-		setMenu:function(menuList){
+		set:function(menuList){
 			if(!this.hasMenu() ) this.menu_tree_list= $.merge([],menuList);
 			else $.error('Menu have been created');
 		},
-		resetMenu:function(){
+		reset:function(){
 			this.menu_tree_list=[];
 		},
-		mergeMenu:function(menuList){	
+		merge:function(menuList){	
 			$.merge(this.menu_tree_list,menuList);
 		},
-		mergeMenuTo:function(menuList){
+		mergeTo:function(menuList){
 			this.menu_tree_list=$.merge($.merge([],menuList),this.menu_tree_list);
 		},
-		addMenuTree:function(title,click){
-			if (title !== undefined){
-				var root = {"title":title,"click":click};
+		addTree:function(title,click,id){
+				if (title !== undefined){
+				var root = {"title":title,"click":click,"id":id};
 				this.menu_tree_list.push({"root":root,"list":[]});
 			}else { 
 				this.menu_tree_list.push({"list":[]});
 			}
 		},
-		addMenuItem:function(title,click){
+		addItem:function(title,click,id){
 			if (title !== undefined){
-				var item = {"title":title,"click":click};
+				var item = {"title":title,"click":click,"id":id};
 				if (!this.hasMenu()) $.error("no Menu Tree.");
 				var list=this.menu_tree_list[this.menu_tree_list.length-1]["list"];
 				list.push(item);
@@ -547,17 +547,19 @@ development framework, add a useful and functional menu bar in the page.
 				$.error("addMenuItem must pass the title at least");
 			}
 		},
-		getMenu:function(){
+		get:function(){
 			return this.menu_tree_list;
 		},
 		hasMenu:function(){
 			return this.menu_tree_list.length >0 ? true:false;
 		},
+		//build menu array to fit $.menubar menu object
 		build:function(menu_tree_list){
 			if(typeof menu_tree_list === 'object' ){
-				var menu_tree=jQuery.extend(true, {}, menu_tree_list);
+				var menu_tree=$.extend(true,[], menu_tree_list);
 			}else if(menu_tree_list==true){
-				if(this.hasMenu) var menu_tree= this.menu_tree_list;
+				if(this.hasMenu) var menu_tree= $.extend(true, [], this.menu_tree_list);
+				//if(this.hasMenu) var menu_tree= $.merge( $.merge(this.menu_tree_list,[]), []);
 				else $.error('menu is empty');
 			}else{
 				$.error('build() no such argv.');
@@ -574,53 +576,60 @@ development framework, add a useful and functional menu bar in the page.
         var instantiated;
 
         function init(menu_tree_list, options) {
-			menu_tree_list=menuBuilder.build(menu_tree_list);
-            return new HelperBar(menu_tree_list, options);
+			var menu_tree_list_for_menu_bar=menuBuilder.build(menu_tree_list);
+            return new HelperBar(menu_tree_list_for_menu_bar, options);
         }
-        return {
-            getbar: function (menu_tree_list, options) {
+		var exports={
+			menu:{
+				set:function(menuList){
+					menuBuilder.set(menuList);
+					return this;
+				},
+				addTree:function(title,click){
+					menuBuilder.addTree(title,click);
+					return this;
+				},
+				addItem:function(title,click){
+					menuBuilder.addItem(title,click);
+					return this;
+				},
+				reset:function(){
+					menuBuilder.reset();
+					return this;
+				},
+				merge:function(menuList){
+					menuBuilder.merge(menuList);
+					return this;
+				},
+				mergeTo:function(menuList){
+					menuBuilder.mergeTo(menuList)
+					return this;
+				},
+				get:function(){
+					return menuBuilder.get();
+				},
+				build:function(){
+					return menuBuilder.build(true);
+				}
+			},
+			getBar: function (menu_tree_list, options) {
                 if (!instantiated) {
                     instantiated = init(menu_tree_list, options);
                 }
                 return instantiated;
             },
-			build:function(options){
+			buildBar:function(options){
 				return this.getbar(true,options);
-			},
-			setMenu:function(menuList){
-				menuBuilder.setMenu(menuList);
-				return this;
-			},
-			addMenuTree:function(title,click){
-				menuBuilder.addMenuTree(title,click);
-				return this;
-			},
-			addMenuItem:function(title,click){
-				menuBuilder.addMenuItem(title,click);
-				return this;
-			},
-			getMenu:function(){
-				return menuBuilder.getMenu();
-			},
-			resetMenu:function(){
-				menuBuilder.resetMenu();
-				return this;
-			},
-			mergeMenu:function(menuList){
-				menuBuilder.mergeMenu(menuList);
-				return this;
-			},
-			mergeMenuTo:function(menuList){
-				menuBuilder.mergeMenuTo(menuList)
-				return this;
 			},
             version: function () {
                 return HelperBar.prototype.version();
             }
         };
+		exports.getbar=exports.getBar;
+		return exports;
     })();
 	
 	HelperBar.prototype.version = function () {
-        return '0.4.0b';
+        return '0.4.0a1';
     };
 })(jQuery);
