@@ -23,6 +23,10 @@
 	"use strict";
 	var bar; 
 	var TXT_ABOUT_INFO='<strong>Helper Bar Framework[Version:'+HelperBar.version()+']<br/>Jquery[Version:'+$().jquery+']<br/>Designer: Caoglish</strong>';
+	
+
+			
+
 	//Menu bar setup
 	var menuTreeFunction={
 		'root':'first',
@@ -71,6 +75,21 @@
 		'root':{'title':'about','click':about}
 	};
 	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuOptionsDemo,menuTreeAbout];
+	var Menu_Tree_array=HelperBar
+			.setMenu(menuTreeList)
+			.resetMenu()
+			.addMenuTree()
+			.addMenuItem('1',function(){console.log('addMenuItem');})
+			.addMenuItem('2',function(){console.log('addMenuItem');})
+			.addMenuItem('3',function(){console.log('addMenuItem');})
+			.addMenuTree('root-addMenuTree(title,click)',function(){console.log('addMenuTree');})
+			.addMenuItem('1',function(){console.log('addMenuItem');})
+			.addMenuItem('2',function(){console.log('addMenuItem');})
+			.addMenuItem('3',function(){console.log('addMenuItem');})
+			.mergeMenu(menuTreeList)
+			.mergeMenuTo(menuTreeList)
+			.getMenu();
+
 	var optsDefault={};
 	var opts1={
 				bar_title:'Helper Bar Demo(black)',
@@ -127,7 +146,6 @@
 			menu_bg_color: 'Navy',
 			menu_font_color: 'yellow',
 			menu_hover_bg_color: 'gray',
-			
 			menu_separator_color: 'green'
 		};
 		var optionsList=[optsDefault,opts1,opts2,opts3];
@@ -136,8 +154,10 @@
 		if(optSet.get()===undefined||optSet.get()===null){
 			optSet.init(1);
 		}
+		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSet.get()]);//singleton start
 		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
-		console.log(menuTreeList);
+		//bar = HelperBar.build(optionsList[optSet.get()]);//singleton start
+
 		demo_interface();
 	}
 	

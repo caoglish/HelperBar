@@ -32,8 +32,6 @@ development framework, add a useful and functional menu bar in the page.
     };
 	
 	var barBuilder = {
-		original_menu_tree:{},
-		menu_tree:{},
 		convert_status_bar:function($object) {
 			$object.attr('id', _.cropFirstSymbol(STATUS_BAR)).css(cssManager.bar_basic_style); //create status bar//css: #helper-bar-nnnnnnnnnnnnnn
 			var $div_status_title = $.tag('div', {
@@ -74,7 +72,6 @@ development framework, add a useful and functional menu bar in the page.
 					callback.apply();
 				}
 			});
-
 			$tag_a.css(cssManager.tag_a_css).css({
 				background: settings.menu_bg_color
 			}).hover(
@@ -140,26 +137,8 @@ development framework, add a useful and functional menu bar in the page.
 			}
 			return $tag_ul;
 		},
-		rebuild_menu_tree:function(menu_array){
-			
-			var root;
 
-			if(typeof menu_array['root']=== 'object') {
-				return menu_array;
-			}else if(menu_array['root']=='first'){
-				root = menu_array.list.shift();
-			}else if(menu_array['root']=='last'){
-				root = menu_array.list.pop();
-			}else if(!menu_array['root']){
-				root = menu_array.list.pop();
-			}else{
-				root = menu_array.list.pop();
-			}
-			menu_array.root=root;
-
-		},
 	   construct_one_menu_tree:function(menu_array) {
-			this.rebuild_menu_tree(menu_array);
 			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construction_menu(menu_array.list));
 			//hover to show and hide the menu items.
 			one_menu_tree.hover(function () {
@@ -206,8 +185,6 @@ development framework, add a useful and functional menu bar in the page.
 		},
 		//init menubar with mneu_tree_list. init functions and behaviors of menubar.
 		 init_status_bar:function($menubar,menu_tree_list) {
-			this.original_menu_tree=jQuery.extend(true, {}, menu_tree_list);//keep the tree record.
-			this.menu_tree=jQuery.extend(true, {}, menu_tree_list);//keep the rebuilded tree record.
 			//set the status menu will show on mouse over the statusbar, hide on mouse out
 			var $status_menu = $menubar.find(STATUS_MENU);
 			var $footer=$menubar.find(STATUS_FOOTER);
@@ -218,8 +195,8 @@ development framework, add a useful and functional menu bar in the page.
 				if(settings.foot_mode === 'hide' ) {$footer.hide('slow');}
 				$status_menu.hide('slow');
 			});
-			for (var menu_tree in this.menu_tree) {
-				this.construct_one_menu_tree(this.menu_tree[menu_tree]).appendTo($menubar.find(LIST_MENU));
+			for (var menu_tree in menu_tree_list) {
+				this.construct_one_menu_tree(menu_tree_list[menu_tree]).appendTo($menubar.find(LIST_MENU));
 			}
 			//initalize the default appearance of the status bar
 			$status_menu.hide();
@@ -311,7 +288,6 @@ development framework, add a useful and functional menu bar in the page.
                 _.jqobClean($(this)); //clean this jquery object content and texts
                 barBuilder.convert_status_bar($(this));
                 barBuilder.init_status_bar($(this), menu_tree_list);
-
             });
         },
        title: function (title) {
@@ -524,14 +500,76 @@ development framework, add a useful and functional menu bar in the page.
         return this;
     };
 
-    HelperBar.prototype.version = function () {
-        return '0.4.0a';
-    };
+	var menuBuilder={
+		menu_tree_list:[],
+		rebuild_one_menu_tree:function(menu_array){
+			var root;
+			if(typeof menu_array['root']=== 'object') {
+				return menu_array;
+			}else if(menu_array['root']=='first'){
+				root = menu_array.list.shift();
+			}else if(menu_array['root']=='last'
+					||!menu_array['root']){
+				root = menu_array.list.pop();
+			}else{
+				$.error('no such root config');
+			}
+			menu_array.root=root;
+		},
+		setMenu:function(menuList){
+			if(this.menu_tree_list.length ===0 ) this.menu_tree_list= $.merge([],menuList);
+			else $.error('Menu have been created');
+			console.log(menuList);
+		},
+		resetMenu:function(){
+			this.menu_tree_list=[];
+		},
+		mergeMenu:function(menuList){	
+			$.merge(this.menu_tree_list,menuList);
+		},
+		mergeMenuTo:function(menuList){
+			this.menu_tree_list=$.merge($.merge([],menuList),this.menu_tree_list);
+		},
+		addMenuTree:function(title,click){
+			if (title !== undefined){
+				var root = {"title":title,"click":click};
+				this.menu_tree_list.push({"root":root,"list":[]});
+			}else { 
+				this.menu_tree_list.push({"list":[]});
+			}
+		},
+		addMenuItem:function(title,click){
+			if (title !== undefined){
+				var item = {"title":title,"click":click};
+				if (this.menu_tree_list.length ===0) $.error("no Menu Tree.");
+				var list=this.menu_tree_list[this.menu_tree_list.length-1]["list"];
+				list.push(item);
+			}else {
+				$.error("addMenuItem must pass the title at least");
+			}
+		},
+		getMenu:function(){
+			return this.menu_tree_list;
+		},
+		build:function(menu_tree_list){
+			if(typeof menu_tree_list === 'object' ){
+				var menu_tree=jQuery.extend(true, {}, menu_tree_list);
+			}else if(menu_tree_list){
+				var menu_tree= this.menu_tree_list;
+			}
+	
+			for (var menu_tree_index in menu_tree) {
+				this.rebuild_one_menu_tree(menu_tree[menu_tree_index]);
+			}
+			return menu_tree;
+		}
+	};
 
     window.HelperBar = (function () {
         var instantiated;
 
         function init(menu_tree_list, options) {
+			menu_tree_list=menuBuilder.build(menu_tree_list);
             return new HelperBar(menu_tree_list, options);
         }
         return {
@@ -541,9 +579,43 @@ development framework, add a useful and functional menu bar in the page.
                 }
                 return instantiated;
             },
+			build:function(options){
+				return this.getbar(true,options);
+			},
+			setMenu:function(menuList){
+				menuBuilder.setMenu(menuList);
+				return this;
+			},
+			addMenuTree:function(title,click){
+				menuBuilder.addMenuTree(title,click);
+				return this;
+			},
+			addMenuItem:function(title,click){
+				menuBuilder.addMenuItem(title,click);
+				return this;
+			},
+			getMenu:function(){
+				return menuBuilder.getMenu();
+			},
+			resetMenu:function(){
+				menuBuilder.resetMenu();
+				return this;
+			},
+			mergeMenu:function(menuList){
+				menuBuilder.mergeMenu(menuList);
+				return this;
+			},
+			mergeMenuTo:function(menuList){
+				menuBuilder.mergeMenuTo(menuList)
+				return this;
+			},
             version: function () {
                 return HelperBar.prototype.version();
             }
         };
     })();
+	
+	HelperBar.prototype.version = function () {
+        return '0.4.0a';
+    };
 })(jQuery);
