@@ -585,12 +585,12 @@ development framework, add a useful and functional menu bar in the page.
 					menuBuilder.set(menuList);
 					return this;
 				},
-				addTree:function(title,click){
-					menuBuilder.addTree(title,click);
+				addTree:function(title,click,id){
+					menuBuilder.addTree(title,click,id);
 					return this;
 				},
-				addItem:function(title,click){
-					menuBuilder.addItem(title,click);
+				addItem:function(title,click,id){
+					menuBuilder.addItem(title,click,id);
 					return this;
 				},
 				reset:function(){
