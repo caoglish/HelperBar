@@ -3,7 +3,7 @@ development framework, add a useful and functional menu bar in the page.
 @version     0.4.0a1
 */
 //$.fn.menubar jquery plugin, create a menubar 
-(function ($) {
+;(function ($) {
     "use strict";
 	//core of menubar
     const STATUS_BAR = '#menubar-7cad339b0b08db99561c640461d00a07';
@@ -548,7 +548,7 @@ development framework, add a useful and functional menu bar in the page.
 			}
 		},
 		get:function(){
-			return this.menu_tree_list;
+			return $.extend(true, [], this.menu_tree_list);;
 		},
 		hasMenu:function(){
 			return this.menu_tree_list.length >0 ? true:false;

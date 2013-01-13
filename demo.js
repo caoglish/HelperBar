@@ -89,6 +89,9 @@
 			.merge(menuTreeList)
 			.mergeTo(menuTreeList)
 			.get();
+			
+	HelperBar.menu.get().shift();
+	HelperBar.menu.get().shift();
 
 	var optsDefault={};
 	var opts1={
@@ -155,17 +158,11 @@
 			optSet.init(1);
 		}
 		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSet.get()]);//singleton start
-		//bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
-		bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
+		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
+		//bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
 		demo_interface();
 		
-		var a=HelperBar.menu.get();console.log(a);
-		var a=HelperBar.menu.get();console.log(a);
 		
-		var b=HelperBar.menu.build();console.log(b);
-		var b=HelperBar.menu.build();console.log(b);
-		var a=HelperBar.menu.get();console.log(a);
-		var b=HelperBar.menu.build();console.log(b);
 	}
 	
 	function go_top(){
