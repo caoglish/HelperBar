@@ -1,0 +1,7 @@
+{
+		"esnext":true,
+        "debug":true,
+        "undef": true,
+		"jquery": true,
+        "browser": true
+    }

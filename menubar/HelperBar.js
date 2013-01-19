@@ -1,6 +1,6 @@
 /*
 development framework, add a useful and functional menu bar in the page.
-@version     0.4.0a1
+@version     0.4.0
 */
 //$.fn.menubar jquery plugin, create a menubar 
 ;(function ($) {
@@ -123,10 +123,10 @@ development framework, add a useful and functional menu bar in the page.
 			return menu_item;
 		},
 		//root_menu must have attribute of id,title,click[function]
-		 construct_root_menu:function(root_menu) {
+		construct_root_menu:function(root_menu) {
 			return this.create_root_menu_item(root_menu.id, root_menu.title, root_menu.click);
 		},
-		 construction_menu:function(menu_list) {
+		construction_menu:function(menu_list) {
 			var $tag_ul = $.tag('ul');
 			$tag_ul.hide().css(cssManager.menu_ul_style); //css:#status-menu ul li ul
 			for (var menu in menu_list) {
@@ -138,7 +138,7 @@ development framework, add a useful and functional menu bar in the page.
 			return $tag_ul;
 		},
 
-	   construct_one_menu_tree:function(menu_array) {
+		construct_one_menu_tree:function(menu_array) {
 			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construction_menu(menu_array.list));
 			//hover to show and hide the menu items.
 			one_menu_tree.hover(function () {
@@ -164,27 +164,27 @@ development framework, add a useful and functional menu bar in the page.
 						$menubar.show();
 					}
 				});
-			} else if (settings.hide_mode === 'notOnBar') {
+			}else if (settings.hide_mode === 'notOnBar') {
 				$(document).dblclick(function (e) {
 					var event_area = $(e.target).parents(STATUS_BAR);
 					if (event_area[0] !== $menubar[0]) {
 						$menubar.toggle();
 					}
 				});
-			} else if (settings.hide_mode === 'notOnMenu') {
+			}else if (settings.hide_mode === 'notOnMenu') {
 				$(document).dblclick(function (e) {
 					var event_area = $(e.target).parents(STATUS_BAR);
 					if (!(event_area[0] === $menubar[0] && e.target.nodeName === 'A')) {
 						$menubar.toggle();
 					}
 				});
-			} else if (settings.hide_mode === 'noHide') {
-			} else {
+			}else if (settings.hide_mode === 'noHide') {
+			}else {
 				$.error('Wrong Type of Hide Mode');
 			}
 		},
 		//init menubar with mneu_tree_list. init functions and behaviors of menubar.
-		 init_status_bar:function($menubar,menu_tree_list) {
+		init_status_bar:function($menubar,menu_tree_list) {
 			//set the status menu will show on mouse over the statusbar, hide on mouse out
 			var $status_menu = $menubar.find(STATUS_MENU);
 			var $footer=$menubar.find(STATUS_FOOTER);
@@ -207,8 +207,8 @@ development framework, add a useful and functional menu bar in the page.
 		},
 		inital_cssManager:function (){
 			cssManager={
-				font_style:{'font-family':settings.font_family
-							,'font-size':'100%'
+				font_style:{'font-family':settings.font_family,
+							'font-size':'100%'
 				},
 				bar_basic_style:{
 					'position': 'fixed',
@@ -234,7 +234,7 @@ development framework, add a useful and functional menu bar in the page.
 				},//basic style for both menu and root menu
 				menu_ul_style:{
 					'margin': '0',
-				   'padding': '0',
+					'padding': '0',
 					'position': 'absolute',
 					'bottom': '23px'
 				},
@@ -246,13 +246,13 @@ development framework, add a useful and functional menu bar in the page.
 						'color': settings.menu_font_color,
 						'white-space': 'nowrap'
 					} //tag a style sheet.
-			}
+			};
 			cssManager.menu_style=$.extend({},cssManager.menu_basic_style,{	
 								'display': 'inline'
-							 });//css:#status-menu ul li ul li
+							});//css:#status-menu ul li ul li
 			cssManager.root_menu_style=$.extend({},cssManager.menu_basic_style,{	
-								  'float': 'left',
-								  'border-left':'1px solid '+settings.menu_separator_color
+								'float': 'left',
+								'border-left':'1px solid '+settings.menu_separator_color
 							});//css:#status-menu ul li
 			cssManager.bar_basic_style=$.extend({},cssManager.bar_basic_style,cssManager.font_style);
 		}
@@ -260,34 +260,34 @@ development framework, add a useful and functional menu bar in the page.
 	
 	//Jquery Plugin structure:
 	var methods = {
-        init: function (menu_tree_list, options) {
-            settings = $.extend(true, {
-                bar_title: 'Helper Bar',
+		init: function (menu_tree_list, options) {
+			settings = $.extend(true, {
+				bar_title: 'Helper Bar',
 				bar_foot:'',
 				foot_mode:'hide',
 				foot_size:'6px',
-                safe_mode: 'safe',
-                hide_mode: 'notOnMenu',
-                warn_size: '50px', 
-                warn_color: 'red', 
-                warn_mode: 'append', 
-                border_radius: '56px',
-                bar_bg_color: 'black',
-                bar_opacity: '0.8',
-                bar_font_color: 'white',
+				safe_mode: 'safe',
+				hide_mode: 'notOnMenu',
+				warn_size: '50px', 
+				warn_color: 'red', 
+				warn_mode: 'append', 
+				border_radius: '56px',
+				bar_bg_color: 'black',
+				bar_opacity: '0.8',
+				bar_font_color: 'white',
 				menu_width: 'auto',
 				menu_separator_color: 'black',
-                menu_bg_color: '#111111',
-                menu_hover_bg_color: '#333333',
-                font_family: 'Arial,Helvetica,Sans-Serif',
+				menu_bg_color: '#111111',
+				menu_hover_bg_color: '#333333',
+				font_family: 'Arial,Helvetica,Sans-Serif',
 				menu_font_color: '#EAFFED'
             }, options); //options 
 			barBuilder.inital_cssManager();//manage all css stylesheet
            
             return this.each(function () {
-                _.jqobClean($(this)); //clean this jquery object content and texts
-                barBuilder.convert_status_bar($(this));
-                barBuilder.init_status_bar($(this), menu_tree_list);
+				_.jqobClean($(this)); //clean this jquery object content and texts
+				barBuilder.convert_status_bar($(this));
+				barBuilder.init_status_bar($(this), menu_tree_list);
             });
         },
        title: function (title) {
@@ -504,12 +504,12 @@ development framework, add a useful and functional menu bar in the page.
 		menu_tree_list:[],
 		rebuild_one_menu_tree:function(menu_array){
 			var root;
-			if(typeof menu_array['root']=== 'object') {
+			if(typeof menu_array.root=== 'object') {
 				return menu_array;
-			}else if(menu_array['root']=='first'){
+			}else if(menu_array.root=='first'){
 				root = menu_array.list.shift();
-			}else if(menu_array['root']=='last'
-					||!menu_array['root']){
+			}else if(menu_array.root=='last'||
+					!menu_array.root){
 				root = menu_array.list.pop();
 			}else{
 				$.error('no such root config');
@@ -541,24 +541,25 @@ development framework, add a useful and functional menu bar in the page.
 			if (title !== undefined){
 				var item = {"title":title,"click":click,"id":id};
 				if (!this.hasMenu()) $.error("no Menu Tree.");
-				var list=this.menu_tree_list[this.menu_tree_list.length-1]["list"];
+				var list=this.menu_tree_list[this.menu_tree_list.length-1].list;
 				list.push(item);
 			}else {
 				$.error("addMenuItem must pass the title at least");
 			}
 		},
 		get:function(){
-			return $.extend(true, [], this.menu_tree_list);;
+			return $.extend(true, [], this.menu_tree_list);
 		},
 		hasMenu:function(){
 			return this.menu_tree_list.length >0 ? true:false;
 		},
 		//build menu array to fit $.menubar menu object
 		build:function(menu_tree_list){
+			var menu_tree;
 			if(typeof menu_tree_list === 'object' ){
-				var menu_tree=$.extend(true,[], menu_tree_list);
-			}else if(menu_tree_list==true){
-				if(this.hasMenu) var menu_tree= $.extend(true, [], this.menu_tree_list);
+				menu_tree=$.extend(true,[], menu_tree_list);
+			}else if(menu_tree_list===true){
+				if(this.hasMenu) menu_tree= $.extend(true, [], this.menu_tree_list);
 				//if(this.hasMenu) var menu_tree= $.merge( $.merge(this.menu_tree_list,[]), []);
 				else $.error('menu is empty');
 			}else{
@@ -602,7 +603,7 @@ development framework, add a useful and functional menu bar in the page.
 					return this;
 				},
 				mergeTo:function(menuList){
-					menuBuilder.mergeTo(menuList)
+					menuBuilder.mergeTo(menuList);
 					return this;
 				},
 				get:function(){
