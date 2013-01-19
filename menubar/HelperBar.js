@@ -631,6 +631,6 @@ development framework, add a useful and functional menu bar in the page.
     })();
 	
 	HelperBar.prototype.version = function () {
-        return '0.4.0a1';
+        return '0.4.0';
     };
 })(jQuery);
