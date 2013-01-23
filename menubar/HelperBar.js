@@ -1,11 +1,52 @@
-/*
-development framework, add a useful and functional menu bar in the page.
-@version     0.4.0
+//Development framework, add a useful and functional menu bar for GreaseMonkey Plugin.
+//
+//@version     0.4.0
+//
+//Purpose: a quick way to generate a interactive menu bar for GreaseMonkey/Tamper plugin
+//
+//Create by: Caoglish
+
+//##Description
+//####1) This requires jQuery.
+//####2) Core is a jQuery plugin.
+//####3) Use only in GreaseMonkey/TamperMonkey
+//####4) Currently test under jQuery 1.8.x
+
+//##How to use
+//###1) create a set of menu. (see right)
+//addTree(title,func) to start a new column of the menubar
+//
+//addItem(title,func) add a menu item, 1st param is name of menu item, 2ns param is the event/function when user click the the button
+/**
+*menu builder 
+*
+*HelperBar.menu.addTree('root1',func)
+*		 			.addItem('menu1-1',func)
+*					.addItem('menu1-2',func)
+*			.addTree('root2',func)
+*					.addItem('menu2-2',func)
+*					.addItem('menu2-2',func)
 */
-//$.fn.menubar jquery plugin, create a menubar 
+
+//###2) build the menu and get the bar.
+//use HelperBar.buildBar(options) to build a menu bar and return a bar object which will be used/called in the event/function of menu item.
+//
+//####to config/set the options, please see the options section below.
+
+/**
+*menu build
+*
+*bar=HelperBar.buildBar(options);
+*/
+
+//##Code Explain
+//$.fn.menubar: a jquery plugin to create a menubar
+//a core of generate Menu bar by passing a json structure.
 ;(function ($) {
     "use strict";
-	//core of menubar
+	
+	//menubar element name define.
+	//const keywork is working fine with firefox/chrome, plugin is not using in IE, so it's better user const here.
     const STATUS_BAR = '#menubar-7cad339b0b08db99561c640461d00a07';
     const STATUS_TITLE = '#menubar-title';
     const STATUS_MESSAGE = '#menubar-message';
@@ -16,22 +57,29 @@ development framework, add a useful and functional menu bar in the page.
     var settings;
     var cssManager;
  
-    //string methods 
+    //(private level tool) specific for this plugin
     var _={
+		//_.cropFirstSymbol(string) crop the first string if first string is # or .
+		//sync the element name which are in both html and javascript
 		cropFirstSymbol:function (str) {
 			var patt = /^#|^\./;
 			return str.replace(patt, '');
 		},
+		//_.jqobClean($object) clean all the style and attribute and text.
 		jqobClean:function($object){
 			$object.empty().removeAttr('id').removeAttr('class').removeAttr('style');
 		}
 	};
-    //jquery tag maker
+    //$.tag(tag, opts)jquery tag maker
+	//
+	//too lazy to type < />
     $.tag = function (tag, opts) {
         return $('<' + tag + '/>', opts);
     };
 	
+	//barBuilder object to manage the code to builer the menu bar.
 	var barBuilder = {
+		//convert a 'div' element to the Menu bar
 		convert_status_bar:function($object) {
 			$object.attr('id', _.cropFirstSymbol(STATUS_BAR)).css(cssManager.bar_basic_style); //create status bar//css: #helper-bar-nnnnnnnnnnnnnn
 			var $div_status_title = $.tag('div', {
@@ -46,7 +94,7 @@ development framework, add a useful and functional menu bar in the page.
 			if(settings.foot_size!=='none'){$div_status_footer.css('font-size',settings.foot_size);}
 			$object.append($div_status_title).append($div_status_message).append($div_status_footer).append(this.create_status_menu());
 		},
-	//status menu
+	//creating top menu level (root menu)
 		create_status_menu:function() {
 			var $div_status_menu = $.tag('div', {
 				id: _.cropFirstSymbol(STATUS_MENU)
@@ -61,6 +109,7 @@ development framework, add a useful and functional menu bar in the page.
 			$div_status_menu.append(ul_list_menu); //construct status bar
 			return $div_status_menu;
 		},
+		//creating a single menu item for root level
 		create_root_menu_item:function(id, title, callback) {
 			var $tag_a = $.tag('a', {
 				id: id,
@@ -85,11 +134,12 @@ development framework, add a useful and functional menu bar in the page.
 						background: settings.menu_bg_color
 					});
 			}); //css:#status-menu ul li a
-
+			
 			var $root_menu_item = $.tag('li').css(cssManager.root_menu_style) //css:#status-menu ul li
 			.append($tag_a);
 			return $root_menu_item;
 		},
+		//creating a single menu item
 		create_menu_item:function(id, title, callback) {
 			var menu_item = $.tag('li');
 			menu_item.css(cssManager.menu_style); //css:#status-menu ul li ul li
@@ -122,11 +172,13 @@ development framework, add a useful and functional menu bar in the page.
 			menu_item.append($tag_a);
 			return menu_item;
 		},
-		//root_menu must have attribute of id,title,click[function]
-		construct_root_menu:function(root_menu) {
+		
+		//construct a root menu item
+		construct_root_menu:function(root_menu) {//root_menu must have attribute of id,title,click[function]
 			return this.create_root_menu_item(root_menu.id, root_menu.title, root_menu.click);
 		},
-		construction_menu:function(menu_list) {
+		//construct a menu tree except the root menu item
+		construct_menu:function(menu_list) {
 			var $tag_ul = $.tag('ul');
 			$tag_ul.hide().css(cssManager.menu_ul_style); //css:#status-menu ul li ul
 			for (var menu in menu_list) {
@@ -137,9 +189,9 @@ development framework, add a useful and functional menu bar in the page.
 			}
 			return $tag_ul;
 		},
-
+		//construct one menu tree include root menu item and other menu item
 		construct_one_menu_tree:function(menu_array) {
-			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construction_menu(menu_array.list));
+			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construct_menu(menu_array.list));
 			//hover to show and hide the menu items.
 			one_menu_tree.hover(function () {
 				$(this).find('ul').slideDown();
@@ -148,9 +200,10 @@ development framework, add a useful and functional menu bar in the page.
 			});
 			return one_menu_tree;
 		},
-		//hide_mode
+		//setting of hide mode
+		//
+		//hide mode selection: all, onBar, notOnBar,notOnMenu,noHide
 		select_hide_mode:function($menubar) {
-			//hide mode selection: all, onBar, notOnBar,notOnMenu,noHide
 			if (settings.hide_mode === 'all') {
 				$(document).dblclick(function () {
 					$menubar.toggle();
@@ -183,11 +236,15 @@ development framework, add a useful and functional menu bar in the page.
 				$.error('Wrong Type of Hide Mode');
 			}
 		},
-		//init menubar with mneu_tree_list. init functions and behaviors of menubar.
+		//Initinalize entire menu bar
+		//
+		//1) init menubar with mneu_tree_list. 
+		//
+		//2) init functions and behaviors of menubar.
 		init_status_bar:function($menubar,menu_tree_list) {
-			//set the status menu will show on mouse over the statusbar, hide on mouse out
 			var $status_menu = $menubar.find(STATUS_MENU);
 			var $footer=$menubar.find(STATUS_FOOTER);
+			//set the status menu will show on mouse over the statusbar, hide on mouse out
 			$menubar.hover(function () {
 				if(settings.foot_mode === 'hide' ) {$footer.show();}
 				$status_menu.show();
@@ -195,6 +252,7 @@ development framework, add a useful and functional menu bar in the page.
 				if(settings.foot_mode === 'hide' ) {$footer.hide('slow');}
 				$status_menu.hide('slow');
 			});
+			//construct entire menu tree for the menu bar
 			for (var menu_tree in menu_tree_list) {
 				this.construct_one_menu_tree(menu_tree_list[menu_tree]).appendTo($menubar.find(LIST_MENU));
 			}
@@ -205,6 +263,7 @@ development framework, add a useful and functional menu bar in the page.
 			$menubar.menubar('foot', settings.bar_foot);
 			this.select_hide_mode($menubar); //select hide mode
 		},
+		//manage the css for the menu bar. use for $().css()
 		inital_cssManager:function (){
 			cssManager={
 				font_style:{'font-family':settings.font_family,
@@ -258,14 +317,33 @@ development framework, add a useful and functional menu bar in the page.
 		}
 	};
 	
-	//Jquery Plugin structure:
+	//Jquery Plugin structure to create $.fn.menubar plugin.
 	var methods = {
+		//initialize the options for the jquery pluin
 		init: function (menu_tree_list, options) {
+		//## Options and Default value
+		
 			settings = $.extend(true, {
+			//###bar_title: (default:"Helper Bar")
+			//the title of the bar 
 				bar_title: 'Helper Bar',
+			//###bar_foot: (default: empty string)
+			//the footer of the bar 
 				bar_foot:'',
+			//###foot_mode: (default: 'hide')
+			//the footer of the bar 
+			//
+			//1)'hide' display the footer only if mouse on the bar
+			//
+			//2)'show' always display footer
 				foot_mode:'hide',
+			//###foot_size: (default: '6px')
+			//the footer size
 				foot_size:'6px',
+			//###safe_mode: (default: 'safe')
+			//1) 'safe' mode: can not return the jQuery object of menubar and options
+			//
+			//2) 'unsafe' mode: allow return Menu bar jQuery object and options
 				safe_mode: 'safe',
 				hide_mode: 'notOnMenu',
 				warn_size: '50px', 
@@ -340,24 +418,28 @@ development framework, add a useful and functional menu bar in the page.
     };
 })(jQuery);
 
-//create Helper Bar as Class for the page
-//provide API of Helper Bar
+//create Helper Bar as Class for the page and provide API of Helper Bar
 (function ($) {
     "use strict";
     var _menubar;
     var _settings;
-	
+//private method: create a style text for message.	
 	function _makeTagMsg(tag,text,style){
 		return style?$.tag(tag).html(text).css(style):$.tag(tag).html(text);
 	}
-	
+
+//## API of HelperBar	
     function HelperBar(menu_tree_list, options) {
         _menubar = $.tag('div').appendTo('body').menubar(menu_tree_list, options);
         _settings = _menubar.menubar('getSettings');
         if (_settings.safe_mode === 'safe') {} else if (_settings.safe_mode === 'unsafe') {
+// ###bar.getMenuBar():		
+// (return $object)get jQuery object of menu bar, only can be used in unsafe mode.
             this.getMenuBar = function () {
 				return _menubar;
             };
+// ###bar.getSettings():		
+// (return object)get setting/options of menu bar, only can be used in unsafe mode.			
             this.getSettings = function () {
 				return _settings;
             };
@@ -366,11 +448,16 @@ development framework, add a useful and functional menu bar in the page.
         }
     }
 
+// ###bar.append(text):		
+// (return bar) append a text/html in bar message area.		
     HelperBar.prototype.append = function (text) {
         _menubar.menubar('append', text);
         return this;
     };
-
+// ###bar.html(text):		
+// (return bar or html code) display text/html in bar message area. previous message will be removed.
+//
+// if parameter give html code, return bar. if parameter is empty, return the html code.
     HelperBar.prototype.html = function (html) {
         if (arguments.length !== 0) {
             _menubar.menubar('html', html);
