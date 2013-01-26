@@ -441,7 +441,7 @@
         _settings = _menubar.menubar('getSettings');
 		if (_settings.safe_mode === "safe") _delUnsafeMethod();
    }
-//## API of HelperBar  
+//## API of bar (The object of HelperBar)
 // ###bar.getMenuBar():		
 // (return $object)get jQuery object of menu bar, only can be used in unsafe mode.
 	HelperBar.prototype.getMenuBar = function () {
@@ -459,7 +459,7 @@
         _menubar.menubar('append', text);
         return this;
     };
-// ###bar.html(text):		
+// ###bar.html(html):		
 // (return bar or html code) display text/html in bar message area. previous message will be removed.
 //#####msg could be a text, html or jQuery object.
 // if parameter give html code, return bar. if no parameter, return the html code on bar.
@@ -471,11 +471,11 @@
             return _menubar.menubar('html');
         }
     };
-// ###bar.addmsg(text,style):		
+// ###bar.addmsg(msg,style):		
 // (return bar) add a message wrapped with span tag.
 // #####msg could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
-// #####if style is object of jquery css, set a css style to message.
+// #####if style is object , set a css style to message. this is according $.fn.css(object)
     HelperBar.prototype.addmsg = function (msg, style) {
         if (typeof style === 'string') {
             msg = _makeTagMsg('span',msg,{color:style});
@@ -485,7 +485,7 @@
         this.append(msg);
         return this;
     };
-// ###bar.addmsg(text,style):		
+// ###bar.msg(msg,style):		
 // (return bar) show a message wrapped with span tag. previous message will be removed.
 // #####message could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
@@ -507,7 +507,10 @@
         msg = _makeTagMsg('div',msg);
         return this.append(msg);
     };
-
+// ###bar.warn(msg):		
+// (return bar) warning a message
+// #####message could be a text, html or jQuery object.
+// #####pre-set the style in options of bar, so this api only need to pass single parameter
     HelperBar.prototype.warn = function (msg) {
         var style = {
             color: _settings.warn_color,
@@ -524,7 +527,13 @@
             $.error('no this type of warning mode');
         }
     };
-	
+// ###bar.clickClsMsg(msg, style,func):		
+// (return bar) show a message wrapped with span div. previous message will be removed.
+// #####message could be a text, html or jQuery object.
+// #####if style is string, set a 'css:color' to message
+// #####if style is object of jquery css, set a css style to message.
+// if parameter give html/text code, return bar. if no parameter text, return a text of message on the bar	
+// This provide a message which could be removed by click.
 	HelperBar.prototype.clickClsMsg = function (msg, style,func) {
 		if(typeof style  === 'function') func = style;
 		
@@ -546,33 +555,45 @@
 		}
 		this.msg(message);
     };
-
+// ###bar.clickClsMsg():		
+// (return bar) clean the bar message
     HelperBar.prototype.cls = function () {
         this.html('');
         return this;
     };
-
+// ###bar.title(text):		
+// (return bar) append message to title
     HelperBar.prototype.title = function (text) {
         _menubar.menubar('title', text);
         return this;
     };
-	
+// ###bar.clsTitle():		
+// (return bar) clean title	which appended.
+// ##### this will not clean the title
 	HelperBar.prototype.clsTitle = function () {
         _menubar.menubar('clsTitle');
         this.title(_settings.bar_title);
         return this;
     };
-	
+// ###bar.foot(text):	
+// (return bar)	append text in footer 
 	HelperBar.prototype.foot = function (text) {
         _menubar.menubar('foot', text);
         return this;
     };
-	
+// ###bar.clsFoot(text):	
+// (return bar)	clean text in footer 	
+// #####this method will clean pre_set footer text
 	HelperBar.prototype.clsFoot = function () {
         _menubar.menubar('clsFoot');
         return this;
     };
-
+// ###bar.open(url, mode):	
+// (return bar) open a url. 
+// open a link by give a url. 
+//
+// mode: new is open link in new window/tab, self is open in current window/tab.
+// ##### the mode may not work which is depending on the browser setting.
     HelperBar.prototype.open = function (url, mode) {
         mode = mode || 'self';
         if (mode === 'new') {
@@ -584,7 +605,9 @@
         }
         return this;
     };
-
+// ###bar.show(speed):	
+// (return bar) show the bar. 
+// ##### speed is the speed according the one in $().hide(speed);
     HelperBar.prototype.show = function (speed) {
         if (!speed) {
             _menubar.show();
@@ -593,7 +616,9 @@
         }
         return this;
     };
-
+// ###bar.hide(speed):	
+// (return bar) hide the bar. 
+// ##### speed is the speed according the one in $().hide(speed);
     HelperBar.prototype.hide = function (speed) {
         if (!speed) {
             _menubar.hide();
@@ -638,7 +663,7 @@
 
 	var menuBuilder={
 		menu_tree_list:[],
-		rebuild_one_menu_tree:function(menu_array){
+		_rebuild_one_menu_tree:function(menu_array){
 			var root;
 			if(typeof menu_array.root=== 'object') {
 				return menu_array;
@@ -703,13 +728,11 @@
 			}
 	
 			for (var menu_tree_index in menu_tree) {
-				this.rebuild_one_menu_tree(menu_tree[menu_tree_index]);
+				this._rebuild_one_menu_tree(menu_tree[menu_tree_index]);
 			}
 			return menu_tree;
 		}
 	};
-	
-	
 
     window.HelperBar = (function () {
         var instantiated;
@@ -777,6 +800,4 @@
 	HelperBar.prototype.version = function () {
         return '0.4.1a';
     };
-	
-	
 })(jQuery);
