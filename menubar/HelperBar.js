@@ -425,29 +425,33 @@
     var _menubar;
     var _settings;
 //private method: create a style text for message.	
-	function _makeTagMsg(tag,text,style){
+	var _makeTagMsg=function (tag,text,style){
 		return style?$.tag(tag).html(text).css(style):$.tag(tag).html(text);
 	}
+	
+	var _delUnsafeMethod=function (){
+		delete HelperBar.prototype['getMenuBar'];
+		delete HelperBar.prototype['getSettings'];
+	}
+	
 
-//## API of HelperBar	
+	
     function HelperBar(menu_tree_list, options) {
         _menubar = $.tag('div').appendTo('body').menubar(menu_tree_list, options);
         _settings = _menubar.menubar('getSettings');
-        if (_settings.safe_mode === 'safe') {} else if (_settings.safe_mode === 'unsafe') {
+		if (_settings.safe_mode === "safe") _delUnsafeMethod();
+   }
+//## API of HelperBar  
 // ###bar.getMenuBar():		
 // (return $object)get jQuery object of menu bar, only can be used in unsafe mode.
-            this.getMenuBar = function () {
+	HelperBar.prototype.getMenuBar = function () {
 				return _menubar;
             };
 // ###bar.getSettings():		
-// (return object)get setting/options of menu bar, only can be used in unsafe mode.			
-            this.getSettings = function () {
+// (return object)get setting/options of menu bar, only can be used in unsafe mode.				
+	HelperBar.prototype.getSettings = function () {
 				return _settings;
             };
-        } else {
-            $.error('no this type of safe mode.');
-        }
-    }
 
 // ###bar.append(text):		
 // (return bar) append a text/html in bar message area.		
@@ -457,8 +461,8 @@
     };
 // ###bar.html(text):		
 // (return bar or html code) display text/html in bar message area. previous message will be removed.
-//
-// if parameter give html code, return bar. if parameter is empty, return the html code.
+//#####msg could be a text, html or jQuery object.
+// if parameter give html code, return bar. if no parameter, return the html code on bar.
     HelperBar.prototype.html = function (html) {
         if (arguments.length !== 0) {
             _menubar.menubar('html', html);
@@ -468,9 +472,10 @@
         }
     };
 // ###bar.addmsg(text,style):		
-// (return bar) add a 
-//
-// if parameter give html code, return bar. if parameter is empty, return the html code.
+// (return bar) add a message wrapped with span tag.
+// #####msg could be a text, html or jQuery object.
+// #####if style is string, set a 'css:color' to message
+// #####if style is object of jquery css, set a css style to message.
     HelperBar.prototype.addmsg = function (msg, style) {
         if (typeof style === 'string') {
             msg = _makeTagMsg('span',msg,{color:style});
@@ -480,7 +485,12 @@
         this.append(msg);
         return this;
     };
-
+// ###bar.addmsg(text,style):		
+// (return bar) show a message wrapped with span tag. previous message will be removed.
+// #####message could be a text, html or jQuery object.
+// #####if style is string, set a 'css:color' to message
+// #####if style is object of jquery css, set a css style to message.
+// if parameter give html/text code, return bar. if no parameter text, return a text of message on the bar
     HelperBar.prototype.msg = function (msg, style) {
         if (arguments.length !== 0) {
             this.cls();
@@ -489,10 +499,13 @@
             return $(this.html()).text();
         }
     };
-
+	
+// ###bar.log(msg):		
+// (return bar) append a message wrapped with div tag. 
+// #####message could be a text, html or jQuery object.
     HelperBar.prototype.log = function (msg) {
         msg = _makeTagMsg('div',msg);
-        return this.addmsg(msg);
+        return this.append(msg);
     };
 
     HelperBar.prototype.warn = function (msg) {
@@ -695,6 +708,8 @@
 			return menu_tree;
 		}
 	};
+	
+	
 
     window.HelperBar = (function () {
         var instantiated;
@@ -743,7 +758,10 @@
                 return instantiated;
             },
 			buildBar:function(options){
-				return this.getBar(true,options);
+				if (!instantiated) {
+                    instantiated = init(true, options);
+                }
+                return instantiated;
 			},
             version: function () {
                 return HelperBar.prototype.version();
@@ -752,10 +770,13 @@
 		exports.getbar=exports.getBar;
 		exports.data= HelperBar.prototype.data;
 		exports.delData= HelperBar.prototype.delData;
+		
 		return exports;
     })();
 	
 	HelperBar.prototype.version = function () {
         return '0.4.1a';
     };
+	
+	
 })(jQuery);

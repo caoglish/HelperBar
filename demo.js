@@ -354,6 +354,7 @@
 			//bar.warn(i+":"+bar.data(i),'yellow'); 
 		}
 		
+		console.log(bar.getSettings);
 		console.log(bar.getMenuBar);
 		
 	}
