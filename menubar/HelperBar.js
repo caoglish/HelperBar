@@ -1,10 +1,10 @@
 //Development framework, add a useful and functional menu bar for GreaseMonkey Plugin.
 //
-//@version     0.4.0
+//@version     0.4.1a
 //
 //Purpose: a quick way to generate a interactive menu bar for GreaseMonkey/Tamper plugin
 //
-//Create by: Caoglish
+//Created by: Caoglish
 
 //##Description
 //####1) This requires jQuery.
@@ -21,7 +21,7 @@
 *menu builder 
 *
 *HelperBar.menu.addTree('root1',func)
-*		 			.addItem('menu1-1',func)
+*					.addItem('menu1-1',func)
 *					.addItem('menu1-2',func)
 *			.addTree('root2',func)
 *					.addItem('menu2-2',func)
@@ -46,7 +46,8 @@
     "use strict";
 	
 	//menubar element name define.
-	//const keywork is working fine with firefox/chrome, plugin is not using in IE, so it's better user const here.
+	//const keywork is working fine with firefox/chrome, plugin is not using in IE, so it's better use const here.
+	//####(make syntax incompitable with IE on purpose)
     const STATUS_BAR = '#menubar-7cad339b0b08db99561c640461d00a07';
     const STATUS_TITLE = '#menubar-title';
     const STATUS_MESSAGE = '#menubar-message';
@@ -466,13 +467,15 @@
             return _menubar.menubar('html');
         }
     };
-
+// ###bar.addmsg(text,style):		
+// (return bar) add a 
+//
+// if parameter give html code, return bar. if parameter is empty, return the html code.
     HelperBar.prototype.addmsg = function (msg, style) {
         if (typeof style === 'string') {
             msg = _makeTagMsg('span',msg,{color:style});
         } else if (typeof style === 'object') {
             msg = _makeTagMsg('span',msg,style);
-			
         }
         this.append(msg);
         return this;
@@ -570,7 +573,7 @@
     };
 
     HelperBar.prototype.show = function (speed) {
-        if (speed === undefined) {
+        if (!speed) {
             _menubar.show();
         } else {
             _menubar.slideDown(speed);
@@ -579,13 +582,46 @@
     };
 
     HelperBar.prototype.hide = function (speed) {
-        if (speed === undefined) {
+        if (!speed) {
             _menubar.hide();
         } else {
             _menubar.slideUp(speed);
         }
         return this;
     };
+//###bar.data(key,value):		
+//setter: (return bar) if have value, return bar. store the value in the key in localStorage.
+//
+//getter: (return value) if only give key without value, will return  value.
+//####The Data storage uses LocalStorage.
+//	the value soppurts string, array, and object. 
+//####HelperBar.data(key,value) is the same, but will not return bar.
+	HelperBar.prototype.data=function(key,value){
+		if(typeof key !=='string') $.error('data() key must be string');
+		if(!!value){
+			localStorage.setItem(key, JSON.stringify(value));
+			if(this instanceof HelperBar) return this;
+		}else{
+			try	{
+				return JSON.parse(localStorage.getItem(key));
+			}
+			catch(e)			{
+				return localStorage.getItem(key);
+			}
+		}
+	};
+//###bar.delData(key,value):		
+//(return bar) remove the key with the value from localStorage
+//
+//####HelperBar.delData(key,value) is the same, but will not return bar.
+	HelperBar.prototype.delData=function(key){
+		if(typeof key ==='string'){
+			localStorage.removeItem(key);
+			if(this instanceof HelperBar) return this;
+		}else{
+			$.error('delData() has not key or key is not string');
+		}
+	};
 
 	var menuBuilder={
 		menu_tree_list:[],
@@ -714,10 +750,12 @@
             }
         };
 		exports.getbar=exports.getBar;
+		exports.data= HelperBar.prototype.data;
+		exports.delData= HelperBar.prototype.delData;
 		return exports;
     })();
 	
 	HelperBar.prototype.version = function () {
-        return '0.4.0';
+        return '0.4.1a';
     };
 })(jQuery);

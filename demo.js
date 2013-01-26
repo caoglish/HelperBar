@@ -161,6 +161,27 @@
 		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
 		//bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
 		demo_interface();
+		bar.data('test','abc')
+		.data('testfakeobject','{abc:"abc"}')
+		.data('testarray',['abc','edb'])
+		.data('testobject',{'abc':'edb',"hello":'world'});
+		
+		HelperBar.data('uu','ddd');
+		for (var i in localStorage) {
+			bar.log(i+":"+bar.data(i)); 
+		}
+		
+		bar.delData('test')
+			.delData('testfakeobject');
+		
+		HelperBar.delData('uu','ddd');
+		for (var i in localStorage) {
+			bar.warn(i+":"+bar.data(i),'yellow'); 
+		}
+		
+		
+		
+		
 		
 		
 	}
