@@ -79,13 +79,13 @@
 			.set(menuTreeList)
 			.reset()
 			.addTree()
-			.addItem('1',function(){bar.log('addMenuItem1.1');})
-			.addItem('2',function(){bar.log('addMenuItem1.2');})
-			.addItem('3',function(){bar.log('addMenuItem1.3');})
+			.addItem('1.1',function(){bar.log('addMenuItem1.1');})
+			.addItem('1.2',function(){bar.log('addMenuItem1.2');})
+			.addItem('1.3',function(){bar.log('addMenuItem1.3');})
 			.addTree('root-addMenuTree(title,click)',function(){console.log('addMenuTree');})
-			.addItem('1',function(){bar.log('addMenuItem2.1');})
-			.addItem('2',function(){bar.log('addMenuItem2.2');})
-			.addItem('3',function(){bar.log('addMenuItem2.3');})
+			.addItem('2.1',function(){bar.log('addMenuItem2.1');})
+			.addItem('2.2',function(){bar.log('addMenuItem2.2');})
+			.addItem('2.3',function(){bar.log('addMenuItem2.3');})
 			.merge(menuTreeList)
 			.mergeTo(menuTreeList)
 			.get();
@@ -99,7 +99,7 @@
 				bar_foot:'verions:'+HelperBar.version(),
 				foot_mode:'show',
 				foot_size:'8px',
-                safe_mode: 'safe',
+                safe_mode: 'unsafe',
                 hide_mode: 'notOnMenu',
 				border_radius: '86px',
                 warn_size:'32px',
@@ -153,38 +153,7 @@
 		};
 		var optionsList=[optsDefault,opts1,opts2,opts3];
 	$(run);
-	function run(){
-		if(optSet.get()===undefined||optSet.get()===null){
-			optSet.init(1);
-		}
-		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSet.get()]);//singleton start
-		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
-		//bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
-		demo_interface();
-		bar.data('test','abc')
-		.data('testfakeobject','{abc:"abc"}')
-		.data('testarray',['abc','edb'])
-		.data('testobject',{'abc':'edb',"hello":'world'});
-		
-		HelperBar.data('uu','ddd');
-		for (var i in localStorage) {
-			bar.log(i+":"+bar.data(i)); 
-		}
-		
-		bar.delData('test')
-			.delData('testfakeobject');
-		
-		HelperBar.delData('uu','ddd');
-		for (var i in localStorage) {
-			bar.warn(i+":"+bar.data(i),'yellow'); 
-		}
-		
-		
-		
-		
-		
-		
-	}
+	
 	
 	function go_top(){
 			$('html, body').animate({ scrollTop: 0 }, 'slow');
@@ -358,4 +327,36 @@
 			bar.show('slow');
 		});
 	}
+	
+	function run(){
+		if(optSet.get()===undefined||optSet.get()===null){
+			optSet.init(1);
+		}
+		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSet.get()]);//singleton start
+		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
+		//bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
+		demo_interface();
+		bar.data('test','abc')
+		.data('testfakeobject','{abc:"abc"}')
+		.data('testarray',['abc','edb'])
+		.data('testobject',{'abc':'edb',"hello":'world'});
+		
+		HelperBar.data('uu','ddd');
+		for (var i in localStorage) {
+			//bar.log(i+":"+bar.data(i)); 
+		}
+		
+		bar.delData('test')
+			.delData('testfakeobject');
+		
+		HelperBar.delData('uu','ddd');
+		for (var i in localStorage) {
+			//bar.warn(i+":"+bar.data(i),'yellow'); 
+		}
+		
+		console.log(bar.getMenuBar);
+		
+	}
+	
+	
 })( jQuery );

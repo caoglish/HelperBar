@@ -653,7 +653,7 @@
 			this.menu_tree_list=$.merge($.merge([],menuList),this.menu_tree_list);
 		},
 		addTree:function(title,click,id){
-				if (title !== undefined){
+				if (!!title){
 				var root = {"title":title,"click":click,"id":id};
 				this.menu_tree_list.push({"root":root,"list":[]});
 			}else { 
@@ -661,7 +661,7 @@
 			}
 		},
 		addItem:function(title,click,id){
-			if (title !== undefined){
+			if (!!title){
 				var item = {"title":title,"click":click,"id":id};
 				if (!this.hasMenu()) $.error("no Menu Tree.");
 				var list=this.menu_tree_list[this.menu_tree_list.length-1].list;
@@ -743,7 +743,7 @@
                 return instantiated;
             },
 			buildBar:function(options){
-				return this.getbar(true,options);
+				return this.getBar(true,options);
 			},
             version: function () {
                 return HelperBar.prototype.version();
