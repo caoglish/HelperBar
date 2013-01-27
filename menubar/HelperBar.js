@@ -47,13 +47,13 @@
 	
 	//menubar element name define.
 	//const keywork is working fine with firefox/chrome, plugin is not using in IE, so it's better use const here.
-	//####(make syntax incompitable with IE on purpose)
-    const STATUS_BAR = '#menubar-7cad339b0b08db99561c640461d00a07';
-    const STATUS_TITLE = '#menubar-title';
-    const STATUS_MESSAGE = '#menubar-message';
-	const STATUS_FOOTER = '#menubar-footer';
-    const STATUS_MENU = '#menubar-menu';
-    const LIST_MENU = "#menubar-list-menu";
+	
+    var STATUS_BAR = '#menubar-7cad339b0b08db99561c640461d00a07';
+    var STATUS_TITLE = '#menubar-title';
+    var STATUS_MESSAGE = '#menubar-message';
+	var STATUS_FOOTER = '#menubar-footer';
+    var STATUS_MENU = '#menubar-menu';
+    var LIST_MENU = "#menubar-list-menu";
 
     var settings;
     var cssManager;
@@ -437,29 +437,37 @@
 
 	
     function HelperBar(menu_tree_list, options) {
-        _menubar = $.tag('div').appendTo('body').menubar(menu_tree_list, options);
+        _menubar = $.tag('div').menubar(menu_tree_list, options);
         _settings = _menubar.menubar('getSettings');
-		if (_settings.safe_mode === "safe") _delUnsafeMethod();
+		if (_settings.safe_mode !== "unsafe") _delUnsafeMethod();
+//Check body is existed or not, if existed, append into body, if not existed, waiting for page fully loaded then append into body.		
+		if($('body').size()>0){
+			_menubar.appendTo('body');
+		}else{
+			$(function(){
+				_menubar.appendTo('body');
+			});
+		}
    }
 //## API of bar (The object of HelperBar)
-// ###bar.getMenuBar():		
+// ### #API#bar.getMenuBar():		
 // (return $object)get jQuery object of menu bar, only can be used in unsafe mode.
 	HelperBar.prototype.getMenuBar = function () {
 				return _menubar;
             };
-// ###bar.getSettings():		
+// ### #API#bar.getSettings():		
 // (return object)get setting/options of menu bar, only can be used in unsafe mode.				
 	HelperBar.prototype.getSettings = function () {
 				return _settings;
             };
 
-// ###bar.append(text):		
+// ### #API#bar.append(text):		
 // (return bar) append a text/html in bar message area.		
     HelperBar.prototype.append = function (text) {
         _menubar.menubar('append', text);
         return this;
     };
-// ###bar.html(html):		
+// ### #API#bar.html(html):		
 // (return bar or html code) display text/html in bar message area. previous message will be removed.
 //#####msg could be a text, html or jQuery object.
 // if parameter give html code, return bar. if no parameter, return the html code on bar.
@@ -471,7 +479,7 @@
             return _menubar.menubar('html');
         }
     };
-// ###bar.addmsg(msg,style):		
+// ### #API#bar.addmsg(msg,style):		
 // (return bar) add a message wrapped with span tag.
 // #####msg could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
@@ -485,7 +493,7 @@
         this.append(msg);
         return this;
     };
-// ###bar.msg(msg,style):		
+// ### #API#bar.msg(msg,style):		
 // (return bar) show a message wrapped with span tag. previous message will be removed.
 // #####message could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
@@ -500,14 +508,14 @@
         }
     };
 	
-// ###bar.log(msg):		
+// ### #API#bar.log(msg):		
 // (return bar) append a message wrapped with div tag. 
 // #####message could be a text, html or jQuery object.
     HelperBar.prototype.log = function (msg) {
         msg = _makeTagMsg('div',msg);
         return this.append(msg);
     };
-// ###bar.warn(msg):		
+// ### #API#bar.warn(msg):		
 // (return bar) warning a message
 // #####message could be a text, html or jQuery object.
 // #####pre-set the style in options of bar, so this api only need to pass single parameter
@@ -527,7 +535,7 @@
             $.error('no this type of warning mode');
         }
     };
-// ###bar.clickClsMsg(msg, style,func):		
+// ### #API#bar.clickClsMsg(msg, style,func):		
 // (return bar) show a message wrapped with span div. previous message will be removed.
 // #####message could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
@@ -555,19 +563,19 @@
 		}
 		this.msg(message);
     };
-// ###bar.clickClsMsg():		
+// ### #API#bar.clickClsMsg():		
 // (return bar) clean the bar message
     HelperBar.prototype.cls = function () {
         this.html('');
         return this;
     };
-// ###bar.title(text):		
+// ### #API# bar.title(text):		
 // (return bar) append message to title
     HelperBar.prototype.title = function (text) {
         _menubar.menubar('title', text);
         return this;
     };
-// ###bar.clsTitle():		
+// ### #API#bar.clsTitle():		
 // (return bar) clean title	which appended.
 // ##### this will not clean the title
 	HelperBar.prototype.clsTitle = function () {
@@ -575,20 +583,20 @@
         this.title(_settings.bar_title);
         return this;
     };
-// ###bar.foot(text):	
+// ### #API#bar.foot(text):	
 // (return bar)	append text in footer 
 	HelperBar.prototype.foot = function (text) {
         _menubar.menubar('foot', text);
         return this;
     };
-// ###bar.clsFoot(text):	
+// ### #API#bar.clsFoot(text):	
 // (return bar)	clean text in footer 	
 // #####this method will clean pre_set footer text
 	HelperBar.prototype.clsFoot = function () {
         _menubar.menubar('clsFoot');
         return this;
     };
-// ###bar.open(url, mode):	
+// ### #API#bar.open(url, mode):	
 // (return bar) open a url. 
 // open a link by give a url. 
 //
@@ -605,7 +613,7 @@
         }
         return this;
     };
-// ###bar.show(speed):	
+// ### #API# bar.show(speed):	
 // (return bar) show the bar. 
 // ##### speed is the speed according the one in $().hide(speed);
     HelperBar.prototype.show = function (speed) {
@@ -616,7 +624,7 @@
         }
         return this;
     };
-// ###bar.hide(speed):	
+// ### #API# bar.hide(speed):	
 // (return bar) hide the bar. 
 // ##### speed is the speed according the one in $().hide(speed);
     HelperBar.prototype.hide = function (speed) {
@@ -627,7 +635,7 @@
         }
         return this;
     };
-//###bar.data(key,value):		
+//### #API# bar.data(key,value):		
 //setter: (return bar) if have value, return bar. store the value in the key in localStorage.
 //
 //getter: (return value) if only give key without value, will return  value.
@@ -636,7 +644,7 @@
 //####HelperBar.data(key,value) is the same, but will not return bar.
 	HelperBar.prototype.data=function(key,value){
 		if(typeof key !=='string') $.error('data() key must be string');
-		if(!!value){
+		if(value!==undefined){//localStorage can save boolean value. so cannot use !!value
 			localStorage.setItem(key, JSON.stringify(value));
 			if(this instanceof HelperBar) return this;
 		}else{
@@ -648,10 +656,10 @@
 			}
 		}
 	};
-//###bar.delData(key,value):		
+//### #API#bar.delData(key,value):		
 //(return bar) remove the key with the value from localStorage
 //
-//####HelperBar.delData(key,value) is the same, but will not return bar.
+//#####HelperBar.delData(key,value) is the same, but will not return bar.
 	HelperBar.prototype.delData=function(key){
 		if(typeof key ==='string'){
 			localStorage.removeItem(key);
