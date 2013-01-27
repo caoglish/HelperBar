@@ -333,8 +333,8 @@
 			optSet.init(1);
 		}
 		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSet.get()]);//singleton start
-		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
-		//bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
+		// bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
+		bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
 		demo_interface();
 		bar.data('test','abc')
 		.data('testfakeobject','{abc:"abc"}')
@@ -354,8 +354,9 @@
 			//bar.warn(i+":"+bar.data(i),'yellow'); 
 		}
 		
-		console.log(bar.getSettings);
-		console.log(bar.getMenuBar);
+		bar.data('bool',true);
+		console.log(bar.data('bool')===true);
+	
 		
 	}
 	
