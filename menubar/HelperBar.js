@@ -42,7 +42,7 @@
 //##Code Explain
 //$.fn.menubar: a jquery plugin to create a menubar
 //a core of generate Menu bar by passing a json structure.
-;(function ($) {
+;(function ($,window,undefined) {
     "use strict";
 	
 	//menubar element name define.
@@ -417,10 +417,10 @@
             $.error('Method ' + method + ' does not exist on jQuery.menubar');
         }
     };
-})(jQuery);
+})(jQuery,window);
 
 //create Helper Bar as Class for the page and provide API of Helper Bar
-(function ($) {
+(function ($,window,undefined) {
     "use strict";
     var _menubar;
     var _settings;
@@ -644,7 +644,7 @@
 //####HelperBar.data(key,value) is the same, but will not return bar.
 	HelperBar.prototype.data=function(key,value){
 		if(typeof key !=='string') $.error('data() key must be string');
-		if(value!==undefined){//localStorage can save boolean value. so cannot use !!value
+		if(value !== undefined ){////localStorage can save boolean value. need to save false value to storage, so not !!value.
 			localStorage.setItem(key, JSON.stringify(value));
 			if(this instanceof HelperBar) return this;
 		}else{
@@ -808,4 +808,4 @@
 	HelperBar.prototype.version = function () {
         return '0.4.1a';
     };
-})(jQuery);
+})(jQuery,window);
