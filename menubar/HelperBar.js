@@ -1,6 +1,6 @@
 //Development framework, add a useful and functional menu bar for GreaseMonkey Plugin.
 //
-//@version     0.4.1a
+//@version     0.4.1b
 //
 //Purpose: a quick way to generate a interactive menu bar for GreaseMonkey/Tamper plugin
 //
@@ -806,6 +806,6 @@
     })();
 	
 	HelperBar.prototype.version = function () {
-        return '0.4.1a';
+        return '0.4.1b';
     };
 })(jQuery,window);
