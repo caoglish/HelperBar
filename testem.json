@@ -1,0 +1,4 @@
+{
+	"framework":"qunit",
+	"src_files":["jq/*.js","HelperBar.min/*.js","testem/*.js"]
+}
