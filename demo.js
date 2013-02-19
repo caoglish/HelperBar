@@ -2,7 +2,6 @@
     "use strict";
     window.optSet = (function () {
         var ITEM_OPTSET = 'HelperBar_optset';
-
         return {
             set: function (opt) {
                 localStorage.setItem(ITEM_OPTSET, opt);
@@ -22,10 +21,10 @@
 (function( $ ){
 	"use strict";
 	var bar; 
+	$.tag = function (tag, opts) {
+			return $('<' + tag + '/>', opts);
+		}
 	var TXT_ABOUT_INFO='<strong>Helper Bar Framework[Version:'+HelperBar.version()+']<br/>Jquery[Version:'+$().jquery+']<br/>Designer: Caoglish</strong>';
-	
-
-			
 
 	//Menu bar setup
 	var menuTreeFunction={
@@ -112,7 +111,8 @@
                 menu_bg_color: '#111111',
                 menu_hover_bg_color: '#333333',
                 menu_font_color: '#EAFFED',
-				menu_separator_color: 'black'
+				menu_separator_color: 'black',
+				msg_click:function(){bar.cls().clsTitle();}
 		};
 		
 		var opts2={
@@ -134,7 +134,8 @@
                 menu_hover_bg_color: '#ff33cc',
                 menu_font_color: 'yellow',
 				menu_separator_color: 'yellow',
-				font_family:'MuseoLight,Arial,Helvetica,Sans-Serif'
+				font_family:'MuseoLight,Arial,Helvetica,Sans-Serif',
+				bar_click:function(){bar.cls().clsTitle();}
 		};
 		
 		var opts3={
@@ -356,7 +357,11 @@
 		
 		bar.data('bool',true);
 		console.log(bar.data('bool')===true);
-	
+		bar.log('a');
+		bar.log([]);
+		bar.log({});
+		bar.log(/undefined/);
+		bar.log(['a','a','a','a',{'b':'b',"a":"a","c":"a",'d':['a','a','a','a','a','a','a','a',{a:'a',"c":"a",z:[]}]}]);
 		
 	}
 	

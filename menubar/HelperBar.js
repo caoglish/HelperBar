@@ -1,6 +1,6 @@
 //Development framework, add a useful and functional menu bar for GreaseMonkey Plugin.
 //
-//@version     0.4.1
+//@version     0.4.2a
 //
 //Purpose: a quick way to generate a interactive menu bar for GreaseMonkey/Tamper plugin
 //
@@ -69,27 +69,29 @@
 		//_.jqobClean($object) clean all the style and attribute and text.
 		jqobClean:function($object){
 			$object.empty().removeAttr('id').removeAttr('class').removeAttr('style');
+		},
+		//_.tag(tag, opts)jquery tag maker
+		//
+		//too lazy to type < />
+		tag : function (tag, opts) {
+			return $('<' + tag + '/>', opts);
 		}
 	};
-    //$.tag(tag, opts)jquery tag maker
-	//
-	//too lazy to type < />
-    $.tag = function (tag, opts) {
-        return $('<' + tag + '/>', opts);
-    };
+    
+    
 	
 	//barBuilder object to manage the code to builer the menu bar.
 	var barBuilder = {
 		//convert a 'div' element to the Menu bar
 		convert_status_bar:function($object) {
 			$object.attr('id', _.cropFirstSymbol(STATUS_BAR)).css(cssManager.bar_basic_style); //create status bar//css: #helper-bar-nnnnnnnnnnnnnn
-			var $div_status_title = $.tag('div', {
+			var $div_status_title = _.tag('div', {
 				id: _.cropFirstSymbol(STATUS_TITLE)
 			}).css(cssManager.menu_basic_style).css(cssManager.font_style); //create status title area
-			var $div_status_message = $.tag('div', {
+			var $div_status_message = _.tag('div', {
 				id: _.cropFirstSymbol(STATUS_MESSAGE)
 			}).css(cssManager.menu_basic_style).css(cssManager.font_style); //create status message area
-			var $div_status_footer = $.tag('div', {
+			var $div_status_footer = _.tag('div', {
 				id: _.cropFirstSymbol(STATUS_FOOTER)
 			}).css(cssManager.menu_basic_style).css(cssManager.font_style); //create status footer area
 			if(settings.foot_size!=='none'){$div_status_footer.css('font-size',settings.foot_size);}
@@ -97,10 +99,10 @@
 		},
 	//creating top menu level (root menu)
 		create_status_menu:function() {
-			var $div_status_menu = $.tag('div', {
+			var $div_status_menu = _.tag('div', {
 				id: _.cropFirstSymbol(STATUS_MENU)
 			}).css(cssManager.menu_basic_style); //create status menu
-			var ul_list_menu = $.tag('ul', {
+			var ul_list_menu = _.tag('ul', {
 				id: _.cropFirstSymbol(LIST_MENU)
 			}); //create menu list
 			ul_list_menu.css({
@@ -112,7 +114,7 @@
 		},
 		//creating a single menu item for root level
 		create_root_menu_item:function(id, title, callback) {
-			var $tag_a = $.tag('a', {
+			var $tag_a = _.tag('a', {
 				id: id,
 				href: '#',
 				text: title
@@ -136,15 +138,15 @@
 					});
 			}); //css:#status-menu ul li a
 			
-			var $root_menu_item = $.tag('li').css(cssManager.root_menu_style) //css:#status-menu ul li
+			var $root_menu_item = _.tag('li').css(cssManager.root_menu_style) //css:#status-menu ul li
 			.append($tag_a);
 			return $root_menu_item;
 		},
 		//creating a single menu item
 		create_menu_item:function(id, title, callback) {
-			var menu_item = $.tag('li');
+			var menu_item = _.tag('li');
 			menu_item.css(cssManager.menu_style); //css:#status-menu ul li ul li
-			var $tag_a = $.tag('a', {
+			var $tag_a = _.tag('a', {
 				id: id,
 				href: '#',
 				text: title
@@ -180,7 +182,7 @@
 		},
 		//construct a menu tree except the root menu item
 		construct_menu:function(menu_list) {
-			var $tag_ul = $.tag('ul');
+			var $tag_ul = _.tag('ul');
 			$tag_ul.hide().css(cssManager.menu_ul_style); //css:#status-menu ul li ul
 			for (var menu in menu_list) {
 				var id = menu_list[menu].id;
@@ -263,6 +265,8 @@
 			$menubar.menubar('title', settings.bar_title);
 			$menubar.menubar('foot', settings.bar_foot);
 			this.select_hide_mode($menubar); //select hide mode
+			
+			
 		},
 		//manage the css for the menu bar. use for $().css()
 		inital_cssManager:function (){
@@ -359,7 +363,9 @@
 				menu_bg_color: '#111111',
 				menu_hover_bg_color: '#333333',
 				font_family: 'Arial,Helvetica,Sans-Serif',
-				menu_font_color: '#EAFFED'
+				menu_font_color: '#EAFFED',
+				msg_click:function(){},
+				bar_click:function(){}
             }, options); //options 
 			barBuilder.inital_cssManager();//manage all css stylesheet
            
@@ -384,6 +390,15 @@
                 $(this).find(STATUS_FOOTER).append(text);
             });
         },
+		getArea:function(area){
+			var area_map={
+				'foot':STATUS_FOOTER,
+				'title':STATUS_TITLE,
+				'msg':STATUS_MESSAGE,
+				'menu':STATUS_MENU
+			};
+			return $(this).find(area_map[area]);
+		},
         clsFoot: function () {
             return this.each(function () {
                 $(this).find(STATUS_FOOTER).empty();
@@ -425,21 +440,33 @@
     var _menubar;
     var _settings;
 //private method: create a style text for message.	
-	var _makeTagMsg=function (tag,text,style){
-		return style?$.tag(tag).html(text).css(style):$.tag(tag).html(text);
-	}
-	
-	var _delUnsafeMethod=function (){
-		delete HelperBar.prototype['getMenuBar'];
-		delete HelperBar.prototype['getSettings'];
-	}
-	
-
+	var _={
+		tag : function (tag, opts) {
+			return $('<' + tag + '/>', opts);
+		},
+		makeTagMsg:function (tag,text,style){
+		return style?_.tag(tag).html(text).css(style):_.tag(tag).html(text);
+		},
+		delUnsafeMethod:function(){
+			delete HelperBar.prototype.getMenuBar;
+			delete HelperBar.prototype.getSettings;
+		},
+		set_action_on_bar:function(){
+			if($.isFunction(_settings.msg_click)) _menubar.menubar('getArea','msg').on('click',_settings.msg_click);
+			if($.isFunction(_settings.bar_click)){
+				_menubar.on('click',_settings.bar_click);
+				_menubar.menubar('getArea','menu').children().on('click',function(e){
+					e.stopPropagation();
+				});
+			}
+		}
+	};
 	
     function HelperBar(menu_tree_list, options) {
-        _menubar = $.tag('div').menubar(menu_tree_list, options);
+        _menubar = _.tag('div').menubar(menu_tree_list, options);
         _settings = _menubar.menubar('getSettings');
-		if (_settings.safe_mode !== "unsafe") _delUnsafeMethod();
+		_.set_action_on_bar();
+		if (_settings.safe_mode !== "unsafe") _.delUnsafeMethod();
 //Check body is existed or not, if existed, append into body, if not existed, waiting for page fully loaded then append into body.		
 		if($('body').size()>0){
 			_menubar.appendTo('body');
@@ -449,6 +476,7 @@
 			});
 		}
    }
+   
 //## API of bar (The object of HelperBar)
 // ### #API#bar.getMenuBar():		
 // (return $object)get jQuery object of menu bar, only can be used in unsafe mode.
@@ -456,7 +484,7 @@
 				return _menubar;
             };
 // ### #API#bar.getSettings():		
-// (return object)get setting/options of menu bar, only can be used in unsafe mode.				
+// (return object)get setting/options of menu bar, only can be used in unsafe mode.	
 	HelperBar.prototype.getSettings = function () {
 				return _settings;
             };
@@ -486,9 +514,9 @@
 // #####if style is object , set a css style to message. this is according $.fn.css(object)
     HelperBar.prototype.addmsg = function (msg, style) {
         if (typeof style === 'string') {
-            msg = _makeTagMsg('span',msg,{color:style});
+            msg = _.makeTagMsg('span',msg,{color:style});
         } else if (typeof style === 'object') {
-            msg = _makeTagMsg('span',msg,style);
+            msg = _.makeTagMsg('span',msg,style);
         }
         this.append(msg);
         return this;
@@ -512,7 +540,12 @@
 // (return bar) append a message wrapped with div tag. 
 // #####message could be a text, html or jQuery object.
     HelperBar.prototype.log = function (msg) {
-        msg = _makeTagMsg('div',msg);
+		if(msg===undefined){
+			msg='undefined' ;
+		}else if(typeof msg !=='string'){
+			msg=JSON.stringify(msg);
+		}
+		msg = _.makeTagMsg('div',msg);
         return this.append(msg);
     };
 // ### #API#bar.warn(msg):		
@@ -527,7 +560,7 @@
         if (_settings.warn_mode === 'append') {
             return this.addmsg(msg, style);
         } else if (_settings.warn_mode === 'log') {
-            msg = _makeTagMsg('div',msg,style);
+            msg = _.makeTagMsg('div',msg,style);
             return this.append(msg);
         } else if (_settings.warn_mode === 'clean') {
 			return this.msg(msg, style);
@@ -545,7 +578,7 @@
 	HelperBar.prototype.clickClsMsg = function (msg, style,func) {
 		if(typeof style  === 'function') func = style;
 		
-        var message=$.tag('div')
+        var message=_.tag('div')
 			.html(msg)
 			.click(function(){
 				$(this).remove();
@@ -572,8 +605,8 @@
 // ### #API# bar.title(text):		
 // (return bar) append message to title
     HelperBar.prototype.title = function (text) {
-        _menubar.menubar('title', text);
-        return this;
+		_menubar.menubar('title', text);
+		return this;
     };
 // ### #API#bar.clsTitle():		
 // (return bar) clean title	which appended.
@@ -589,8 +622,8 @@
         _menubar.menubar('foot', text);
         return this;
     };
-// ### #API#bar.clsFoot(text):	
-// (return bar)	clean text in footer 	
+// ### #API#bar.clsFoot(text):
+// (return bar) clean text in footer
 // #####this method will clean pre_set footer text
 	HelperBar.prototype.clsFoot = function () {
         _menubar.menubar('clsFoot');
@@ -818,6 +851,6 @@
     })();
 	
 	HelperBar.prototype.version = function () {
-        return '0.4.1';
+        return '0.4.2a';
     };
 })(jQuery,window);

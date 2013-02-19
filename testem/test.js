@@ -8,7 +8,7 @@ var LIST_MENU = "#menubar-list-menu";
 var tester={
 	version:'0.4.1b',
 	getMsgArea:function(){
-			return bar.getMenuBar().find(STATUS_MESSAGE);
+			return $(STATUS_MESSAGE);
 	}
 };
 
@@ -22,7 +22,7 @@ init();
 
 module("Helperbar Method");
 test("Helperbar.version()", function () {
-	var expect=tester.version;
+	var expect=bar.version();
 	var result=HelperBar.version();
 	equal(result,expect,'version() is return right number');
 });
