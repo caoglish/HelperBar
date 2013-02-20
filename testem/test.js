@@ -9,9 +9,18 @@ var tester={
 	version:'0.4.1b',
 	getMsgArea:function(){
 			return $(STATUS_MESSAGE);
+	},
+	getTitleArea:function(){
+			return $(STATUS_TITLE);
+	},
+	getFootArea:function(){
+			return $(STATUS_FOOTER);
 	}
 };
 
+$.tag = function (tag, opts) {
+			return $('<' + tag + '/>', opts);
+		};
 
 
 var init=function(){
@@ -82,7 +91,7 @@ test("bar.html", function () {
 test("bar.getMenuBar() in unsafe mode", function () {
 	bar.cls();
 	bar.msg('abc').addmsg('+++---+++--asfadsf3342');
-	var expect=$(STATUS_MESSAGE).html();
+	var expect='abc+++---+++--asfadsf3342';
 	var result=bar.getMenuBar().find(STATUS_MESSAGE).html();
 	
 	
@@ -93,3 +102,36 @@ test("bar.getMenuBar() in unsafe mode", function () {
 	ok(expect1.indexOf(result1)>-1,'get id of the bar by use getMenuBar().attr(id) [is the result inside expect]');
 });
 
+test("bar.foot(text)", function () {
+	var expect='abc';
+	bar.cls();
+	bar.foot('abc');
+	var result=tester.getFootArea().html();
+	equal(result,expect,'bar.foot("abc") will set abc');
+});
+
+test("bar.title(text)", function () {
+	var expect=bar.getSettings().bar_title+'abcded123456789';
+	bar.clsTitle();
+	bar.title('abcded123456789');
+	var result=tester.getTitleArea().html();
+	equal(result,expect,'bar.title("abc") will set title '+bar.getSettings().bar_title+"abcded123456789");
+});
+
+ test("bar.append(text)", function () {
+	var expect='abc + def + ghijk';
+	bar.cls();
+	bar.append('abc')
+		. append(' + def')
+		. append(' + ghijk');
+	var result=tester.getMsgArea().html();
+	equal(result,expect,'bar.append() will set text '+expect);
+	
+	bar.cls();
+	expect='<span>abc</span><div>def</div><span>ghjk</span>';
+	bar.append('<span>abc</span>')
+		.append($('<div/>').text('def'))
+		.append($('<span/>').text('ghjk'));
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.append() will set text '+expect);
+ });

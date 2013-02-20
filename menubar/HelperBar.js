@@ -288,6 +288,7 @@
 					'width': '100%',
 					'z-index': '99999',
 					'line-height': 'normal',
+					'box-shadow':settings.bar_shadow,
 					'text-align': 'left'
 				},//css: #helper-bar-nnnnnnnnnnnnnn
 				menu_basic_style:{
@@ -299,10 +300,12 @@
 				menu_ul_style:{
 					'margin': '0',
 					'padding': '0',
-					'position': 'absolute',
-					'bottom': '23px'
+					'position': 'fixed',
+					'box-shadow':settings.menu_shadow,
+					'bottom': '30px'
 				},
 				tag_a_css :{
+						'font-size':'medium',
 						'display': 'block',
 						'padding': '5px 12px',
 						'text-decoration': 'none',
@@ -364,6 +367,8 @@
 				menu_hover_bg_color: '#333333',
 				font_family: 'Arial,Helvetica,Sans-Serif',
 				menu_font_color: '#EAFFED',
+				menu_shadow:'0px 0px 6px 2px black',
+				bar_shadow:'6px 0px 6px 2px black',
 				msg_click:function(){},
 				bar_click:function(){}
             }, options); //options 
