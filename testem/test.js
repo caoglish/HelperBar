@@ -135,3 +135,55 @@ test("bar.title(text)", function () {
 	result=tester.getMsgArea().html();
 	equal(result,expect,'bar.append() will set text '+expect);
  });
+ 
+ 
+test("bar.cls()", function () {
+	var expect='';
+	bar.cls();
+	bar.append('abc')
+		. append(' + def')
+		. append(' + ghijk');
+	bar.cls();
+	var result=tester.getMsgArea().html();
+	equal(result,expect,'bar.cls() will clean text');
+	
+	
+	expect='';
+	bar.cls();
+	bar.append('<span>abc</span>')
+		.append($('<div/>').text('def'))
+		.append($('<span/>').text('ghjk'));
+		
+	bar.cls();
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.cls() will clean text');
+ });
+ 
+test("bar.clsTitle()", function () {
+	var expect=bar.getSettings().bar_title;
+	bar.clsTitle();
+	bar.title('abcded123456789');
+	bar.clsTitle();
+	var result=tester.getTitleArea().html();
+	equal(result,expect,'bar.clsTitle("abc") will only have title of the bar');
+});
+
+test("bar.addmsg(text,sytle)", function () {
+	var expect='<span style="color: yellow;">hello,world</span>';
+	bar.cls();
+	bar.addmsg('hello,world','yellow');
+	var result=tester.getMsgArea().html();
+	equal(result,expect,'bar.addmsg(text,sytle) {style is stirng}will only set this on the bar:'+expect);
+	
+	expect='<span style="font-size: 50px; margin-left: 20px;">hello,world</span>'
+	bar.cls();
+	bar.addmsg('hello,world',{'font-size':'50px','margin-left':'20px'});
+	var result=tester.getMsgArea().html();
+	equal(result,expect,'bar.addmsg(text,sytle) {style is object} will only set this on the bar:'+expect);
+	
+	expect='hello,codehello,code';
+	bar.cls();
+	bar.addmsg('hello,code').addmsg('hello,code');
+	var result=tester.getMsgArea().html();
+	equal(result,expect,'bar.addmsg("hello,code") will only set this on the bar:'+expect);
+});
