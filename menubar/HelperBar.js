@@ -800,50 +800,79 @@
             return new HelperBar(menu_tree_list_for_menu_bar, options);
         }
 		var exports={
+//###Helperbar.menu:		
+//Helperbar.menu is the the menu builder toolkit,it's contains a set of toolkit to build the menu
 			menu:{
+//### #API# Helperbar.menu.set(menuList);
+//(return Helperbar.menu) set a menu list object into the builder	
 				set:function(menuList){
 					menuBuilder.set(menuList);
 					return this;
 				},
+//### #API# Helperbar.menu.addTree(title,click,id);
+//(return Helperbar.menu) start add a new menu column(tree). if parameter have been give, create a root menu item. if parameter is empty, one of the item in the tree will be root menu item(default is the last item)
 				addTree:function(title,click,id){
 					menuBuilder.addTree(title,click,id);
 					return this;
 				},
+//### #API# Helperbar.menu.addItem(title,click,id);
+//(return Helperbar.menu) add a new menu item in the column(tree).
+				
 				addItem:function(title,click,id){
 					menuBuilder.addItem(title,click,id);
 					return this;
 				},
+//### #API# Helperbar.menu.reset();
+//(return Helperbar.menu) clear/reset the menu.				
 				reset:function(){
 					menuBuilder.reset();
 					return this;
 				},
+//### #API# Helperbar.menu.merge(menuList);
+//(return Helperbar.menu) merge a menuList with menu builder's menu list.
+//menuList will be appended. 		
 				merge:function(menuList){
 					menuBuilder.merge(menuList);
 					return this;
 				},
+//### #API# Helperbar.menu.mergeTo(menuList);
+//(return Helperbar.menu) merge a menuList with menu builder's menu list.
+//menuList will be prepended. 					
 				mergeTo:function(menuList){
 					menuBuilder.mergeTo(menuList);
 					return this;
 				},
+				
+//### #API# Helperbar.menu.get();
+//(return object) get a menu list object (the object is not built)		
 				get:function(){
 					return menuBuilder.get();
 				},
+//### #API# Helperbar.menu.build();
+//(return object) get a menu list object (the object have been  built)						
 				build:function(){
 					return menuBuilder.build(true);
 				}
 			},
+//### #API#Helperbar.getBar(menu_tree_list,options):		
+//(return bar) build a entire Helperbar/menubar according the menu tree list object with given options
+	
 			getBar: function (menu_tree_list, options) {
                 if (!instantiated) {
                     instantiated = init(menu_tree_list, options);
                 }
                 return instantiated;
             },
+//### #API#Helperbar.buildBar(options):		
+//(return bar) build a entire Helperbar/menubar with given options. this is according the menu setting by the menu builder.
 			buildBar:function(options){
 				if (!instantiated) {
                     instantiated = init(true, options);
                 }
                 return instantiated;
 			},
+//### #API#Helperbar.version():
+//(return string) return the Helperbar version information	
             version: function () {
                 return HelperBar.prototype.version();
             }
@@ -855,6 +884,8 @@
 		return exports;
     })();
 	
+//### #API#bar.version():
+//(return string) return the Helperbar version information	
 	HelperBar.prototype.version = function () {
         return '0.4.2a';
     };

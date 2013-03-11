@@ -88,7 +88,7 @@
 			.merge(menuTreeList)
 			.mergeTo(menuTreeList)
 			.get();
-			
+
 	HelperBar.menu.get().shift();
 	HelperBar.menu.get().shift();
 
@@ -308,11 +308,11 @@
 			$.data(document,'toggle','1');
 		}
 	}
-	
+
 	function create_title(title){
 		return '[<span style="color:green"><b>'+title+'</b></span>]';
 	}
-	
+
 	function demo_interface(){
 		$.tag('div',{id:'helperbar-demo'}).appendTo('body').html($.tag('h1').text('Helper Bar API Demo Button(no included in framework)').css('color','yellow')).css({opacity: '0.5',width:'100%',position:'fixed',top:0,background:'black'});
 		$.tag('button').prependTo('#helperbar-demo').text('hide()').click(function(){
@@ -328,13 +328,13 @@
 			bar.show('slow');
 		});
 	}
-	
+
 	function run(){
 		if(optSet.get()===undefined||optSet.get()===null){
 			optSet.init(1);
 		}
 		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSet.get()]);//singleton start
-		 bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
+		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
 		//bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
 		demo_interface();
 	}
