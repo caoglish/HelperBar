@@ -353,7 +353,33 @@
 			//
 			//2) 'unsafe' mode: allow return Menu bar jQuery object and options
 				safe_mode: 'safe',
+			//###hide_mode: (default:'notOnMenu')
+			//all, onBar, notOnBar,notOnMenu,noHide
+			//1)'all': double click on page everywhere to toggle the bar
+			//
+			//2)'onBar': double click on bar to hide, double click everywhere to show bar
+			//
+			//3)'notOnBar': double click everywhere except bar to toggle the bar
+			//
+			//4)'notOnMenu': double click everywhere except click on menu to toggle the bar. (default)
+			//
+			//5)'noHide': not hide bar at all.
 				hide_mode: 'notOnMenu',
+			//###warn_size(default:'50px')
+			//###warn_color(default:'red')
+			//###warn_mode(default:'append')
+			//warn() text style is set by options, so it only need one parameter.
+			//
+			//warn_size is font-size for warn() API,
+			//
+			//warn_color is the color for warn() API,
+			//
+			//warn_mode set how warn() add message into the bar.
+			//1)'append':append message without new line.(default)
+			//
+			//2)'log':append message in new line
+			//
+			//3)'clean':clean the message,only display one warning message.
 				warn_size: '50px', 
 				warn_color: 'red', 
 				warn_mode: 'append', 
@@ -830,14 +856,14 @@
 				},
 //### #API# Helperbar.menu.merge(menuList);
 //(return Helperbar.menu) merge a menuList with menu builder's menu list.
-//menuList will be appended. 		
+//menuList will be appended.
 				merge:function(menuList){
 					menuBuilder.merge(menuList);
 					return this;
 				},
 //### #API# Helperbar.menu.mergeTo(menuList);
 //(return Helperbar.menu) merge a menuList with menu builder's menu list.
-//menuList will be prepended. 					
+//menuList will be prepended.
 				mergeTo:function(menuList){
 					menuBuilder.mergeTo(menuList);
 					return this;
