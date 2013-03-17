@@ -6,7 +6,7 @@ var STATUS_MENU = '#menubar-menu';
 var LIST_MENU = "#menubar-list-menu";
 
 var tester={
-	version:'0.4.1b',
+	//version:'0.4.1b',
 	getMsgArea:function(){
 			return $(STATUS_MESSAGE);
 	},
@@ -185,5 +185,55 @@ test("bar.addmsg(text,sytle)", function () {
 	bar.cls();
 	bar.addmsg('hello,code').addmsg('hello,code');
 	var result=tester.getMsgArea().html();
-	equal(result,expect,'bar.addmsg("hello,code") will only set this on the bar:'+expect);
+	equal(result,expect,'bar.addmsg("hello,code") will only set this on the bar:'+expect);
+});
+
+test("bar.msg(text,sytle)", function () {
+	bar.cls();
+	bar.addmsg('mess up everythin first. this should not affect the result');
+	
+	var expect='<span style="color: yellow;">hello,world</span>';
+	bar.msg('hello,world','yellow');
+	var result=tester.getMsgArea().html();
+	equal(result,expect,'bar.msg(text,sytle) {style is stirng}will only set this on the bar:'+expect);
+	
+	expect='<span style="font-size: 50px; margin-left: 20px;">hello,world</span>'
+	bar.msg('hello,world',{'font-size':'50px','margin-left':'20px'});
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.msg(text,sytle) {style is object} will only set this on the bar:'+expect);
+	
+	
+	expect='hello,code';
+	bar.msg('hddjdjgfjytjtyffhgfhfu').msg('hello,code');
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.msg("hello,code") will only set this on the bar:'+expect);
+});
+
+test("bar.log(text)", function () {
+	bar.cls();
+	var expect='<div>hello,world</div>';
+	bar.cls();
+	bar.log('hello,world');
+	var result=tester.getMsgArea().html();
+	equal(result,expect,'bar.log(text) {text is stirng}will only set this on the bar:'+expect);
+	
+	expect='<div>undefined</div>';
+	bar.cls();
+	bar.log(undefined);
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.log(undefined) {style is undefined} will only set this on the bar:'+expect);
+	
+	
+	expect='<div>hello,code</div><div>hello,code</div>';
+	bar.cls();
+	bar.log('hello,code').log('hello,code');
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.log("hello,code").log("hello,code") will only set this on the bar:'+expect);
+	
+	expect='<div>{"a":"abc","accd":{"abc":"edd"},"1":"qwer"}</div><div>hello,code</div>';
+	bar.cls();
+	bar.log({a:"abc",accd:{abc:"edd"},"1":"qwer"}).log('hello,code');
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.log({a:"abc",accd:{abc:"edd"},"1":"qwer"}).log("hello,code"),log the object will only set this on the bar:'+expect);
+	bar.cls();
 });
