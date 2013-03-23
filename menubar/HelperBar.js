@@ -1,6 +1,6 @@
 //Development framework, add a useful and functional menu bar for GreaseMonkey Plugin.
 //
-//@version     0.4.2b
+//@version     0.4.2
 //
 //Purpose: a quick way to generate a interactive menu bar for GreaseMonkey/Tamper plugin
 //
@@ -383,19 +383,60 @@
 				warn_size: '50px', 
 				warn_color: 'red', 
 				warn_mode: 'append', 
+				
+			//###border_radius(default:'56px')	
+			//border right corner radius.
 				border_radius: '56px',
+			//###bar_bg_color(default:'black')
+			//bar background color
+			//######css background-color value compatible.
 				bar_bg_color: 'black',
+			//###bar_opacity(default:'0.8')
+			//bar's opacity
+			//######css opacity value compatible.
 				bar_opacity: '0.8',
+			////###bar_font_color(default:'white')
+			//bar message text/font's default color. include message and title and footer of the bar 
+			//######css color value compatible.
+			//specific color of particular text can be changed by certain bar API.
 				bar_font_color: 'white',
+			//###menu_width(default:'auto')
+			//set up width of menu item. 
+			//######css width value compatible.
 				menu_width: 'auto',
+			//###menu_separator_color(default:'black')
+			//set up the separator line between each menu item.
+			//######css color value compatible.
 				menu_separator_color: 'black',
+			//###menu_separator_color(default:'#111111')
+			//set up menu item background color
+			//######css color value compatible.
 				menu_bg_color: '#111111',
+			//###menu_hover_bg_color(default:'#333333')
+			//set up menu item background color when hover.
+			//######css color value compatible.
 				menu_hover_bg_color: '#333333',
+			//###font_family(default:'Arial,Helvetica,Sans-Serif')
+			//set up font on bar
+			//######css font-family value compatible.	
 				font_family: 'Arial,Helvetica,Sans-Serif',
+			//###menu_font_color(default:'#EAFFED')
+			//set up color of the menu item.
+			//######css color value compatible.	
 				menu_font_color: '#EAFFED',
+			//###menu_shadow(default:'0px 0px 6px 2px black')
+			//set up box shadow of the menu list box.
+			//######css box-shadow value compatible.		
 				menu_shadow:'0px 0px 6px 2px black',
+			//###bar_shadow(default:'6px 0px 6px 2px black')
+			//set up box shadow of the bar.
+			//######css box-shadow value compatible.		
 				bar_shadow:'6px 0px 6px 2px black',
+			//###msg_click(default:empty event handler)
+			//set up click event when user click the message area.
 				msg_click:function(){},
+			//###bar_click(default:empty event handler)
+			//set up click event when user click on the bar except user click the menu.
 				bar_click:function(){}
             }, options); //options 
 			barBuilder.inital_cssManager();//manage all css stylesheet
@@ -913,6 +954,6 @@
 //### #API#bar.version():
 //(return string) return the Helperbar version information	
 	HelperBar.prototype.version = function () {
-        return '0.4.2b';
+        return '0.4.2';
     };
 })(jQuery,window);
