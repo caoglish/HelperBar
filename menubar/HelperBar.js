@@ -395,7 +395,7 @@
 			//bar's opacity
 			//######css opacity value compatible.
 				bar_opacity: '0.8',
-			////###bar_font_color(default:'white')
+			//###bar_font_color(default:'white')
 			//bar message text/font's default color. include message and title and footer of the bar 
 			//######css color value compatible.
 			//specific color of particular text can be changed by certain bar API.
