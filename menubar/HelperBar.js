@@ -46,9 +46,7 @@
     "use strict";
 	
 	//menubar element name define.
-	//const keywork is working fine with firefox/chrome, plugin is not using in IE, so it's better use const here.
-	
-    var STATUS_BAR = '#menubar-7cad339b0b08db99561c640461d00a07';
+	var STATUS_BAR = '#menubar-7cad339b0b08db99561c640461d00a07';
     var STATUS_TITLE = '#menubar-title';
     var STATUS_MESSAGE = '#menubar-message';
 	var STATUS_FOOTER = '#menubar-footer';
@@ -241,7 +239,7 @@
 		},
 		//Initinalize entire menu bar
 		//
-		//1) init menubar with mneu_tree_list. 
+		//1) init menubar with menu_tree_list. 
 		//
 		//2) init functions and behaviors of menubar.
 		init_status_bar:function($menubar,menu_tree_list) {
