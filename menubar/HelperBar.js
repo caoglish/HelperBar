@@ -1,6 +1,6 @@
 //Development framework, add a useful and functional menu bar for GreaseMonkey Plugin.
 //
-//@version     0.4.2
+//@version     0.4.3a
 //
 //Purpose: a quick way to generate a interactive menu bar for GreaseMonkey/Tamper plugin
 //
@@ -521,10 +521,21 @@
 			delete HelperBar.prototype.getMenuBar;
 			delete HelperBar.prototype.getSettings;
 		},
-		set_action_on_bar:function(){
-			if($.isFunction(_settings.msg_click)) _menubar.menubar('getArea','msg').on('click',_settings.msg_click);
+		//context reference the bar.so in callback this means bar.
+		set_action_on_bar:function(context){
+			if($.isFunction(_settings.msg_click)){ 
+				_menubar
+					.menubar('getArea','msg')
+					.on('click',function(){
+						_settings.msg_click.call(context);
+					});
+			}
+			
 			if($.isFunction(_settings.bar_click)){
-				_menubar.on('click',_settings.bar_click);
+				_menubar
+					.on('click',function(){
+						_settings.bar_click.call(context);
+					});
 				_menubar.menubar('getArea','menu').children().on('click',function(e){
 					e.stopPropagation();
 				});
@@ -535,7 +546,7 @@
     function HelperBar(menu_tree_list, options) {
         _menubar = _.tag('div').menubar(menu_tree_list, options);
         _settings = _menubar.menubar('getSettings');
-		_.set_action_on_bar();
+		_.set_action_on_bar(this);
 		if (_settings.safe_mode !== "unsafe") _.delUnsafeMethod();
 //Check body is existed or not, if existed, append into body, if not existed, waiting for page fully loaded then append into body.		
 		if($('body').size()>0){
@@ -864,6 +875,12 @@
 			var menu_tree_list_for_menu_bar=menuBuilder.build(menu_tree_list);
             return new HelperBar(menu_tree_list_for_menu_bar, options);
         }
+		
+		var destroy=function(){
+			_menubar.remove();
+			instantiated=undefined;
+		};
+		
 		var exports={
 //###Helperbar.menu:		
 //Helperbar.menu is the the menu builder toolkit,it's contains a set of toolkit to build the menu
@@ -936,22 +953,38 @@
                 }
                 return instantiated;
 			},
-//### #API#Helperbar.version():
+//### #API#Helperbar.version()
 //(return string) return the Helperbar version information	
             version: function () {
                 return HelperBar.prototype.version();
-            }
+            },
+//### #API#Helperbar.tag(tag,attribute)			
+//(return jQuery object),create a jQuery object with html tag and its attribute.
+//
+//tag:string
+//
+//attribute:object
+			tag:_.tag
         };
 		exports.getbar=exports.getBar;
 		exports.data= HelperBar.prototype.data;
 		exports.delData= HelperBar.prototype.delData;
+//### #API#Helperbar.destory()
+//### #API#bar.destory()
+//(no return) destory the Helperbar
+		exports.destroy = HelperBar.prototype.destroy=  destroy;
 		
+//### HelperBar.fn.plugin=function(){}
+//extend the helperbar.
+		exports.fn=HelperBar.prototype;
 		return exports;
     })();
+	
+	
 	
 //### #API#bar.version():
 //(return string) return the Helperbar version information	
 	HelperBar.prototype.version = function () {
-        return '0.4.2';
+        return '0.4.3a';
     };
 })(jQuery,window);

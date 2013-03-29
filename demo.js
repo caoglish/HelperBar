@@ -112,7 +112,10 @@
                 menu_hover_bg_color: '#333333',
                 menu_font_color: '#EAFFED',
 				menu_separator_color: 'black',
-				msg_click:function(){bar.cls().clsTitle();}
+				msg_click:function(){
+					//console.log(this);
+					this.cls().clsTitle();
+				}
 		};
 		
 		var opts2={
@@ -135,7 +138,7 @@
                 menu_font_color: 'yellow',
 				menu_separator_color: 'yellow',
 				font_family:'MuseoLight,Arial,Helvetica,Sans-Serif',
-				bar_click:function(){bar.cls().clsTitle();}
+				bar_click:function(){this.cls().clsTitle();}
 		};
 		
 		var opts3={
@@ -330,6 +333,11 @@
 	}
 
 	function run(){
+		// HelperBar.fn.test=function(){
+			// bar.log('make extension');
+			// console.log(this);
+		// }
+	
 		if(optSet.get()===undefined||optSet.get()===null){
 			optSet.init(1);
 		}
@@ -337,5 +345,12 @@
 		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
 		//bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
 		demo_interface();
+		//bar=undefined;
+		//HelperBar.buildBar(optionsList[3]);
+		//bar.destroy();
+		//HelperBar.getbar(menuTreeList,optionsList[3]);//singleton start
+		bar.test();
+		
+		
 	}
 })( jQuery );
