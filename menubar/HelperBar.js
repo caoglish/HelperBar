@@ -588,18 +588,48 @@
             return _menubar.menubar('html');
         }
     };
-// ### #API#bar.addmsg(msg,style):		
+// ### #API#bar.addmsg(msg,style,event,func):		
 // (return bar) add a message wrapped with span tag.
 // #####msg could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
 // #####if style is object , set a css style to message. this is according $.fn.css(object)
-    HelperBar.prototype.addmsg = function (msg, style) {
+// #####if style is function, register a click event on the msg.
+// #####if sytle is empty , is empty {} style.
+// #####event is the event name.default is click.
+// #####func($msg,msg,style) is the eventHanlder on msg. $msg is jQuery object wrapped message. msg is the msg it self which is the parameter of the addmsg. style is the object of style applied on the $msg.
+    HelperBar.prototype.addmsg = function (msg, style,event,func) {
+		var that=this;
+		var $msg;
+		
+		//process parameter.
+		if($.isFunction(style)){ 
+			func=style;
+			style=event=undefined;
+		}else if($.isFunction(event)){
+			func=event;
+			event=undefined;
+		}
+		
+		event=event||'click';
+		
+		//process style.
         if (typeof style === 'string') {
-            msg = _.makeTagMsg('span',msg,{color:style});
+			style={"color":style};
         } else if (typeof style === 'object') {
-            msg = _.makeTagMsg('span',msg,style);
-        }
-        this.append(msg);
+        } else{
+			style= {};
+		}
+		$msg = _.makeTagMsg('span',msg,style);
+		
+		//setup msg event.
+		if($.isFunction(func)){
+			$msg.on(event,function(){
+				func.apply(that,[$msg,msg,style]);
+			});
+		}
+		
+		
+        this.append($msg);
         return this;
     };
 // ### #API#bar.msg(msg,style):		
@@ -608,10 +638,10 @@
 // #####if style is string, set a 'css:color' to message
 // #####if style is object of jquery css, set a css style to message.
 // if parameter give html/text code, return bar. if no parameter text, return a text of message on the bar
-    HelperBar.prototype.msg = function (msg, style) {
+    HelperBar.prototype.msg = function (msg, style,event,func) {
         if (arguments.length !== 0) {
             this.cls();
-            return this.addmsg(msg, style);
+            return this.addmsg(msg, style,event,func);
         } else {
             return $(this.html()).text();
         }
@@ -979,8 +1009,6 @@
 		exports.fn=HelperBar.prototype;
 		return exports;
     })();
-	
-	
 	
 //### #API#bar.version():
 //(return string) return the Helperbar version information	

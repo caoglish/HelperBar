@@ -349,8 +349,13 @@
 		//HelperBar.buildBar(optionsList[3]);
 		//bar.destroy();
 		//HelperBar.getbar(menuTreeList,optionsList[3]);//singleton start
-		bar.test();
-		
+		//bar.test();
+		bar.msg($.tag('div').text('hello,wolrd.'),'red',function($msg,msg,style){
+			console.log($msg);
+			console.log(msg);
+			console.log(style);
+			this.addmsg(msg.clone(),function($msg,msg){bar.addmsg($msg.clone())});
+		});
 		
 	}
 })( jQuery );
