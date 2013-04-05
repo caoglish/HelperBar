@@ -207,6 +207,16 @@ test("bar.msg(text,sytle)", function () {
 	bar.msg('hddjdjgfjytjtyffhgfhfu').msg('hello,code');
 	result=tester.getMsgArea().html();
 	equal(result,expect,'bar.msg("hello,code") will only set this on the bar:'+expect);
+	
+	expect='hello,code';
+	result=bar.msg();
+	equal(result,expect,'bar.msg() return the message on the bar without html tag:'+expect);
+	
+	expect='hello,code';
+	bar.msg('hello,code',{color:'red'});
+	result=bar.msg();
+	equal(result,expect,'bar.msg() return the message on the bar without html tag:'+expect);
+	
 });
 
 test("bar.log(text)", function () {

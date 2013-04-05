@@ -598,10 +598,14 @@
 // #####event is the event name.default is click.
 // #####func($msg,msg,style) is the eventHanlder on msg. $msg is jQuery object wrapped message. msg is the msg it self which is the parameter of the addmsg. style is the object of style applied on the $msg.
     HelperBar.prototype.addmsg = function (msg, style,event,func) {
+		if(style===undefined&&event==undefined&&func===undefined){
+			this.append(msg);
+			return this;
+		}
+		
 		var that=this;
 		var $msg;
-		
-		//process parameter.
+		//process func.
 		if($.isFunction(style)){ 
 			func=style;
 			style=event=undefined;
@@ -613,23 +617,24 @@
 		event=event||'click';
 		
 		//process style.
-        if (typeof style === 'string') {
+		if (typeof style === 'string') {
 			style={"color":style};
-        } else if (typeof style === 'object') {
-        } else{
+		} else if (typeof style === 'object') {
+		} else{
 			style= {};
 		}
-		$msg = _.makeTagMsg('span',msg,style);
 		
+		$msg = _.makeTagMsg('span',msg,style);
 		//setup msg event.
 		if($.isFunction(func)){
+			
 			$msg.on(event,function(){
 				func.apply(that,[$msg,msg,style]);
 			});
+			
 		}
 		
-		
-        this.append($msg);
+		this.append($msg);
         return this;
     };
 // ### #API#bar.msg(msg,style):		
@@ -643,7 +648,7 @@
             this.cls();
             return this.addmsg(msg, style,event,func);
         } else {
-            return $(this.html()).text();
+            return _menubar.menubar('getArea','msg').text();
         }
     };
 	
@@ -659,7 +664,7 @@
 		msg = _.makeTagMsg('div',msg);
         return this.append(msg);
     };
-// ### #API#bar.warn(msg):		
+// ### #API#bar.warn(msg):
 // (return bar) warning a message
 // #####message could be a text, html or jQuery object.
 // #####pre-set the style in options of bar, so this api only need to pass single parameter

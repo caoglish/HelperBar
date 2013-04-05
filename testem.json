@@ -1,4 +1,12 @@
 {
 	"framework":"qunit",
-	"src_files":["jq/*.js","HelperBar.min/*.js","testem/*.js"]
+	"src_files":["menubar/*.js"],
+	"before_tests":"minify.bat",
+	"serve_files": [
+		  "jq/*.js",
+		  "HelperBar.min/*.js",
+		  "testem/*.js"
+		],
+	"after_tests": "rm HelperBar.min/*.js"	
+	
 }
