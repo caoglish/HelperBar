@@ -193,7 +193,7 @@ test("bar.addmsg(text,func)", function () {
 	var expect1,expect2,expect3,
 		result1,result2,result3;
 	
-	
+	//case
 	expect1='<span>abc</span>';
 	expect2='<span style="color: yellow;">h,w</span>';
 	bar.addmsg('abc',function(){
@@ -208,6 +208,7 @@ test("bar.addmsg(text,func)", function () {
 	result=tester.getMsgArea().html();
 	equal(result,expect2,'.expect:'+expect);
 	
+	//case
 	bar.cls();
 	expect1='abc';
 	expect2='abc';
@@ -222,6 +223,7 @@ test("bar.addmsg(text,func)", function () {
 	equal(result2,expect2,"msg is the msg applied.");
 	deepEqual(result3,expect3,"sytle is the style object applied on the message.which is empty {}");
 	
+	//case
 	bar.cls();
 	var _obj=$.tag('div').text('hello,world')
 	expect1=$.tag('span').append(_obj.clone()).html();
@@ -236,6 +238,114 @@ test("bar.addmsg(text,func)", function () {
 	equal(result1,expect1,"$msg is message wrapped as jQuery object");
 	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference");//the msg is the jQuery object itself(referenced)
 	deepEqual(result3,expect3,"sytle is the style object applied on the message.which is empty {}");
+});
+
+
+test("bar.addmsg(text,style,func)", function () {
+	bar.cls();
+	var expect1,expect2,expect3,
+		result1,result2,result3;
+	
+	//case
+	expect1='<span style="font-size: 50px;">abc</span>';
+	expect2='<span style="font-size: 50px;">h,w</span>';
+	bar.addmsg('abc',{"font-size":'50px'},function($msg,msg,style){
+		bar.msg('h,w',style);
+	});
+	
+	//before click this message.
+	result=tester.getMsgArea().html();
+	equal(result,expect1,'.expect:'+expect);
+	//after click this message.
+	tester.getMsgArea().find('span').trigger('click');
+	result=tester.getMsgArea().html();
+	equal(result,expect2,'.expect:'+expect);
+	
+	//case
+	bar.cls();
+	expect1='abcdefg';
+	expect2='abcdefg';
+	expect3={"font-size":'72px'};
+	bar.addmsg('abcdefg',{"font-size":'72px'},function($msg,msg,style){
+		result1=$msg.text()==expect1&&$msg instanceof $;
+		result2=msg;
+		result3=style;
+	});
+	tester.getMsgArea().find('span').trigger('click');
+	ok(result1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2,"msg is the msg applied.");
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
+	
+	//case
+	bar.cls();
+	var _obj=$.tag('div').text('hello,world')
+	expect1=$.tag('span').append(_obj.clone()).html();
+	expect2=_obj;
+	expect3={"color":"#abcdef"};
+	bar.addmsg(_obj,'#abcdef',function($msg,msg,style){
+		result1=$msg.html();
+		result2=msg;
+		result3=style;
+	});
+	tester.getMsgArea().find('span').trigger('click');
+	equal(result1,expect1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference,expect:"+expect2.html());//the msg is the jQuery object itself(referenced)
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
+});
+
+
+test("bar.addmsg(text,style,,event, func)", function () {
+	bar.cls();
+	var expect1,expect2,expect3,
+		result1,result2,result3;
+	
+	//case
+	expect1='<span style="font-size: 50px;">abc</span>';
+	expect2='<span style="font-size: 50px;">h,w</span>';
+	bar.addmsg('abc',{"font-size":'50px'},'mouseover',function($msg,msg,style){
+		bar.msg('h,w',style);
+	});
+	
+	//click this message.
+	tester.getMsgArea().find('span').trigger('click');
+	result=tester.getMsgArea().html();
+	equal(result,expect1,'.expect:'+expect);
+	
+	//mouseover this message.
+	tester.getMsgArea().find('span').trigger('mouseover');
+	result=tester.getMsgArea().html();
+	equal(result,expect2,'.expect:'+expect);
+	
+	//case
+	bar.cls();
+	expect1='abcdefg';
+	expect2='abcdefg';
+	expect3={"font-size":'72px',"color":"red"};
+	bar.addmsg('abcdefg',{"font-size":'72px',"color":"red"},'onSomething',function($msg,msg,style){
+		result1=$msg.text()==expect1&&$msg instanceof $;
+		result2=msg;
+		result3=style;
+	});
+	tester.getMsgArea().find('span').trigger('onSomething');
+	ok(result1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2,"msg is the msg applied.");
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
+	
+	//case
+	bar.cls();
+	var _obj=$.tag('div').text('hello,world')
+	expect1=$.tag('span').append(_obj.clone()).html();
+	expect2=_obj;
+	expect3={"color":"#abcdef"};
+	bar.addmsg(_obj,'#abcdef','onOk',function($msg,msg,style){
+		result1=$msg.html();
+		result2=msg;
+		result3=style;
+	});
+	tester.getMsgArea().find('span').trigger('onOk');
+	equal(result1,expect1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference,expect:"+expect2.html());//the msg is the jQuery object itself(referenced)
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
 });
 
 test("bar.msg(text,sytle)", function () {
@@ -281,18 +391,17 @@ test("bar.log(text)", function () {
 	bar.log(undefined);
 	result=tester.getMsgArea().html();
 	equal(result,expect,'bar.log(undefined) {style is undefined} will only set this on the bar:'+expect);
-	
-	
+		
 	expect='<div>hello,code</div><div>hello,code</div>';
 	bar.cls();
 	bar.log('hello,code').log('hello,code');
 	result=tester.getMsgArea().html();
 	equal(result,expect,'bar.log("hello,code").log("hello,code") will only set this on the bar:'+expect);
 	
-	expect='<div>{"a":"abc","accd":{"abc":"edd"},"1":"qwer"}</div><div>hello,code</div>';
+	expect='<div>{"1":"qwer","a":"abc","accd":{"abc":"edd"}}</div><div>hello,code</div>';
 	bar.cls();
-	bar.log({a:"abc",accd:{abc:"edd"},"1":"qwer"}).log('hello,code');
+	bar.log({"1":"qwer",a:"abc",accd:{abc:"edd"}}).log('hello,code');
 	result=tester.getMsgArea().html();
-	equal(result,expect,'bar.log({a:"abc",accd:{abc:"edd"},"1":"qwer"}).log("hello,code"),log the object will only set this on the bar:'+expect);
+	equal(result,expect,'bar.log({"1":"qwer",a:"abc",accd:{abc:"edd"}}).log("hello,code"),log the object will only set this on the bar:'+expect);
 	bar.cls();
 });
