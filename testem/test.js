@@ -188,6 +188,56 @@ test("bar.addmsg(text,sytle)", function () {
 	equal(result,expect,'bar.addmsg("hello,code") will only set this on the bar:'+expect);
 });
 
+test("bar.addmsg(text,func)", function () {
+	bar.cls();
+	var expect1,expect2,expect3,
+		result1,result2,result3;
+	
+	
+	expect1='<span>abc</span>';
+	expect2='<span style="color: yellow;">h,w</span>';
+	bar.addmsg('abc',function(){
+		bar.msg('h,w','yellow');
+	});
+	
+	//before click this message.
+	result=tester.getMsgArea().html();
+	equal(result,expect1,'.expect:'+expect);
+	//after click this message.
+	tester.getMsgArea().find('span').trigger('click');
+	result=tester.getMsgArea().html();
+	equal(result,expect2,'.expect:'+expect);
+	
+	bar.cls();
+	expect1='abc';
+	expect2='abc';
+	expect3={};
+	bar.addmsg('abc',function($msg,msg,style){
+		result1=$msg.text()==expect1&&$msg instanceof $;
+		result2=msg;
+		result3=style;
+	});
+	tester.getMsgArea().find('span').trigger('click');
+	ok(result1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2,"msg is the msg applied.");
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.which is empty {}");
+	
+	bar.cls();
+	var _obj=$.tag('div').text('hello,world')
+	expect1=$.tag('span').append(_obj.clone()).html();
+	expect2=_obj;
+	expect3={};
+	bar.addmsg(_obj,function($msg,msg,style){
+		result1=$msg.html();
+		result2=msg;
+		result3=style;
+	});
+	tester.getMsgArea().find('span').trigger('click');
+	equal(result1,expect1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference");//the msg is the jQuery object itself(referenced)
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.which is empty {}");
+});
+
 test("bar.msg(text,sytle)", function () {
 	bar.cls();
 	bar.addmsg('mess up everythin first. this should not affect the result');
@@ -201,7 +251,6 @@ test("bar.msg(text,sytle)", function () {
 	bar.msg('hello,world',{'font-size':'50px','margin-left':'20px'});
 	result=tester.getMsgArea().html();
 	equal(result,expect,'bar.msg(text,sytle) {style is object} will only set this on the bar:'+expect);
-	
 	
 	expect='hello,code';
 	bar.msg('hddjdjgfjytjtyffhgfhfu').msg('hello,code');

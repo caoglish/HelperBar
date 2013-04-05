@@ -1,6 +1,6 @@
 {
 	"framework":"qunit",
-	"src_files":["menubar/*.js"],
+	"src_files":["menubar/*.js","testem/*.js"],
 	"before_tests":"minify.bat",
 	"serve_files": [
 		  "jq/*.js",
