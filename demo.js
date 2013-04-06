@@ -368,9 +368,9 @@
 		// $('div').eq(1).data('abc',null);
 		// bar.log($('div').eq(1).data('abc'));
 		
-		//bar.destroy();
-		//HelperBar.buildBar();
-		//bar.log(bar.cache('abc'));
+		bar.destroy();
+		HelperBar.buildBar();
+		bar.log(bar.cache('abc'));
 		
 	}
 })( jQuery );

@@ -780,17 +780,19 @@
 //	the value soppurts string, array, and object. 
 //####HelperBar.data(key,value) is the same, but will not return bar.
 	HelperBar.prototype.data=function(key,value){
-		if(typeof key !=='string') $.error('data() key must be string');
-		if(value !== undefined ){////localStorage can save boolean value. need to save false value to storage, so not !!value.
+		if(arguments.length > 1 ){
 			localStorage.setItem(key, JSON.stringify(value));
 			if(this instanceof HelperBar) return this;
-		}else{
+		}else if(arguments.length > 0) {
+			if(typeof key !=='string') $.error('data() key must be string');
 			try	{
 				return JSON.parse(localStorage.getItem(key));
 			}
 			catch(e)			{
 				return localStorage.getItem(key);
 			}
+		}else{
+			$.error('data() must has a key');
 		}
 	};
 //### #API#bar.delData(key):		
@@ -812,11 +814,11 @@
 	//getter: (return value) if only give key without value, will return  value.
 	//#####since store data in jQuery element, when the bar is destroyed, the data will be destroyed with it.
 	HelperBar.prototype.cache=function(key,value){
-		if(typeof key !=='string') $.error('cache() key must be string');
 		if(arguments.length > 1){
 			_menubar.data(key,value);
 			return this;
 		}else if(arguments.length > 0){
+			if(typeof key !=='string') $.error('cache() key must be string');
 			return _menubar.data(key);
 		}else{
 			$.error('cache() must has a key');

@@ -30,7 +30,7 @@ var init=function(){
 init();
 
 module("Helperbar Method");
-test("Helperbar.version()", function () {
+test("Helperbar.version() is "+HelperBar.version(), function () {
 	var expect=bar.version();
 	var result=HelperBar.version();
 	equal(result,expect,'version() is return right number');
