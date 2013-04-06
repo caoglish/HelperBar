@@ -519,7 +519,7 @@
 		},
 		delUnsafeMethod:function(){
 			delete HelperBar.prototype.getMenuBar;
-			delete HelperBar.prototype.getSettings;
+			//delete HelperBar.prototype.getSettings;
 		},
 		//context reference the bar.so in callback this means bar.
 		set_action_on_bar:function(context){
@@ -566,8 +566,9 @@
             };
 // ### #API#bar.getSettings():		
 // (return object)get setting/options of menu bar, only can be used in unsafe mode.	
-	HelperBar.prototype.getSettings = function () {
-				return _settings;
+	HelperBar.prototype.getSettings = function (mode) {
+				mode= mode||'clone';
+				return mode==='clone'?$.extend(true,{},_settings):_settings;
             };
 
 // ### #API#bar.append(text):		
@@ -598,7 +599,7 @@
 // #####event is the event name.default is click.
 // #####func($msg,msg,style) is the eventHanlder on msg. $msg is jQuery object wrapped message. msg is the msg it self which is the parameter of the addmsg. style is the object of style applied on the $msg.
     HelperBar.prototype.addmsg = function (msg, style,event,func) {
-		if(style===undefined&&event==undefined&&func===undefined){
+		if(style===undefined&&event===undefined&&func===undefined){
 			this.append(msg);
 			return this;
 		}
@@ -684,7 +685,9 @@
             $.error('no this type of warning mode');
         }
     };
-// ### #API#bar.clickClsMsg(msg, style,func):		
+	
+	
+// ### *Deprecated* #API#bar.clickClsMsg(msg, style,func):		
 // (return bar) show a message wrapped with span div. previous message will be removed.
 // #####message could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
@@ -692,27 +695,12 @@
 // if parameter give html/text code, return bar. if no parameter text, return a text of message on the bar	
 // This provide a message which could be removed by click.
 	HelperBar.prototype.clickClsMsg = function (msg, style,func) {
-		if(typeof style  === 'function') func = style;
-		
-        var message=_.tag('div')
-			.html(msg)
-			.click(function(){
-				$(this).remove();
-				if(typeof func === "function") func.call(message);
-			});
-			
-		if(typeof style  === 'number') {
-			message.css({'font-size':style});
-		}else if(typeof style  === 'string') {
-			message.css({'color':style});
-		}else if(typeof style  === 'object'){
-			message.css(style);
-		}else{
-			message.css({'font-size':'100%'});
-		}
-		this.msg(message);
+		this.msg(msg,style,function($msg,msg,style){
+			$msg.remove();
+			if($.isFunction(func)) func.apply(this,[$msg,msg,style]);
+		});
     };
-// ### #API#bar.clickClsMsg():		
+// ### #API#bar.cls():		
 // (return bar) clean the bar message
     HelperBar.prototype.cls = function () {
         this.html('');
@@ -805,10 +793,10 @@
 			}
 		}
 	};
-//### #API#bar.delData(key,value):		
+//### #API#bar.delData(key):		
 //(return bar) remove the key with the value from localStorage
 //
-//#####HelperBar.delData(key,value) is the same, but will not return bar.
+//#####HelperBar.delData(key) is the same, but will not return bar.
 	HelperBar.prototype.delData=function(key){
 		if(typeof key ==='string'){
 			localStorage.removeItem(key);
@@ -817,6 +805,33 @@
 			$.error('delData() has not key or key is not string');
 		}
 	};
+	
+	//### #API# bar.cache(key,value):	
+	//setter: (return bar) if have value, return bar. store the value in the key in bar.
+	//
+	//getter: (return value) if only give key without value, will return  value.
+	//#####since store data in jQuery element, when the bar is destroyed, the data will be destroyed with it.
+	HelperBar.prototype.cache=function(key,value){
+		if(typeof key !=='string') $.error('cache() key must be string');
+		if(arguments.length > 1){
+			_menubar.data(key,value);
+			return this;
+		}else if(arguments.length > 0){
+			return _menubar.data(key);
+		}else{
+			$.error('cache() must has a key');
+		}
+	}
+	//### #API#bar.delCache(key):		
+	//(return bar) remove the key with the value from bar
+	HelperBar.prototype.delCache=function(key){
+		if(typeof key ==='string'){
+			_menubar.removeData(key);
+			return this;
+		}else{
+			$.error('delData() has not key or key is not string');
+		}
+	}
 
 	//menu Builder, this will build a menu tree array which could use for $.fn.menubar.
 	//#####this menuBuilder is for internal scope usage, exports(public) API please see HelperBar.menu section.

@@ -20,6 +20,7 @@
 
 (function( $ ){
 	"use strict";
+	
 	var bar; 
 	$.tag = function (tag, opts) {
 			return $('<' + tag + '/>', opts);
@@ -294,7 +295,8 @@
 	//about 
 	function about(){
 		bar.clsTitle().cls().title(create_title('about'));
-		bar.clickClsMsg(TXT_ABOUT_INFO,18,function(){
+		bar.msg(TXT_ABOUT_INFO,{'font-size':'28px'},function($msg){
+			$msg.remove();
 			bar.cls().clsTitle();
 		});
 	}
@@ -350,12 +352,25 @@
 		//bar.destroy();
 		//HelperBar.getbar(menuTreeList,optionsList[3]);//singleton start
 		//bar.test();
-		bar.msg($.tag('div').text('hello,wolrd.'),'red',function($msg,msg,style){
-			console.log($msg);
-			console.log(msg);
-			console.log(style);
-			this.addmsg(msg.clone(),function($msg,msg){bar.addmsg($msg.clone())});
-		});
+		// bar.msg($.tag('div').text('hello,wolrd.'),'red',function($msg,msg,style){
+			// console.log($msg);
+			// console.log(msg);
+			// console.log(style);
+			// this.addmsg(msg.clone(),function($msg,msg){bar.addmsg($msg.clone())});
+		// });
+		
+		//bar.clickClsMsg('abc');
+		bar.cache('abc',{a:'hello,world',1:'ede'});
+		bar.cache('abc',null);
+		bar.log(bar.cache('abc'));
+		
+		// $('div').eq(1).data('abc',{a:'hello,world',1:'ede'});
+		// $('div').eq(1).data('abc',null);
+		// bar.log($('div').eq(1).data('abc'));
+		
+		//bar.destroy();
+		//HelperBar.buildBar();
+		//bar.log(bar.cache('abc'));
 		
 	}
 })( jQuery );
