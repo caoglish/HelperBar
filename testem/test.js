@@ -6,7 +6,6 @@ var STATUS_MENU = '#menubar-menu';
 var LIST_MENU = "#menubar-list-menu";
 
 var tester={
-	//version:'0.4.1b',
 	getMsgArea:function(){
 			return $(STATUS_MESSAGE);
 	},
@@ -18,9 +17,7 @@ var tester={
 	}
 };
 
-$.tag = function (tag, opts) {
-			return $('<' + tag + '/>', opts);
-		};
+$.tag = HelperBar.tag;
 
 
 var init=function(){
@@ -196,17 +193,19 @@ test("bar.addmsg(text,func)", function () {
 	//case
 	expect1='<span>abc</span>';
 	expect2='<span style="color: yellow;">h,w</span>';
-	bar.addmsg('abc',function(){
-		bar.msg('h,w','yellow');
+	bar.addmsg('abc',function($msg){
+		$msg.on('click',function(){
+			bar.msg('h,w','yellow');
+		});
 	});
 	
 	//before click this message.
 	result=tester.getMsgArea().html();
-	equal(result,expect1,'.expect:'+expect);
+	equal(result,expect1,'.expect:'+expect1);
 	//after click this message.
 	tester.getMsgArea().find('span').trigger('click');
 	result=tester.getMsgArea().html();
-	equal(result,expect2,'.expect:'+expect);
+	equal(result,expect2,'.expect:'+expect2);
 	
 	//case
 	bar.cls();
@@ -218,7 +217,7 @@ test("bar.addmsg(text,func)", function () {
 		result2=msg;
 		result3=style;
 	});
-	tester.getMsgArea().find('span').trigger('click');
+	
 	ok(result1,"$msg is message wrapped as jQuery object");
 	equal(result2,expect2,"msg is the msg applied.");
 	deepEqual(result3,expect3,"sytle is the style object applied on the message.which is empty {}");
@@ -234,7 +233,7 @@ test("bar.addmsg(text,func)", function () {
 		result2=msg;
 		result3=style;
 	});
-	tester.getMsgArea().find('span').trigger('click');
+	
 	equal(result1,expect1,"$msg is message wrapped as jQuery object");
 	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference");//the msg is the jQuery object itself(referenced)
 	deepEqual(result3,expect3,"sytle is the style object applied on the message.which is empty {}");
@@ -250,16 +249,18 @@ test("bar.addmsg(text,style,func)", function () {
 	expect1='<span style="font-size: 50px;">abc</span>';
 	expect2='<span style="font-size: 50px;">h,w</span>';
 	bar.addmsg('abc',{"font-size":'50px'},function($msg,msg,style){
-		bar.msg('h,w',style);
+		$msg.on('click',function(){
+			bar.msg('h,w',style);
+		});
 	});
 	
 	//before click this message.
 	result=tester.getMsgArea().html();
-	equal(result,expect1,'.expect:'+expect);
+	equal(result,expect1,'.expect:'+expect1);
 	//after click this message.
 	tester.getMsgArea().find('span').trigger('click');
 	result=tester.getMsgArea().html();
-	equal(result,expect2,'.expect:'+expect);
+	equal(result,expect2,'.expect:'+expect2);
 	
 	//case
 	bar.cls();
@@ -288,61 +289,6 @@ test("bar.addmsg(text,style,func)", function () {
 		result3=style;
 	});
 	tester.getMsgArea().find('span').trigger('click');
-	equal(result1,expect1,"$msg is message wrapped as jQuery object");
-	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference,expect:"+expect2.html());//the msg is the jQuery object itself(referenced)
-	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
-});
-
-
-test("bar.addmsg(text,style,,event, func)", function () {
-	bar.cls();
-	var expect1,expect2,expect3,
-		result1,result2,result3;
-	
-	//case
-	expect1='<span style="font-size: 50px;">abc</span>';
-	expect2='<span style="font-size: 50px;">h,w</span>';
-	bar.addmsg('abc',{"font-size":'50px'},'mouseover',function($msg,msg,style){
-		bar.msg('h,w',style);
-	});
-	
-	//click this message.
-	tester.getMsgArea().find('span').trigger('click');
-	result=tester.getMsgArea().html();
-	equal(result,expect1,'.expect:'+expect);
-	
-	//mouseover this message.
-	tester.getMsgArea().find('span').trigger('mouseover');
-	result=tester.getMsgArea().html();
-	equal(result,expect2,'.expect:'+expect);
-	
-	//case
-	bar.cls();
-	expect1='abcdefg';
-	expect2='abcdefg';
-	expect3={"font-size":'72px',"color":"red"};
-	bar.addmsg('abcdefg',{"font-size":'72px',"color":"red"},'onSomething',function($msg,msg,style){
-		result1=$msg.text()==expect1&&$msg instanceof $;
-		result2=msg;
-		result3=style;
-	});
-	tester.getMsgArea().find('span').trigger('onSomething');
-	ok(result1,"$msg is message wrapped as jQuery object");
-	equal(result2,expect2,"msg is the msg applied.");
-	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
-	
-	//case
-	bar.cls();
-	var _obj=$.tag('div').text('hello,world')
-	expect1=$.tag('span').append(_obj.clone()).html();
-	expect2=_obj;
-	expect3={"color":"#abcdef"};
-	bar.addmsg(_obj,'#abcdef','onOk',function($msg,msg,style){
-		result1=$msg.html();
-		result2=msg;
-		result3=style;
-	});
-	tester.getMsgArea().find('span').trigger('onOk');
 	equal(result1,expect1,"$msg is message wrapped as jQuery object");
 	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference,expect:"+expect2.html());//the msg is the jQuery object itself(referenced)
 	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
@@ -404,4 +350,36 @@ test("bar.log(text)", function () {
 	result=tester.getMsgArea().html();
 	equal(result,expect,'bar.log({"1":"qwer",a:"abc",accd:{abc:"edd"}}).log("hello,code"),log the object will only set this on the bar:'+expect);
 	bar.cls();
+});
+
+test("bar.cache()", function () {
+	var expect='cache is ok';
+	bar.cache('keystring','cache is ok');
+	var result=bar.cache('keystring');
+	
+	equal(result,expect,'save "string" on bar , and get from it');
+	
+	var expect=['array','is','ok'];
+	bar.cache('keyarray',['array','is','ok']);
+	deepEqual(bar.cache('keyarray'),expect,'save "array" on bar, and get from it');
+	
+	var expect={'array':'array','is':'is','ok':'ok','num':1234567890};
+	bar.cache('keyobject',{'array':'array','is':'is','ok':'ok','num':1234567890});
+	deepEqual(bar.cache('keyobject'),expect,'save "object" on bar, and get from it');
+	
+	var expect=false;
+	bar.cache('keyfalse',false);
+	deepEqual(bar.cache('keyfalse'),expect,'save boolean false on bar, and get from it');
+	
+	var expect=true;
+	bar.cache('keytrue',true);
+	deepEqual(bar.cache('keytrue'),expect,'save boolean true on bar, and get from it');
+	
+});
+
+test("bar.delCache()", function () {
+	bar.cache('delCache','this will be delete');
+	equal(bar.cache('delCache'),'this will be delete','check the key "delCache" is existed');
+	bar.delCache('delCache');
+	equal(bar.cache('delCache'),undefined,'check the  key "delCache"  have been deleted');
 });

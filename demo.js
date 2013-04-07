@@ -335,10 +335,16 @@
 	}
 
 	function run(){
-		// HelperBar.fn.test=function(){
-			// bar.log('make extension');
-			// console.log(this);
-		// }
+		 HelperBar.fn.test=function(text){
+			this.addmsg(text,'green',function($msg){
+				$msg.hover(function(){
+					$(this).css('color','yellow');
+				},function(){
+					$(this).css('color','blue');
+				});
+			});
+			
+		 }
 	
 		if(optSet.get()===undefined||optSet.get()===null){
 			optSet.init(1);
@@ -359,18 +365,24 @@
 			// this.addmsg(msg.clone(),function($msg,msg){bar.addmsg($msg.clone())});
 		// });
 		
-		//bar.clickClsMsg('abc');
-		bar.cache('abc',{a:'hello,world',1:'ede'});
-		bar.cache('abc',null);
-		bar.log(bar.cache('abc'));
+		bar.clickClsMsg('abc');
+		bar.addmsg('hello,world',function($msg){
+			$msg.css('color','red');
+			
+		});
+		
+		bar.test('click cls msg');
+		//bar.cache('abc',{a:'hello,world',1:'ede'});
+		//bar.cache('abc',null);
+		//bar.log(bar.cache('abc'));
 		
 		// $('div').eq(1).data('abc',{a:'hello,world',1:'ede'});
 		// $('div').eq(1).data('abc',null);
 		// bar.log($('div').eq(1).data('abc'));
 		
-		bar.destroy();
-		HelperBar.buildBar();
-		bar.log(bar.cache('abc'));
+		// bar.destroy();
+		// HelperBar.buildBar();
+		// bar.log(bar.cache('abc'));
 		
 	}
 })( jQuery );

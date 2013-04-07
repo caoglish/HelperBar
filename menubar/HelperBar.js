@@ -596,47 +596,39 @@
 // #####if style is object , set a css style to message. this is according $.fn.css(object)
 // #####if style is function, register a click event on the msg.
 // #####if sytle is empty , is empty {} style.
-// #####event is the event name.default is click.
 // #####func($msg,msg,style) is the eventHanlder on msg. $msg is jQuery object wrapped message. msg is the msg it self which is the parameter of the addmsg. style is the object of style applied on the $msg.
-    HelperBar.prototype.addmsg = function (msg, style,event,func) {
-		if(style===undefined&&event===undefined&&func===undefined){
+    HelperBar.prototype.addmsg = function (msg, style,func) {
+		if(arguments.length>1){
+			var that=this;
+			var $msg;
+			//process func.
+			if($.isFunction(style)){ 
+				func=style;
+				style={};
+			}
+			
+			//process style.
+			if (typeof style === 'string') {
+				style={"color":style};
+			} else if (typeof style === 'object'&&!Array.isArray(style)) {
+			} else{
+				style= {};
+			}
+			
+			$msg = _.makeTagMsg('span',msg,style);
+			//process callback.
+			if($.isFunction(func)){
+					func.apply(that,[$msg,msg,style]);
+			}
+			
+			this.append($msg);
+			return this;
+		}else if(style===undefined&&func===undefined){
 			this.append(msg);
 			return this;
+		}else{
+			$.error('addmsg() must has msg');
 		}
-		
-		var that=this;
-		var $msg;
-		//process func.
-		if($.isFunction(style)){ 
-			func=style;
-			style=event=undefined;
-		}else if($.isFunction(event)){
-			func=event;
-			event=undefined;
-		}
-		
-		event=event||'click';
-		
-		//process style.
-		if (typeof style === 'string') {
-			style={"color":style};
-		} else if (typeof style === 'object') {
-		} else{
-			style= {};
-		}
-		
-		$msg = _.makeTagMsg('span',msg,style);
-		//setup msg event.
-		if($.isFunction(func)){
-			
-			$msg.on(event,function(){
-				func.apply(that,[$msg,msg,style]);
-			});
-			
-		}
-		
-		this.append($msg);
-        return this;
     };
 // ### #API#bar.msg(msg,style):		
 // (return bar) show a message wrapped with span tag. previous message will be removed.
@@ -644,10 +636,10 @@
 // #####if style is string, set a 'css:color' to message
 // #####if style is object of jquery css, set a css style to message.
 // if parameter give html/text code, return bar. if no parameter text, return a text of message on the bar
-    HelperBar.prototype.msg = function (msg, style,event,func) {
+    HelperBar.prototype.msg = function (msg, style,func) {
         if (arguments.length !== 0) {
             this.cls();
-            return this.addmsg(msg, style,event,func);
+            return this.addmsg.apply(this,arguments);
         } else {
             return _menubar.menubar('getArea','msg').text();
         }
