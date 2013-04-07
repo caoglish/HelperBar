@@ -191,7 +191,7 @@
 			}
 			
 			//menu column top  has the round corner.
-			var first_menu_item_css={'border-radius':'6px 6px 0px 0px'}
+			var first_menu_item_css={'border-radius':'6px 6px 0px 0px'};
 			$tag_ul
 				.css(first_menu_item_css)
 			.find('li a').eq(0)
@@ -240,7 +240,7 @@
 					'show':function(){
 						$menubar.slideDown();
 					}
-				},
+				}
 			};
 			
 			if(hide_effect_func[settings.hide_effect]) real_hide_effect_func=hide_effect_func[settings.hide_effect];
@@ -682,7 +682,6 @@
 					func.apply(that,[$msg,msg,style]);
 			}
 			
-			
 			return this;
 		}else if(style===undefined&&func===undefined){
 			this.append(msg);
@@ -887,7 +886,7 @@
 		}else{
 			$.error('cache() must has a key');
 		}
-	}
+	};
 	//### #API#bar.delCache(key):		
 	//(return bar) remove the key with the value from bar
 	HelperBar.prototype.delCache=function(key){
@@ -897,7 +896,7 @@
 		}else{
 			$.error('delData() has not key or key is not string');
 		}
-	}
+	};
 
 	//menu Builder, this will build a menu tree array which could use for $.fn.menubar.
 	//#####this menuBuilder is for internal scope usage, exports(public) API please see HelperBar.menu section.
