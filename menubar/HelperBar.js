@@ -625,10 +625,9 @@
 				return _menubar;
             };
 // ### #API#bar.getSettings():		
-// (return object)get setting/options of menu bar, only can be used in unsafe mode.	
-	HelperBar.prototype.getSettings = function (mode) {
-				mode= mode||'clone';
-				return mode==='clone'?$.extend(true,{},_settings):_settings;
+// (return object)get setting/options of menu bar
+	HelperBar.prototype.getSettings = function () {
+				return $.extend(true,{},_settings);
             };
 
 // ### #API#bar.append(text):		

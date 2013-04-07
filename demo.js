@@ -384,6 +384,9 @@
 			// $msg.css('color','red');
 			
 		// });
+		bar.msg('setting:',function(){
+			this.log(bar.getSettings());
+		});
 		
 		// bar.test('click cls msg');
 		//bar.cache('abc',{a:'hello,world',1:'ede'});
