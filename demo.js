@@ -4,15 +4,15 @@
         var ITEM_OPTSET = 'HelperBar_optset';
         return {
             set: function (opt) {
-                localStorage.setItem(ITEM_OPTSET, opt);
+                HelperBar.data(ITEM_OPTSET, opt);
             },
             init: function (opt) {
-                localStorage.removeItem(ITEM_OPTSET);
+                HelperBar.data(ITEM_OPTSET);
                 var value = opt || 0;
                 this.set(value);
             },
             get: function () {
-                return localStorage.getItem(ITEM_OPTSET);
+                return HelperBar.data(ITEM_OPTSET);
             }
         };
     })();
@@ -100,7 +100,10 @@
 				foot_mode:'show',
 				foot_size:'8px',
                 safe_mode: 'unsafe',
-                hide_mode: 'notOnMenu',
+                //hide_mode: 'notOnMenu',
+                hide_mode: 'rightClick',
+				//hide_mode: 'rightDblClick',
+				hide_effect:'slide',
 				border_radius: '86px',
                 warn_size:'32px',
 				warn_color:'yellow',
@@ -108,6 +111,7 @@
                 bar_bg_color: 'black',
                 bar_opacity: '0.8',
                 bar_font_color: 'white',
+				menu_show_effect:'slide',
 				menu_width:'auto',
                 menu_bg_color: '#111111',
                 menu_hover_bg_color: '#333333',
@@ -116,6 +120,9 @@
 				msg_click:function(){
 					//console.log(this);
 					this.cls().clsTitle();
+				},
+				warn_callback:function($msg,msg,style){
+					this.addmsg('more....');
 				}
 		};
 		
@@ -154,7 +161,10 @@
 			menu_bg_color: 'Navy',
 			menu_font_color: 'yellow',
 			menu_hover_bg_color: 'gray',
-			menu_separator_color: 'green'
+			menu_separator_color: 'green',
+			warn_callback:function($msg,msg,style){
+					this.addmsg('more....');
+				}
 		};
 		var optionsList=[optsDefault,opts1,opts2,opts3];
 	$(run);
@@ -296,8 +306,10 @@
 	function about(){
 		bar.clsTitle().cls().title(create_title('about'));
 		bar.msg(TXT_ABOUT_INFO,{'font-size':'28px'},function($msg){
-			$msg.remove();
-			bar.cls().clsTitle();
+			$msg.on('click',function(){
+				$msg.remove();
+				bar.cls().clsTitle();
+			});
 		});
 	}
 	
@@ -335,7 +347,7 @@
 	}
 
 	function run(){
-		 HelperBar.fn.test=function(text){
+		HelperBar.fn.test=function(text){
 			this.addmsg(text,'green',function($msg){
 				$msg.hover(function(){
 					$(this).css('color','yellow');
@@ -343,8 +355,7 @@
 					$(this).css('color','blue');
 				});
 			});
-			
-		 }
+		}
 	
 		if(optSet.get()===undefined||optSet.get()===null){
 			optSet.init(1);
@@ -364,14 +375,17 @@
 			// console.log(style);
 			// this.addmsg(msg.clone(),function($msg,msg){bar.addmsg($msg.clone())});
 		// });
-		
-		bar.clickClsMsg('abc');
-		bar.addmsg('hello,world',function($msg){
-			$msg.css('color','red');
-			
+		bar.warn('hello,world');
+		bar.msg('hellow,world',function(){
+			this.addmsg('hahaha.....');
 		});
+		// bar.clickClsMsg('abc');
+		// bar.addmsg('hello,world',function($msg){
+			// $msg.css('color','red');
+			
+		// });
 		
-		bar.test('click cls msg');
+		// bar.test('click cls msg');
 		//bar.cache('abc',{a:'hello,world',1:'ede'});
 		//bar.cache('abc',null);
 		//bar.log(bar.cache('abc'));

@@ -1,6 +1,6 @@
 //Development framework, add a useful and functional menu bar for GreaseMonkey Plugin.
 //
-//@version     0.4.3a
+//@version     0.5.0a
 //
 //Purpose: a quick way to generate a interactive menu bar for GreaseMonkey/Tamper plugin
 //
@@ -10,7 +10,7 @@
 //####1) This requires jQuery.
 //####2) Core is a jQuery plugin.
 //####3) Use only in GreaseMonkey/TamperMonkey
-//####4) Currently test under jQuery 1.8.x
+//####4) Currently test under jQuery 1.9.x
 
 //##How to use
 //###1) create a set of menu. (see right)
@@ -53,6 +53,7 @@
     var STATUS_MENU = '#menubar-menu';
     var LIST_MENU = "#menubar-list-menu";
 
+	var default_settings;
     var settings;
     var cssManager;
  
@@ -188,6 +189,14 @@
 				var click = menu_list[menu].click;
 				$tag_ul.append(this.create_menu_item(id, title, click));
 			}
+			
+			//menu column top  has the round corner.
+			var first_menu_item_css={'border-radius':'6px 6px 0px 0px'}
+			$tag_ul
+				.css(first_menu_item_css)
+			.find('li a').eq(0)
+				.css(first_menu_item_css);
+			
 			return $tag_ul;
 		},
 		//construct one menu tree include root menu item and other menu item
@@ -195,45 +204,86 @@
 			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construct_menu(menu_array.list));
 			//hover to show and hide the menu items.
 			one_menu_tree.hover(function () {
-				$(this).find('ul').slideDown();
+				if(settings.menu_show_effect === "slide" ) $(this).find('ul').slideDown();
+				else $(this).find('ul').show();
 			}, function () {
-				$(this).find('ul').slideUp();
+				if(settings.menu_show_effect === "slide" ) $(this).find('ul').slideUp();
+				else $(this).find('ul').hide();
 			});
 			return one_menu_tree;
 		},
 		//setting of hide mode
 		//
-		//hide mode selection: all, onBar, notOnBar,notOnMenu,noHide
+		//hide mode selection: all, onBar, notOnBar,notOnMenu,noHide,rightClick,rightDblClick
 		select_hide_mode:function($menubar) {
+			//setting.hide_effect
+			var real_hide_effect_func;
+			var hide_effect_func={
+				'none':{
+					'toggle':function(){
+						$menubar.toggle();
+					},
+					'hide':function(){
+						$menubar.hide();
+					},
+					'show':function(){
+						$menubar.show();
+					}
+				},
+				'slide':{
+					'toggle':function(){
+						$menubar.slideToggle();
+					},
+					'hide':function(){
+						$menubar.slideUp();
+					},
+					'show':function(){
+						$menubar.slideDown();
+					}
+				},
+			};
+			
+			if(hide_effect_func[settings.hide_effect]) real_hide_effect_func=hide_effect_func[settings.hide_effect];
+			else real_hide_effect_func=hide_effect_func[default_settings.hide_effect];
+			
 			if (settings.hide_mode === 'all') {
 				$(document).dblclick(function () {
-					$menubar.toggle();
+					real_hide_effect_func.toggle();
 				});
 			} else if (settings.hide_mode === 'onBar') {
 				$(document).dblclick(function (e) {
 					var event_area = $(e.target).parents(STATUS_BAR);
 					if (event_area[0] === $menubar[0]) {
-						$menubar.hide();
+						real_hide_effect_func.hide();
 					} else {
-						$menubar.show();
+						real_hide_effect_func.show();
 					}
 				});
 			}else if (settings.hide_mode === 'notOnBar') {
 				$(document).dblclick(function (e) {
 					var event_area = $(e.target).parents(STATUS_BAR);
 					if (event_area[0] !== $menubar[0]) {
-						$menubar.toggle();
+						real_hide_effect_func.toggle();
 					}
 				});
 			}else if (settings.hide_mode === 'notOnMenu') {
 				$(document).dblclick(function (e) {
 					var event_area = $(e.target).parents(STATUS_BAR);
 					if (!(event_area[0] === $menubar[0] && e.target.nodeName === 'A')) {
-						$menubar.toggle();
+						real_hide_effect_func.toggle();
 					}
 				});
-			}else if (settings.hide_mode === 'noHide') {
-			}else {
+			
+			}else if (settings.hide_mode === 'rightClick'){
+				$(document).on('contextmenu',function (e) {
+					real_hide_effect_func.toggle();
+				});
+			}else if (settings.hide_mode === 'rightDblClick'){
+				$(document).on('dblclick',function (e) {
+					if(e.which===3)		real_hide_effect_func.toggle();
+				});
+			}else if (settings.hide_mode === 'noHide') {}
+			else {
 				$.error('Wrong Type of Hide Mode');
 			}
 		},
@@ -329,7 +379,7 @@
 		init: function (menu_tree_list, options) {
 		//## Options and Default value
 		
-			settings = $.extend(true, {
+			default_settings={
 			//###bar_title: (default:"Helper Bar")
 			//the title of the bar 
 				bar_title: 'Helper Bar',
@@ -363,6 +413,9 @@
 			//
 			//5)'noHide': not hide bar at all.
 				hide_mode: 'notOnMenu',
+			//###hide_effect(default:'none')
+			//options:slide,none
+				hide_effect:'none',
 			//###warn_size(default:'50px')
 			//###warn_color(default:'red')
 			//###warn_mode(default:'append')
@@ -381,6 +434,9 @@
 				warn_size: '50px', 
 				warn_color: 'red', 
 				warn_mode: 'append', 
+			//###warn_callback(default:empty event handler)
+			//set up  warn callback when warn happen.
+				warn_callback:function(){},
 				
 			//###border_radius(default:'56px')	
 			//border right corner radius.
@@ -402,6 +458,9 @@
 			//set up width of menu item. 
 			//######css width value compatible.
 				menu_width: 'auto',
+			//###menu_show_effect(default:'none')
+			//options:slide,none
+				menu_show_effect:'none',
 			//###menu_separator_color(default:'black')
 			//set up the separator line between each menu item.
 			//######css color value compatible.
@@ -436,7 +495,8 @@
 			//###bar_click(default:empty event handler)
 			//set up click event when user click on the bar except user click the menu.
 				bar_click:function(){}
-            }, options); //options 
+            };
+			settings = $.extend(true, default_settings , options); //options 
 			barBuilder.inital_cssManager();//manage all css stylesheet
            
             return this.each(function () {
@@ -616,12 +676,13 @@
 			}
 			
 			$msg = _.makeTagMsg('span',msg,style);
+			this.append($msg);
 			//process callback.
 			if($.isFunction(func)){
 					func.apply(that,[$msg,msg,style]);
 			}
 			
-			this.append($msg);
+			
 			return this;
 		}else if(style===undefined&&func===undefined){
 			this.append(msg);
@@ -662,17 +723,28 @@
 // #####message could be a text, html or jQuery object.
 // #####pre-set the style in options of bar, so this api only need to pass single parameter
     HelperBar.prototype.warn = function (msg) {
+		var that=this;
         var style = {
             color: _settings.warn_color,
             'font-size': _settings.warn_size
         };
+		var func;
+		if($.isFunction(_settings.warn_callback)){
+			func=function($msg,msg,style){
+				_settings.warn_callback.apply(that,arguments);
+			};
+		}else {
+			func=function(){};
+		}
         if (_settings.warn_mode === 'append') {
-            return this.addmsg(msg, style);
+            return this.addmsg(msg, style,func);
         } else if (_settings.warn_mode === 'log') {
-            msg = _.makeTagMsg('div',msg,style);
-            return this.append(msg);
+			var $msg = _.makeTagMsg('div',msg,style);
+			this.append($msg);
+			func.apply(that,[$msg,msg,style]);
+            return this;
         } else if (_settings.warn_mode === 'clean') {
-			return this.msg(msg, style);
+			return this.msg(msg, style,func);
         } else {
             $.error('no this type of warning mode');
         }
@@ -1027,6 +1099,6 @@
 //### #API#bar.version():
 //(return string) return the Helperbar version information	
 	HelperBar.prototype.version = function () {
-        return '0.4.3a';
+        return '0.5.0a';
     };
 })(jQuery,window);
