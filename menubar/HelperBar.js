@@ -74,7 +74,8 @@
 		//too lazy to type < />
 		tag : function (tag, opts) {
 			return $('<' + tag + '/>', opts);
-		}
+		},
+		empty_func:function(){}
 	};
     
     
@@ -437,7 +438,7 @@
 				warn_mode: 'append', 
 			//###warn_callback(default:empty event handler)
 			//set up  warn callback when warn happen.
-				warn_callback:function(){},
+				warn_callback:_.empty_func,
 				
 			//###border_radius(default:'56px')	
 			//border right corner radius.
@@ -492,10 +493,10 @@
 				bar_shadow:'6px 0px 6px 2px black',
 			//###msg_click(default:empty event handler)
 			//set up click event when user click the message area.
-				msg_click:function(){},
+				msg_click:_.empty_func,
 			//###bar_click(default:empty event handler)
 			//set up click event when user click on the bar except user click the menu.
-				bar_click:function(){}
+				bar_click:_.empty_func
             };
 			settings = $.extend(true, default_settings , options); //options 
 			barBuilder.inital_cssManager();//manage all css stylesheet
@@ -563,6 +564,8 @@
             $.error('Method ' + method + ' does not exist on jQuery.menubar');
         }
     };
+	//transfer reuseful internal using function to HelpeBar scope.
+	window._internalUseUtils_7cad339b0b08db99561c640461d00a07=_;
 })(jQuery,window);
 
 //create Helper Bar as Class for the page and provide API of Helper Bar
@@ -571,16 +574,12 @@
     var _menubar;
     var _settings;
 //private method: create a style text for message.	
-	var _={
-		tag : function (tag, opts) {
-			return $('<' + tag + '/>', opts);
-		},
+	var _=$.extend({},window._internalUseUtils_7cad339b0b08db99561c640461d00a07,{
 		makeTagMsg:function (tag,text,style){
-		return style?_.tag(tag).html(text).css(style):_.tag(tag).html(text);
+			return style?_.tag(tag).html(text).css(style):_.tag(tag).html(text);
 		},
 		delUnsafeMethod:function(){
 			delete HelperBar.prototype.getMenuBar;
-			//delete HelperBar.prototype.getSettings;
 		},
 		//context reference the bar.so in callback this means bar.
 		set_action_on_bar:function(context){
@@ -591,7 +590,7 @@
 						_settings.msg_click.call(context);
 					});
 			}
-			
+		
 			if($.isFunction(_settings.bar_click)){
 				_menubar
 					.on('click',function(){
@@ -601,10 +600,11 @@
 					e.stopPropagation();
 				});
 			}
-		},
-		empty_func:function(){}
-	};
-	
+		}
+	});
+	//remove agent variable, so no global variable pollution.
+	delete window._internalUseUtils_7cad339b0b08db99561c640461d00a07;
+		
     function HelperBar(menu_tree_list, options) {
         _menubar = _.tag('div').menubar(menu_tree_list, options,this);
         _settings = _menubar.menubar('getSettings');
