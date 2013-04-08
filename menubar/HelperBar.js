@@ -56,7 +56,8 @@
 	var default_settings;
     var settings;
     var cssManager;
- 
+	
+	var bar_context;//store a context of the bar.
     //(private level tool) specific for this plugin
     var _={
 		//_.cropFirstSymbol(string) crop the first string if first string is # or .
@@ -113,7 +114,7 @@
 			return $div_status_menu;
 		},
 		//creating a single menu item for root level
-		create_root_menu_item:function(id, title, callback,context) {
+		create_root_menu_item:function(id, title, callback) {
 			var $tag_a = _.tag('a', {
 				id: id,
 				href: '#',
@@ -121,7 +122,7 @@
 			}).click(function (event) {
 				event.preventDefault();
 				if (callback) {
-					callback.apply(context);
+					callback.apply(bar_context);
 				}
 			});
 			$tag_a.css(cssManager.tag_a_css).css({
@@ -143,7 +144,7 @@
 			return $root_menu_item;
 		},
 		//creating a single menu item
-		create_menu_item:function(id, title, callback,context) {
+		create_menu_item:function(id, title, callback) {
 			var menu_item = _.tag('li');
 			menu_item.css(cssManager.menu_style); //css:#status-menu ul li ul li
 			var $tag_a = _.tag('a', {
@@ -153,7 +154,7 @@
 			}).click(function (event) {
 				event.preventDefault();
 				if (callback) {
-					callback.apply(context);
+					callback.apply(bar_context);
 				}
 			});
 
@@ -177,11 +178,11 @@
 		},
 		
 		//construct a root menu item
-		construct_root_menu:function(root_menu,context) {//root_menu must have attribute of id,title,click[function]
-			return this.create_root_menu_item(root_menu.id, root_menu.title, root_menu.click,context);
+		construct_root_menu:function(root_menu) {//root_menu must have attribute of id,title,click[function]
+			return this.create_root_menu_item(root_menu.id, root_menu.title, root_menu.click);
 		},
 		//construct a menu tree except the root menu item
-		construct_menu:function(menu_list,context) {
+		construct_menu:function(menu_list) {
 			var $tag_ul = _.tag('ul');
 			$tag_ul.hide().css(cssManager.menu_ul_style); //css:#status-menu ul li ul
 			for (var menu in menu_list) {
@@ -189,7 +190,7 @@
 				var title = menu_list[menu].title;
 				var click = menu_list[menu].click;
 				
-				$tag_ul.append(this.create_menu_item(id, title, click,context));
+				$tag_ul.append(this.create_menu_item(id, title, click));
 			}
 			
 			//menu column top  has the round corner.
@@ -202,8 +203,8 @@
 			return $tag_ul;
 		},
 		//construct one menu tree include root menu item and other menu item
-		construct_one_menu_tree:function(menu_array,context) {
-			var one_menu_tree = this.construct_root_menu(menu_array.root,context).append(this.construct_menu(menu_array.list,context));
+		construct_one_menu_tree:function(menu_array) {
+			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construct_menu(menu_array.list));
 			//hover to show and hide the menu items.
 			one_menu_tree.hover(function () {
 				if(settings.menu_show_effect === "slide" ) $(this).find('ul').slideDown();
@@ -294,7 +295,7 @@
 		//1) init menubar with menu_tree_list. 
 		//
 		//2) init functions and behaviors of menubar.
-		init_status_bar:function($menubar,menu_tree_list,context) {
+		init_status_bar:function($menubar,menu_tree_list) {
 			var $status_menu = $menubar.find(STATUS_MENU);
 			var $footer=$menubar.find(STATUS_FOOTER);
 			//set the status menu will show on mouse over the statusbar, hide on mouse out
@@ -307,7 +308,7 @@
 			});
 			//construct entire menu tree for the menu bar
 			for (var menu_tree in menu_tree_list) {
-				this.construct_one_menu_tree(menu_tree_list[menu_tree],context).appendTo($menubar.find(LIST_MENU));
+				this.construct_one_menu_tree(menu_tree_list[menu_tree]).appendTo($menubar.find(LIST_MENU));
 			}
 			//initalize the default appearance of the status bar
 			$status_menu.hide();
@@ -380,7 +381,7 @@
 		//initialize the options for the jquery pluin
 		init: function (menu_tree_list, options,context) {
 		//## Options and Default value
-		
+			bar_context=context;
 			default_settings={
 			//###bar_title: (default:"Helper Bar")
 			//the title of the bar 
@@ -504,7 +505,7 @@
             return this.each(function () {
 				_.jqobClean($(this)); //clean this jquery object content and texts
 				barBuilder.convert_status_bar($(this));
-				barBuilder.init_status_bar($(this), menu_tree_list,context);
+				barBuilder.init_status_bar($(this), menu_tree_list);
             });
         },
        title: function (title) {
@@ -552,7 +553,10 @@
         },
         getSettings: function () {
             return settings;
-        }
+        },
+		getInternalUsingUtilts:function(){
+			return $.extend({},_);
+		}
     };
     // Method calling logic
     $.fn.menubar = function (method) {
@@ -564,8 +568,7 @@
             $.error('Method ' + method + ' does not exist on jQuery.menubar');
         }
     };
-	//transfer reuseful internal using function to HelpeBar scope.
-	window._internalUseUtils_7cad339b0b08db99561c640461d00a07=_;
+	
 })(jQuery,window);
 
 //create Helper Bar as Class for the page and provide API of Helper Bar
@@ -574,7 +577,7 @@
     var _menubar;
     var _settings;
 //private method: create a style text for message.	
-	var _=$.extend({},window._internalUseUtils_7cad339b0b08db99561c640461d00a07,{
+	var _=$.extend({},$().menubar('getInternalUsingUtilts'),{
 		makeTagMsg:function (tag,text,style){
 			return style?_.tag(tag).html(text).css(style):_.tag(tag).html(text);
 		},
@@ -602,8 +605,6 @@
 			}
 		}
 	});
-	//remove agent variable, so no global variable pollution.
-	delete window._internalUseUtils_7cad339b0b08db99561c640461d00a07;
 		
     function HelperBar(menu_tree_list, options) {
         _menubar = _.tag('div').menubar(menu_tree_list, options,this);
