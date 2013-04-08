@@ -79,7 +79,7 @@
 			.set(menuTreeList)
 			.reset()
 			.addTree()
-			.addItem('1.1',function(){bar.log('addMenuItem1.1');})
+			.addItem('1.1',function(){console.log(this);})
 			.addItem('1.2',function(){bar.log('addMenuItem1.2');})
 			.addItem('1.3',function(){bar.log('addMenuItem1.3');})
 			.addTree('root-addMenuTree(title,click)',function(){console.log('addMenuTree');})
@@ -397,8 +397,8 @@
 		// $('div').eq(1).data('abc',null);
 		// bar.log($('div').eq(1).data('abc'));
 		
-		// bar.destroy();
-		// HelperBar.buildBar();
+		 bar.destroy();
+		HelperBar.buildBar();
 		// bar.log(bar.cache('abc'));
 		
 	}

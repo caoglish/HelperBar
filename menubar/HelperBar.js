@@ -112,7 +112,7 @@
 			return $div_status_menu;
 		},
 		//creating a single menu item for root level
-		create_root_menu_item:function(id, title, callback) {
+		create_root_menu_item:function(id, title, callback,context) {
 			var $tag_a = _.tag('a', {
 				id: id,
 				href: '#',
@@ -120,7 +120,7 @@
 			}).click(function (event) {
 				event.preventDefault();
 				if (callback) {
-					callback.apply();
+					callback.apply(context);
 				}
 			});
 			$tag_a.css(cssManager.tag_a_css).css({
@@ -142,7 +142,7 @@
 			return $root_menu_item;
 		},
 		//creating a single menu item
-		create_menu_item:function(id, title, callback) {
+		create_menu_item:function(id, title, callback,context) {
 			var menu_item = _.tag('li');
 			menu_item.css(cssManager.menu_style); //css:#status-menu ul li ul li
 			var $tag_a = _.tag('a', {
@@ -152,7 +152,7 @@
 			}).click(function (event) {
 				event.preventDefault();
 				if (callback) {
-					callback.apply();
+					callback.apply(context);
 				}
 			});
 
@@ -176,18 +176,19 @@
 		},
 		
 		//construct a root menu item
-		construct_root_menu:function(root_menu) {//root_menu must have attribute of id,title,click[function]
-			return this.create_root_menu_item(root_menu.id, root_menu.title, root_menu.click);
+		construct_root_menu:function(root_menu,context) {//root_menu must have attribute of id,title,click[function]
+			return this.create_root_menu_item(root_menu.id, root_menu.title, root_menu.click,context);
 		},
 		//construct a menu tree except the root menu item
-		construct_menu:function(menu_list) {
+		construct_menu:function(menu_list,context) {
 			var $tag_ul = _.tag('ul');
 			$tag_ul.hide().css(cssManager.menu_ul_style); //css:#status-menu ul li ul
 			for (var menu in menu_list) {
 				var id = menu_list[menu].id;
 				var title = menu_list[menu].title;
 				var click = menu_list[menu].click;
-				$tag_ul.append(this.create_menu_item(id, title, click));
+				
+				$tag_ul.append(this.create_menu_item(id, title, click,context));
 			}
 			
 			//menu column top  has the round corner.
@@ -200,8 +201,8 @@
 			return $tag_ul;
 		},
 		//construct one menu tree include root menu item and other menu item
-		construct_one_menu_tree:function(menu_array) {
-			var one_menu_tree = this.construct_root_menu(menu_array.root).append(this.construct_menu(menu_array.list));
+		construct_one_menu_tree:function(menu_array,context) {
+			var one_menu_tree = this.construct_root_menu(menu_array.root,context).append(this.construct_menu(menu_array.list,context));
 			//hover to show and hide the menu items.
 			one_menu_tree.hover(function () {
 				if(settings.menu_show_effect === "slide" ) $(this).find('ul').slideDown();
@@ -292,7 +293,7 @@
 		//1) init menubar with menu_tree_list. 
 		//
 		//2) init functions and behaviors of menubar.
-		init_status_bar:function($menubar,menu_tree_list) {
+		init_status_bar:function($menubar,menu_tree_list,context) {
 			var $status_menu = $menubar.find(STATUS_MENU);
 			var $footer=$menubar.find(STATUS_FOOTER);
 			//set the status menu will show on mouse over the statusbar, hide on mouse out
@@ -305,7 +306,7 @@
 			});
 			//construct entire menu tree for the menu bar
 			for (var menu_tree in menu_tree_list) {
-				this.construct_one_menu_tree(menu_tree_list[menu_tree]).appendTo($menubar.find(LIST_MENU));
+				this.construct_one_menu_tree(menu_tree_list[menu_tree],context).appendTo($menubar.find(LIST_MENU));
 			}
 			//initalize the default appearance of the status bar
 			$status_menu.hide();
@@ -376,7 +377,7 @@
 	//Jquery Plugin structure to create $.fn.menubar plugin.
 	var methods = {
 		//initialize the options for the jquery pluin
-		init: function (menu_tree_list, options) {
+		init: function (menu_tree_list, options,context) {
 		//## Options and Default value
 		
 			default_settings={
@@ -502,7 +503,7 @@
             return this.each(function () {
 				_.jqobClean($(this)); //clean this jquery object content and texts
 				barBuilder.convert_status_bar($(this));
-				barBuilder.init_status_bar($(this), menu_tree_list);
+				barBuilder.init_status_bar($(this), menu_tree_list,context);
             });
         },
        title: function (title) {
@@ -600,11 +601,12 @@
 					e.stopPropagation();
 				});
 			}
-		}
+		},
+		empty_func:function(){}
 	};
 	
     function HelperBar(menu_tree_list, options) {
-        _menubar = _.tag('div').menubar(menu_tree_list, options);
+        _menubar = _.tag('div').menubar(menu_tree_list, options,this);
         _settings = _menubar.menubar('getSettings');
 		_.set_action_on_bar(this);
 		if (_settings.safe_mode !== "unsafe") _.delUnsafeMethod();
@@ -732,7 +734,7 @@
 				_settings.warn_callback.apply(that,arguments);
 			};
 		}else {
-			func=function(){};
+			func=_.empty_func;
 		}
         if (_settings.warn_mode === 'append') {
             return this.addmsg(msg, style,func);
@@ -938,7 +940,7 @@
 		//add a root of the menu tree. this a start or next menu tree.
 		addTree:function(title,click,id){
 				if (!!title){
-				var root = {"title":title,"click":click,"id":id};
+				var root = {"title":title,"click":$.isFunction(click)?click:_.empty_func,"id":id};
 				this.menu_tree_list.push({"root":root,"list":[]});
 			}else { 
 				this.menu_tree_list.push({"list":[]});
@@ -947,7 +949,7 @@
 		// add menu item on the current tree, until use addTree() start a new menu tree.
 		addItem:function(title,click,id){
 			if (!!title){
-				var item = {"title":title,"click":click,"id":id};
+				var item = {"title":title,"click":$.isFunction(click)?click:_.empty_func,"id":id};
 				if (!this.hasMenu()) $.error("no Menu Tree.");
 				var list=this.menu_tree_list[this.menu_tree_list.length-1].list;
 				list.push(item);
