@@ -56,7 +56,8 @@
 	var default_settings;
     var settings;
     var cssManager;
- 
+	
+	var bar_context;//store a context of the bar.
     //(private level tool) specific for this plugin
     var _={
 		//_.cropFirstSymbol(string) crop the first string if first string is # or .
@@ -74,7 +75,8 @@
 		//too lazy to type < />
 		tag : function (tag, opts) {
 			return $('<' + tag + '/>', opts);
-		}
+		},
+		empty_func:function(){}
 	};
     
     
@@ -120,7 +122,7 @@
 			}).click(function (event) {
 				event.preventDefault();
 				if (callback) {
-					callback.apply();
+					callback.apply(bar_context);
 				}
 			});
 			$tag_a.css(cssManager.tag_a_css).css({
@@ -152,7 +154,7 @@
 			}).click(function (event) {
 				event.preventDefault();
 				if (callback) {
-					callback.apply();
+					callback.apply(bar_context);
 				}
 			});
 
@@ -187,6 +189,7 @@
 				var id = menu_list[menu].id;
 				var title = menu_list[menu].title;
 				var click = menu_list[menu].click;
+				
 				$tag_ul.append(this.create_menu_item(id, title, click));
 			}
 			
@@ -376,9 +379,9 @@
 	//Jquery Plugin structure to create $.fn.menubar plugin.
 	var methods = {
 		//initialize the options for the jquery pluin
-		init: function (menu_tree_list, options) {
+		init: function (menu_tree_list, options,context) {
 		//## Options and Default value
-		
+			bar_context=context;
 			default_settings={
 			//###bar_title: (default:"Helper Bar")
 			//the title of the bar 
@@ -436,7 +439,7 @@
 				warn_mode: 'append', 
 			//###warn_callback(default:empty event handler)
 			//set up  warn callback when warn happen.
-				warn_callback:function(){},
+				warn_callback:_.empty_func,
 				
 			//###border_radius(default:'56px')	
 			//border right corner radius.
@@ -491,10 +494,10 @@
 				bar_shadow:'6px 0px 6px 2px black',
 			//###msg_click(default:empty event handler)
 			//set up click event when user click the message area.
-				msg_click:function(){},
+				msg_click:_.empty_func,
 			//###bar_click(default:empty event handler)
 			//set up click event when user click on the bar except user click the menu.
-				bar_click:function(){}
+				bar_click:_.empty_func
             };
 			settings = $.extend(true, default_settings , options); //options 
 			barBuilder.inital_cssManager();//manage all css stylesheet
@@ -550,7 +553,10 @@
         },
         getSettings: function () {
             return settings;
-        }
+        },
+		getInternalUsingUtilts:function(){
+			return $.extend({},_);
+		}
     };
     // Method calling logic
     $.fn.menubar = function (method) {
@@ -562,6 +568,7 @@
             $.error('Method ' + method + ' does not exist on jQuery.menubar');
         }
     };
+	
 })(jQuery,window);
 
 //create Helper Bar as Class for the page and provide API of Helper Bar
@@ -570,16 +577,12 @@
     var _menubar;
     var _settings;
 //private method: create a style text for message.	
-	var _={
-		tag : function (tag, opts) {
-			return $('<' + tag + '/>', opts);
-		},
+	var _=$.extend({},$().menubar('getInternalUsingUtilts'),{
 		makeTagMsg:function (tag,text,style){
-		return style?_.tag(tag).html(text).css(style):_.tag(tag).html(text);
+			return style?_.tag(tag).html(text).css(style):_.tag(tag).html(text);
 		},
 		delUnsafeMethod:function(){
 			delete HelperBar.prototype.getMenuBar;
-			//delete HelperBar.prototype.getSettings;
 		},
 		//context reference the bar.so in callback this means bar.
 		set_action_on_bar:function(context){
@@ -590,7 +593,7 @@
 						_settings.msg_click.call(context);
 					});
 			}
-			
+		
 			if($.isFunction(_settings.bar_click)){
 				_menubar
 					.on('click',function(){
@@ -601,10 +604,10 @@
 				});
 			}
 		}
-	};
-	
+	});
+		
     function HelperBar(menu_tree_list, options) {
-        _menubar = _.tag('div').menubar(menu_tree_list, options);
+        _menubar = _.tag('div').menubar(menu_tree_list, options,this);
         _settings = _menubar.menubar('getSettings');
 		_.set_action_on_bar(this);
 		if (_settings.safe_mode !== "unsafe") _.delUnsafeMethod();
@@ -732,7 +735,7 @@
 				_settings.warn_callback.apply(that,arguments);
 			};
 		}else {
-			func=function(){};
+			func=_.empty_func;
 		}
         if (_settings.warn_mode === 'append') {
             return this.addmsg(msg, style,func);
@@ -938,7 +941,7 @@
 		//add a root of the menu tree. this a start or next menu tree.
 		addTree:function(title,click,id){
 				if (!!title){
-				var root = {"title":title,"click":click,"id":id};
+				var root = {"title":title,"click":$.isFunction(click)?click:_.empty_func,"id":id};
 				this.menu_tree_list.push({"root":root,"list":[]});
 			}else { 
 				this.menu_tree_list.push({"list":[]});
@@ -947,7 +950,7 @@
 		// add menu item on the current tree, until use addTree() start a new menu tree.
 		addItem:function(title,click,id){
 			if (!!title){
-				var item = {"title":title,"click":click,"id":id};
+				var item = {"title":title,"click":$.isFunction(click)?click:_.empty_func,"id":id};
 				if (!this.hasMenu()) $.error("no Menu Tree.");
 				var list=this.menu_tree_list[this.menu_tree_list.length-1].list;
 				list.push(item);
