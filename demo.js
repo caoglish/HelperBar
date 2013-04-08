@@ -1,6 +1,6 @@
-(function () {
+(function (window,undefined) {
     "use strict";
-    window.optSet = (function () {
+    window.optSetter = (function () {
         var ITEM_OPTSET = 'HelperBar_optset';
         return {
             set: function (opt) {
@@ -16,83 +16,52 @@
             }
         };
     })();
-}());
+})(window);
 
-(function( $ ){
+(function( $,undefined ){
 	"use strict";
 	
 	var bar; 
-	$.tag = function (tag, opts) {
-			return $('<' + tag + '/>', opts);
-		}
+	$.tag = HelperBar.tag;
 	var TXT_ABOUT_INFO='<strong>Helper Bar Framework[Version:'+HelperBar.version()+']<br/>Jquery[Version:'+$().jquery+']<br/>Designer: Caoglish</strong>';
 
 	//Menu bar setup
-	var menuTreeFunction={
-		'root':'first',
-		'list':[
-			{'title':'function'},
-			{'title':'go top','click':go_top},
-			{'title':'go bottom','click':go_bottom},
-			{'title':'mouse position','click':mouse_position},
-			{'title':'page refresh','click':page_reload}
-		]
-	};
-	var menuTreeDemo={
-		'root':{'id':'mi-API-Demo','title':'API Demo'},
-		'list':[
-			{'title':'Show Message => bar.msg(text)','click':show_msg_demo},
-			{'title':'Show Color Message => bar.msg(text,color)','click':show_color_msg_demo},
-			{'title':'Show Style Message => bar.msg(text,style)','click':show_style_msg_demo},
-			{'title':'warning => bar.warn(text)','click':warning_demo},
-			{'title':'log => bar.log(text)','click':log_demo},
-			{'title':'get msg on the bar => bar.msg()','click':alert_demo},
-			{'title':'get html on the bar => bar.html()','click':alert_html_demo},
-			{'title':'add msg demo => bar.addmsg(text,style)','click':add_msg_demo},
-			{'title':'html demo => bar.html(html)','click':html_demo},
-			{'title':'append msg => bar.append(html)','click':append_demo},
-			{'title':'open url =>bar.open(url)','click':open_url_demo},
-			{'title':'chaining Demo','click':chaining_demo},
-			{'title':'append title =>bar.title(text)','click':title_demo},
-			{'title':'append foot =>bar.foot(text)','click':foot_demo},
-			{'title':'clear title =>bar.clsTitle(text)','click':cls_title_demo},
-			{'title':'clear foot =>bar.clsFoot(text)','click':cls_foot_demo},
-			{'title':'clear msg => bar.cls()','click':cls_msg_demo}
-		]
-	};
-	
-	var menuOptionsDemo={
-		'list':[
-			{'title':'default(no custom options)','click':opt_default_demo},
-			{'title':'custom(black)','click':opt_customize_black_demo},
-			{'title':'custom(pink)','click':opt_customize_pink_demo},
-			{'title':'custom(blue)','click':opt_customize_blue_demo},
-			{'title':'custom options demo'}
-		]
-	};
+	HelperBar.menu.addTree()
+						.addItem('go top',go_top)
+						.addItem('go bottom',go_bottom)
+						.addItem('mouse position',mouse_position)
+						.addItem('page refresh',page_reload)
+						.addItem('function')
+					.addTree('API Demo')
+						.addItem('Show Message => bar.msg(text)',show_msg_demo)
+						.addItem('Show Color Message => bar.msg(text,color)',show_color_msg_demo)
+						.addItem('Show Style Message => bar.msg(text,style)',show_style_msg_demo)
+						.addItem('warning => bar.warn(text)',warning_demo)
+						.addItem('log => bar.log(text)',log_demo)
+						.addItem('get msg on the bar => bar.msg()',alert_demo)
+						.addItem('get html on the bar => bar.html()',alert_html_demo)
+						.addItem('add msg demo => bar.addmsg(text,style)',add_msg_demo)
+						.addItem('html demo => bar.html(html)',html_demo)
+						.addItem('append msg => bar.append(html)',append_demo)
+						.addItem('open url =>bar.open(url)',open_url_demo)
+						.addItem('chaining Demo',chaining_demo)
+						.addItem('append title =>bar.title(text)',title_demo)
+						.addItem('append foot =>bar.foot(text)',foot_demo)
+						.addItem('clear title =>bar.clsTitle(text)',cls_title_demo)
+						.addItem('clear foot =>bar.clsFoot(text)',cls_foot_demo)
+						.addItem('clear msg => bar.cls()',cls_msg_demo)
+					.addTree()
+						.addItem('default(no custom options)',opt_default_demo)
+						.addItem('custom(black)',opt_customize_black_demo)
+						.addItem('custom(pink)',opt_customize_pink_demo)
+						.addItem('custom(blue)',opt_customize_blue_demo)
+						.addItem('custom options demo')
+					.addTree('about',about)
 	
 	var menuTreeAbout={
 		'root':{'title':'about','click':about}
 	};
-	var menuTreeList=[menuTreeFunction,menuTreeDemo,menuOptionsDemo,menuTreeAbout];
-	var Menu_Tree_array=HelperBar.menu
-			.set(menuTreeList)
-			.reset()
-			.addTree()
-			.addItem('1.1',function(){bar.log('addMenuItem1.1');})
-			.addItem('1.2',function(){bar.log('addMenuItem1.2');})
-			.addItem('1.3',function(){bar.log('addMenuItem1.3');})
-			.addTree('root-addMenuTree(title,click)',function(){console.log('addMenuTree');})
-			.addItem('2.1',function(){bar.log('addMenuItem2.1');})
-			.addItem('2.2',function(){bar.log('addMenuItem2.2');})
-			.addItem('2.3',function(){bar.log('addMenuItem2.3');})
-			.merge(menuTreeList)
-			.mergeTo(menuTreeList)
-			.get();
-
-	HelperBar.menu.get().shift();
-	HelperBar.menu.get().shift();
-
+	
 	var optsDefault={};
 	var opts1={
 				bar_title:'Helper Bar Demo(black)',
@@ -100,9 +69,7 @@
 				foot_mode:'show',
 				foot_size:'8px',
                 safe_mode: 'unsafe',
-                //hide_mode: 'notOnMenu',
                 hide_mode: 'rightClick',
-				//hide_mode: 'rightDblClick',
 				hide_effect:'slide',
 				border_radius: '86px',
                 warn_size:'32px',
@@ -284,22 +251,22 @@
 	
 	//options demo
 	function opt_default_demo(){
-		optSet.set(0);
+		optSetter.set(0);
 		location.reload();
 	}
 	
 	function opt_customize_black_demo(){
-		optSet.set(1);
+		optSetter.set(1);
 		location.reload();
 	}
 	
 	function opt_customize_pink_demo(){
-		optSet.set(2);
+		optSetter.set(2);
 		location.reload();
 	}
 	
 	function opt_customize_blue_demo(){
-		optSet.set(3);
+		optSetter.set(3);
 		location.reload();
 	}
 	//about 
@@ -331,75 +298,40 @@
 	}
 
 	function demo_interface(){
-		$.tag('div',{id:'helperbar-demo'}).appendTo('body').html($.tag('h1').text('Helper Bar API Demo Button(no included in framework)').css('color','yellow')).css({opacity: '0.5',width:'100%',position:'fixed',top:0,background:'black'});
-		$.tag('button').prependTo('#helperbar-demo').text('hide()').click(function(){
+		var $helperbar_demo=$.tag('div',{id:'helperbar-demo'}).appendTo('body').html($.tag('h1').text('Helper Bar API Demo Button(no included in framework)').css('color','yellow')).css({opacity: '0.5',width:'100%',position:'fixed',top:0,background:'black'});
+		
+		var addbutton=function(text,func){
+			$.tag('button').prependTo($helperbar_demo).text(text).click(func);
+		
+		};
+		
+		addbutton('hide()',function(){
 			bar.hide();
 		});
-		$.tag('button').prependTo('#helperbar-demo').text('show()').click(function(){
+		
+		addbutton('show()',function(){
 			bar.show();
 		});
-		$.tag('button').prependTo('#helperbar-demo').text('hide("slow")').click(function(){
-			bar.hide('slow');
+		
+		addbutton('hide("slow")',function(){
+			bar.hide(100);
 		});
-		$.tag('button').prependTo('#helperbar-demo').text('show("slow")').click(function(){
-			bar.show('slow');
+		
+		addbutton('show("slow")',function(){
+				bar.show(100);
 		});
+		
+
 	}
 
 	function run(){
-		HelperBar.fn.test=function(text){
-			this.addmsg(text,'green',function($msg){
-				$msg.hover(function(){
-					$(this).css('color','yellow');
-				},function(){
-					$(this).css('color','blue');
-				});
-			});
-		}
-	
-		if(optSet.get()===undefined||optSet.get()===null){
-			optSet.init(1);
-		}
-		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSet.get()]);//singleton start
-		bar = HelperBar.getbar(menuTreeList,optionsList[optSet.get()]);//singleton start
-		//bar = HelperBar.buildBar(optionsList[optSet.get()]);//singleton start
-		demo_interface();
-		//bar=undefined;
-		//HelperBar.buildBar(optionsList[3]);
-		//bar.destroy();
-		//HelperBar.getbar(menuTreeList,optionsList[3]);//singleton start
-		//bar.test();
-		// bar.msg($.tag('div').text('hello,wolrd.'),'red',function($msg,msg,style){
-			// console.log($msg);
-			// console.log(msg);
-			// console.log(style);
-			// this.addmsg(msg.clone(),function($msg,msg){bar.addmsg($msg.clone())});
-		// });
-		bar.warn('hello,world');
-		bar.msg('hellow,world',function(){
-			this.addmsg('hahaha.....');
-		});
-		// bar.clickClsMsg('abc');
-		// bar.addmsg('hello,world',function($msg){
-			// $msg.css('color','red');
 			
-		// });
-		bar.msg('setting:',function(){
-			this.log(bar.getSettings());
-		});
-		
-		// bar.test('click cls msg');
-		//bar.cache('abc',{a:'hello,world',1:'ede'});
-		//bar.cache('abc',null);
-		//bar.log(bar.cache('abc'));
-		
-		// $('div').eq(1).data('abc',{a:'hello,world',1:'ede'});
-		// $('div').eq(1).data('abc',null);
-		// bar.log($('div').eq(1).data('abc'));
-		
-		// bar.destroy();
-		// HelperBar.buildBar();
-		// bar.log(bar.cache('abc'));
-		
+		if(!optSetter.get()){
+			optSetter.init(1);
+		}
+		//bar = HelperBar.getbar(Menu_Tree_array,optionsList[optSetter.get()]);//singleton start
+		//bar = HelperBar.getbar(menuTreeList,optionsList[optSetter.get()]);//singleton start
+		bar = HelperBar.buildBar(optionsList[optSetter.get()]);//singleton start
+		demo_interface();
 	}
 })( jQuery );
