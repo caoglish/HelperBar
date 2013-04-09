@@ -20,20 +20,28 @@
 
 //HelperBar plugins and jQuery plugin
 (function ($,window,HelperBar,undefined){
+	$.tag = HelperBar.tag;
+	
 	HelperBar.fn.aboutMsg=function(){
 		var text=Array.slice(arguments);
-		for (var i in text){
-			this.addmsg(text[i]);
-			this.addmsg('<br/>');
+		var $text=$.tag('div');
+;		for (var i in text){
+			$text.append($.tag('div').text(text[i]));
 		}
+		this.addmsg($text,function($msg){
+			$msg.on('click',function (){
+				$(this).remove();
+			});
+		});
 		return this;
 	};
 	
 	HelperBar.fn.demoTitle=function(title){
-		return this.title('[<span style="color:green"><b>'+title+'</b></span>]');
+		var $title=$.tag('span').css('color','green').append(
+						$.tag('b').text(title)
+					);
+		return this.title('[').title($title).title(']');
 	};
-	
-	$.tag = HelperBar.tag;
 })(jQuery,window,HelperBar);
 
 
@@ -50,7 +58,7 @@
                 safe_mode: 'unsafe',
                 hide_mode: 'rightClick',
 				hide_effect:'slide',
-				border_radius: '86px',
+				border_radius: '0px',
                 warn_size:'32px',
 				warn_color:'yellow',
 				warn_mode:'log',
@@ -64,11 +72,10 @@
                 menu_font_color: '#EAFFED',
 				menu_separator_color: 'black',
 				msg_click:function(){
-					//console.log(this);
 					this.cls().clsTitle();
 				},
 				warn_callback:function($msg,msg,style){
-					this.addmsg('more....');
+					this.addmsg('==warn_callback==');
 				}
 		},
 		example2:{
@@ -322,7 +329,7 @@
 	}
 
 	function run(){
-		if(!optSetter.get()){
+		if(!(optSetter.get()>=0)){
 			optSetter.init(1);
 		}
 		
