@@ -18,7 +18,7 @@
     })();
 })(window);
 
-//HelperBar plugins and jQuery plugin
+//extend HelperBar and jQuery plugin
 (function ($,window,HelperBar,undefined){
 	$.tag = HelperBar.tag;
 	

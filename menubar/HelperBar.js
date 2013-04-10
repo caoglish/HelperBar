@@ -574,8 +574,9 @@
 //create Helper Bar as Class for the page and provide API of Helper Bar
 (function ($,window,undefined) {
     "use strict";
-    var _menubar;
-    var _settings;
+    var _menubar,
+		_settings,
+		_helperbar_fn={};
 //private method: create a style text for message.	
 	var _=$.extend({},$().menubar('getInternalUsingUtilts'),{
 		makeTagMsg:function (tag,text,style){
@@ -603,6 +604,22 @@
 					e.stopPropagation();
 				});
 			}
+		},
+		//safely extend Helperbar.
+		registerMethodToPrototype:function(force){
+			force = force || false;
+			if(_helperbar_fn&&_helperbar_fn.constructor === Object){
+				if(force){
+					$.extend(HelperBar.prototype,_helperbar_fn);
+				}else{
+					//if not force, only extend the functions which are not existedon HelperBar.
+					for(var fn in _helperbar_fn){
+						if(!(fn in HelperBar.prototype)) HelperBar.prototype[fn]=_helperbar_fn[fn];
+					}
+				}
+			}else{
+				$.error('HelperBar.fn: HelperBar.fn is overwrited in wrong way.');
+			}
 		}
 	});
 		
@@ -611,6 +628,7 @@
         _settings = _menubar.menubar('getSettings');
 		_.set_action_on_bar(this);
 		if (_settings.safe_mode !== "unsafe") _.delUnsafeMethod();
+		_.registerMethodToPrototype(_settings.safe_mode === "unsafe");//unsafe mode can overwrite orignial method.
 //Check body is existed or not, if existed, append into body, if not existed, waiting for page fully loaded then append into body.		
 		if($('body').size()>0){
 			_menubar.appendTo('body');
@@ -1093,7 +1111,7 @@
 		
 //### HelperBar.fn.plugin=function(){}
 //extend the helperbar.
-		exports.fn=HelperBar.prototype;
+		exports.fn=_helperbar_fn;
 		return exports;
     })();
 	
