@@ -58,11 +58,10 @@
 	
 	HelperBar.fn.extend({
 		rainbowMsg:function(msg,color_filter){
+			color_filter=color_filter||[];
 			var filter_random_color=function (){
 				var this_color=random_color();
-				console.log($.inArray(this_color,color_filter));
 				if($.inArray(this_color,color_filter)>0) this_color=filter_random_color();
-				console.log('this_color');
 				return this_color;
 			};
 			this.addmsg(msg,filter_random_color(),function($msg,msg,style){
