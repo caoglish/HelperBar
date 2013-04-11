@@ -67,6 +67,63 @@ test("Helperbar.delData()", function () {
 });
 
 module("bar");
+
+
+test("bar.getMenuBar() in unsafe mode", function () {
+	bar.cls();
+	bar.msg('abc').addmsg('+++---+++--asfadsf3342');
+	var expect='abc+++---+++--asfadsf3342';
+	var result=bar.getMenuBar().find(STATUS_MESSAGE).html();
+	
+	
+	equal(result,expect,'bar.getMenuBar().find(STATUS_MESSAGE) contains whether same content with $(STATUS_MESSAGE)|message on the bar:'+expect);
+	
+	var expect1=STATUS_BAR;
+	var result1=bar.getMenuBar().attr('id');
+	ok(expect1.indexOf(result1)>-1,'get id of the bar by use getMenuBar().attr(id) [is the result inside expect]');
+});
+
+test("bar.title(text)", function () {
+	var expect=bar.getSettings().bar_title+'abcded123456789';
+	bar.clsTitle();
+	bar.title('abcded123456789');
+	var result=tester.getTitleArea().html();
+	equal(result,expect,'bar.title("abc") will set title '+bar.getSettings().bar_title+"abcded123456789");
+});
+
+test("bar.clsTitle()", function () {
+	var expect=bar.getSettings().bar_title;
+	bar.clsTitle();
+	bar.title('abcded123456789');
+	bar.clsTitle();
+	var result=tester.getTitleArea().html();
+	equal(result,expect,'bar.clsTitle("abc") will only have title of the bar');
+});
+
+test("bar.foot(text)", function () {
+	var expect='abc';
+	bar.cls();
+	bar.foot('abc');
+	var result=tester.getFootArea().html();
+	equal(result,expect,'bar.foot("abc") will set abc');
+});
+
+
+test("bar.clsFoot()", function () {
+	var expect='abc';
+	bar.cls();
+	bar.clsFoot();
+	bar.foot('abc');
+	var result=tester.getFootArea().html();
+	equal(result,expect,'bar.foot("abc") set foot is fine.expect:'+expect);
+	
+	expect='';
+	bar.clsFoot();
+	result=tester.getFootArea().html();
+	equal(result,expect,'bar.clsFoot() will clean the foot:expect'+expect);
+});
+
+
 test("bar.html", function () {
 	var expect='plain text';
 	bar.html('plain text');
@@ -85,37 +142,7 @@ test("bar.html", function () {
 	
 });
 
-test("bar.getMenuBar() in unsafe mode", function () {
-	bar.cls();
-	bar.msg('abc').addmsg('+++---+++--asfadsf3342');
-	var expect='abc+++---+++--asfadsf3342';
-	var result=bar.getMenuBar().find(STATUS_MESSAGE).html();
-	
-	
-	equal(result,expect,'bar.getMenuBar().find(STATUS_MESSAGE) contains whether same content with $(STATUS_MESSAGE)|message on the bar:'+expect);
-	
-	var expect1=STATUS_BAR;
-	var result1=bar.getMenuBar().attr('id');
-	ok(expect1.indexOf(result1)>-1,'get id of the bar by use getMenuBar().attr(id) [is the result inside expect]');
-});
-
-test("bar.foot(text)", function () {
-	var expect='abc';
-	bar.cls();
-	bar.foot('abc');
-	var result=tester.getFootArea().html();
-	equal(result,expect,'bar.foot("abc") will set abc');
-});
-
-test("bar.title(text)", function () {
-	var expect=bar.getSettings().bar_title+'abcded123456789';
-	bar.clsTitle();
-	bar.title('abcded123456789');
-	var result=tester.getTitleArea().html();
-	equal(result,expect,'bar.title("abc") will set title '+bar.getSettings().bar_title+"abcded123456789");
-});
-
- test("bar.append(text)", function () {
+test("bar.append(text)", function () {
 	var expect='abc + def + ghijk';
 	bar.cls();
 	bar.append('abc')
@@ -156,14 +183,7 @@ test("bar.cls()", function () {
 	equal(result,expect,'bar.cls() will clean text');
  });
  
-test("bar.clsTitle()", function () {
-	var expect=bar.getSettings().bar_title;
-	bar.clsTitle();
-	bar.title('abcded123456789');
-	bar.clsTitle();
-	var result=tester.getTitleArea().html();
-	equal(result,expect,'bar.clsTitle("abc") will only have title of the bar');
-});
+
 
 test("bar.addmsg(text,sytle)", function () {
 	var expect='<span style="color: yellow;">hello,world</span>';
