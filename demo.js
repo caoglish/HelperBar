@@ -22,10 +22,11 @@
 (function ($,window,HelperBar,undefined){
 	$.tag = HelperBar.tag;
 	
+	
 	HelperBar.fn.aboutMsg=function(){
 		var text=Array.slice(arguments);
 		var $text=$.tag('div');
-;		for (var i in text){
+		for (var i in text){
 			$text.append($.tag('div').text(text[i]));
 		}
 		this.addmsg($text,function($msg){
@@ -42,6 +43,69 @@
 					);
 		return this.title('[').title($title).title(']');
 	};
+	
+	var random_color=function (){
+		var rand_0_255=function (){
+					return Math.round(Math.random()*255+1);
+				};
+		var rand_color=[];
+		for(var i=0;i<3;i++) {
+			var element=rand_0_255().toString(16);
+			rand_color.push(element.length<2?'0'+element:element);
+		}
+		return '#'+rand_color.join("");
+	};
+	
+	HelperBar.fn.extend({
+		rainbowMsg:function(msg,color_filter){
+			var filter_random_color=function (){
+				var this_color=random_color();
+				console.log($.inArray(this_color,color_filter));
+				if($.inArray(this_color,color_filter)>0) this_color=filter_random_color();
+				console.log('this_color');
+				return this_color;
+			};
+			this.addmsg(msg,filter_random_color(),function($msg,msg,style){
+					$msg.hover(
+						function(){
+							$(this).css(style);
+						},function (){
+							$(this).css('color',filter_random_color());
+						}
+					); 
+				});
+			
+			return this;
+		},
+		flashRanbowMsg:function(msg){
+			var flash=function($msg,color1,color2){
+				$msg.css({'color':color1});
+				setTimeout(function (){
+						flash($msg,color2,random_color());
+					}, 386);
+			};
+			this.addmsg(msg,random_color(),function($msg,msg,style){
+				flash($msg,style.color,random_color());
+			});
+			return this;
+		},
+		realRainbowMsg:function(msg){
+			var color_filter=(function(){
+				var color_list=[];
+				for(var color_el=0;color_el<255;color_el++){
+					var color=[];
+					for(var i=0;i<3;i++){
+						color.push(color_el.toString(16));
+					}
+					color_list.push('#'+color.join(""));
+				}
+				return color_list;
+			})();
+			for (var i = 0, len = msg.length; i < len; i++) {
+				this.rainbowMsg(msg[i],color_filter);
+			}
+		}
+	});
 })(jQuery,window,HelperBar);
 
 
@@ -242,6 +306,19 @@
 		cls_foot_demo:function(){
 			this.clsFoot();
 		},
+		//example
+		extending_example1:function (){
+			this.rainbowMsg('ranbowMsg');
+			this.addmsg(' ');
+		},
+		extending_example2:function (){
+			this.flashRanbowMsg('flashRanbowMsg');
+			this.addmsg(' ');
+		},
+		extending_example3:function (){
+			this.realRainbowMsg('realRainbowMsg');
+			this.addmsg(' ');
+		},
 		
 		//options demo
 		opt_default_demo:function(){
@@ -264,8 +341,8 @@
 		about:function(){
 			this.clsTitle().cls().demoTitle('about');
 			this.aboutMsg('Helper Bar Framework[Version:'+HelperBar.version()+']',
-						 'Jquery[Version:'+$().jquery+']',
-						 'Designer: Caoglish');
+				'Jquery[Version:'+$().jquery+']',
+				'Designer: Caoglish');
 		}
 	};
 
@@ -294,13 +371,17 @@
 						.addItem('clear title =>bar.clsTitle(text)',menuEventHandler.cls_title_demo)
 						.addItem('clear foot =>bar.clsFoot(text)',menuEventHandler.cls_foot_demo)
 						.addItem('clear msg => bar.cls()',menuEventHandler.cls_msg_demo)
+					.addTree('Extending Example')
+						.addItem('example:rainbowMsg',menuEventHandler.extending_example1)
+						.addItem('example:flashMsg',menuEventHandler.extending_example2)
+						.addItem('example:realRainbowMsg',menuEventHandler.extending_example3)
 					.addTree()
 						.addItem('default(no custom options)',menuEventHandler.opt_default_demo)
 						.addItem('custom(black)',menuEventHandler.opt_customize_black_demo)
 						.addItem('custom(pink)',menuEventHandler.opt_customize_pink_demo)
 						.addItem('custom(blue)',menuEventHandler.opt_customize_blue_demo)
 						.addItem('custom options demo')
-					.addTree('about',menuEventHandler.about)
+					.addTree('about',menuEventHandler.about);
 	$(run);
 
 	function demo_interface(){
@@ -329,7 +410,7 @@
 	}
 
 	function run(){
-		if(!(optSetter.get()>=0)){
+		if((optSetter.get()>=0)!==true){
 			optSetter.init(1);
 		}
 		

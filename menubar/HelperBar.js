@@ -1109,9 +1109,18 @@
 //(no return) destory the Helperbar
 		exports.destroy = HelperBar.prototype.destroy=  destroy;
 		
-//### HelperBar.fn.plugin=function(){}
+//#How to extends HelperBar
+//HelperBar.fn.newMethod=function(){}
+//
+//
+//	HelperBar.fn.extend({
+//		newMethod1:function(){},
+//		newMethod2:function(){},
+//	})
+//
 //extend the helperbar.
 		exports.fn=_helperbar_fn;
+		exports.fn.extend = exports.extend = $.extend;
 		return exports;
     })();
 	
