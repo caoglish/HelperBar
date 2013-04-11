@@ -77,7 +77,7 @@
 			
 			return this;
 		},
-		flashRanbowMsg:function(msg){
+		flashRainbowMsg:function(msg){
 			var flash=function($msg,color1,color2){
 				$msg.css({'color':color1});
 				setTimeout(function (){
@@ -312,7 +312,7 @@
 			this.addmsg(' ');
 		},
 		extending_example2:function (){
-			this.flashRanbowMsg('flashRanbowMsg');
+			this.flashRainbowMsg('flashRanbowMsg');
 			this.addmsg(' ');
 		},
 		extending_example3:function (){
@@ -373,7 +373,7 @@
 						.addItem('clear msg => bar.cls()',menuEventHandler.cls_msg_demo)
 					.addTree('Extending Example')
 						.addItem('example:rainbowMsg',menuEventHandler.extending_example1)
-						.addItem('example:flashMsg',menuEventHandler.extending_example2)
+						.addItem('example:flashRainbowMsg',menuEventHandler.extending_example2)
 						.addItem('example:realRainbowMsg',menuEventHandler.extending_example3)
 					.addTree()
 						.addItem('default(no custom options)',menuEventHandler.opt_default_demo)
@@ -383,38 +383,33 @@
 						.addItem('custom options demo')
 					.addTree('about',menuEventHandler.about);
 	$(run);
-
-	function demo_interface(){
-		var $helperbar_demo=$.tag('div',{id:'helperbar-demo'}).appendTo('body').html($.tag('h1').text('Helper Bar API Demo Button(no included in framework)').css('color','yellow')).css({opacity: '0.5',width:'100%',position:'fixed',top:0,background:'black'});
-		
-		var addbutton=function(text,func){
-			$.tag('button').prependTo($helperbar_demo).text(text).click(func);
-		
-		};
-		
-		addbutton('hide()',function(){
-			bar.hide();
-		});
-		
-		addbutton('show()',function(){
-			bar.show();
-		});
-		
-		addbutton('hide("slow")',function(){
-			bar.hide(100);
-		});
-		
-		addbutton('show("slow")',function(){
-			bar.show(100);
-		});
-	}
-
+	
 	function run(){
 		if((optSetter.get()>=0)!==true){
 			optSetter.init(1);
 		}
-		
 		bar = HelperBar.buildBar(optionsList[optSetter.get()]);//singleton start
-		demo_interface();
+		window.bar=bar;
 	}
 })( jQuery );
+
+
+//make demo interface.
+(function ($,window,undefined){
+	function demo_interface(){
+		var bar=window.bar;
+		var $helperbar_demo=$.tag('div',{id:'helperbar-demo'}).appendTo('body').html($.tag('h1').text('Helper Bar API Demo Button(no included in framework)').css('color','yellow')).css({opacity: '0.5',width:'100%',position:'fixed',top:0,background:'black'});
+		
+		var addbutton=function(text,func){
+			$.tag('button').prependTo($helperbar_demo).text(text).click(func);
+		};
+		
+		addbutton('hide()',function(){			bar.hide();		});
+		addbutton('show()',function(){			bar.show();		});
+		addbutton('hide("slow")',function(){			bar.hide(100);		});
+		addbutton('show("slow")',function(){			bar.show(100);		});
+	}
+	
+	$(demo_interface);
+	
+})(jQuery,window);
