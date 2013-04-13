@@ -24,7 +24,7 @@
 	
 	
 	HelperBar.fn.aboutMsg=function(){
-		var text=Array.slice(arguments);
+		var text=Array.prototype.slice.call(arguments);
 		var $text=$.tag('div');
 		for (var i in text){
 			$text.append($.tag('div').text(text[i]));
