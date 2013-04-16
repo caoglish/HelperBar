@@ -121,7 +121,7 @@
 				text: title
 			}).click(function (event) {
 				event.preventDefault();
-				if (callback) {
+				if ($.isFunction(callback)) {
 					callback.apply(bar_context);
 				}
 			});
@@ -153,7 +153,7 @@
 				text: title
 			}).click(function (event) {
 				event.preventDefault();
-				if (callback) {
+				if ($.isFunction(callback)) {
 					callback.apply(bar_context);
 				}
 			});
@@ -316,8 +316,6 @@
 			$menubar.menubar('title', settings.bar_title);
 			$menubar.menubar('foot', settings.bar_foot);
 			this.select_hide_mode($menubar); //select hide mode
-			
-			
 		},
 		//manage the css for the menu bar. use for $().css()
 		inital_cssManager:function (){
