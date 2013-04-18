@@ -319,6 +319,7 @@
 		},
 		//manage the css for the menu bar. use for $().css()
 		inital_cssManager:function (){
+			var root_menu_height='30px';
 			cssManager={
 				font_style:{'font-family':settings.font_family,
 							'font-size':'100%'
@@ -351,7 +352,7 @@
 					'padding': '0',
 					'position': 'fixed',
 					'box-shadow':settings.menu_shadow,
-					'bottom': '30px'
+					'bottom': root_menu_height
 				},
 				tag_a_css :{
 						'font-size':'medium',
@@ -367,6 +368,7 @@
 								'display': 'inline'
 							});//css:#status-menu ul li ul li
 			cssManager.root_menu_style=$.extend({},cssManager.menu_basic_style,{	
+								'height':root_menu_height,
 								'float': 'left',
 								'border-left':'1px solid '+settings.menu_separator_color
 							});//css:#status-menu ul li
