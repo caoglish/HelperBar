@@ -667,13 +667,12 @@
             return _menubar.menubar('html');
         }
     };
-// ### #API#bar.addmsg(msg,style,event,func):		
+// ### #API#bar.addmsg(msg,style,func):		
 // (return bar) add a message wrapped with span tag.
 // #####msg could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
 // #####if style is object , set a css style to message. this is according $.fn.css(object)
 // #####if style is function, register a click event on the msg.
-// #####if sytle is empty , is empty {} style.
 // #####func($msg,msg,style) is the eventHanlder on msg. $msg is jQuery object wrapped message. msg is the msg it self which is the parameter of the addmsg. style is the object of style applied on the $msg.
     HelperBar.prototype.addmsg = function (msg, style,func) {
 		if(arguments.length>1){
@@ -708,11 +707,13 @@
 			$.error('addmsg() must has msg');
 		}
     };
-// ### #API#bar.msg(msg,style):		
+// ### #API#bar.msg(msg,style,func):		
 // (return bar) show a message wrapped with span tag. previous message will be removed.
 // #####message could be a text, html or jQuery object.
 // #####if style is string, set a 'css:color' to message
 // #####if style is object of jquery css, set a css style to message.
+// #####if style is function, register a click event on the msg.
+// #####func($msg,msg,style) is the eventHanlder on msg. $msg is jQuery object wrapped message. msg is the msg it self which is the parameter of the addmsg. style is the object of style applied on the $msg.
 // if parameter give html/text code, return bar. if no parameter text, return a text of message on the bar
     HelperBar.prototype.msg = function (msg, style,func) {
         if (arguments.length !== 0) {
@@ -1114,7 +1115,7 @@
 //	HelperBar.fn.extend({
 //		newMethod1:function(){},
 //		newMethod2:function(){},
-//	})
+//	})</code>
 //
 //extend the helperbar.
 		exports.fn=_helperbar_fn;
