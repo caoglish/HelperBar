@@ -1117,7 +1117,7 @@
 //	HelperBar.fn.extend({
 //		newMethod1:function(){},
 //		newMethod2:function(){},
-//	})</code>
+//	})
 //
 //extend the helperbar.
 		exports.fn=_helperbar_fn;
