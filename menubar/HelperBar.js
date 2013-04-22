@@ -14,18 +14,18 @@
 
 //##How to use
 //###1) create a set of menu. (see right)
-//addTree(title,func) to start a new column of the menubar
+//addTree(title,function(){//dosomething}) to start a new column of the menubar
 //
-//addItem(title,func) add a menu item, 1st param is name of menu item, 2ns param is the event/function when user click the the button
+//addItem(title,function(){//dosomething}) add a menu item, 1st param is name of menu item, 2ns param is the event/function when user click the the button
 /**
 *menu builder 
 *
-*HelperBar.menu.addTree('root1',func)
-*					.addItem('menu1-1',func)
-*					.addItem('menu1-2',func)
-*			.addTree('root2',func)
-*					.addItem('menu2-2',func)
-*					.addItem('menu2-2',func)
+*HelperBar.menu.addTree('root1',function(){//dosomething})
+*					.addItem('menu1-1',function(){//dosomething})
+*					.addItem('menu1-2',function(){//dosomething})
+*			.addTree('root2',function(){//dosomething})
+*					.addItem('menu2-2',function(){//dosomething})
+*					.addItem('menu2-2',function(){//dosomething})
 */
 
 //###2) build the menu and get the bar.
