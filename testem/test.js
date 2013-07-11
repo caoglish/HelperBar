@@ -344,6 +344,115 @@ test("bar.msg(text,sytle)", function () {
 	
 });
 
+test("bar.msg(text,func)", function () {
+	bar.cls();
+	var expect1,expect2,expect3,
+		result1,result2,result3;
+	
+	//case
+	expect1='<span>abc432</span>';
+	expect2='<span style="color: yellow;">h,w11</span>';
+	bar.msg('abc432',function($msg){
+		$msg.on('click',function(){
+			bar.msg('h,w11','yellow');
+		});
+	});
+	
+	//before click this message.
+	result=tester.getMsgArea().html();
+	equal(result,expect1,'.expect:'+expect1);
+	//after click this message.
+	tester.getMsgArea().find('span').trigger('click');
+	result=tester.getMsgArea().html();
+	equal(result,expect2,'.expect:'+expect2);
+	
+	//case
+	bar.cls();
+	expect1='abc';
+	expect2='abc';
+	expect3={};
+	bar.msg('abc',function($msg,msg,style){
+		result1=$msg.text()==expect1&&$msg instanceof $;
+		result2=msg;
+		result3=style;
+	});
+	
+	ok(result1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2,"msg is the msg applied.");
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.which is empty {}");
+	
+	//case
+	bar.cls();
+	var _obj=$.tag('div').text('hello,world')
+	expect1=$.tag('span').append(_obj.clone()).html();
+	expect2=_obj;
+	expect3={};
+	bar.msg(_obj,function($msg,msg,style){
+		result1=$msg.html();
+		result2=msg;
+		result3=style;
+	});
+	
+	equal(result1,expect1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference");//the msg is the jQuery object itself(referenced)
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.which is empty {}");
+});
+
+test("bar.msg(text,style,func)", function () {
+	bar.cls();
+	var expect1,expect2,expect3,
+		result1,result2,result3;
+	
+	//case
+	expect1='<span style="font-size: 50px;">abc1</span>';
+	expect2='<span style="font-size: 50px;">h,w2</span>';
+	bar.msg('abc1',{"font-size":'50px'},function($msg,msg,style){
+		$msg.on('click',function(){
+			bar.msg('h,w2',style);
+		});
+	});
+	
+	//before click this message.
+	result=tester.getMsgArea().html();
+	equal(result,expect1,'.expect:'+expect1);
+	//after click this message.
+	tester.getMsgArea().find('span').trigger('click');
+	result=tester.getMsgArea().html();
+	equal(result,expect2,'.expect:'+expect2);
+	
+	//case
+	bar.cls();
+	expect1='abcdefg2';
+	expect2='abcdefg2';
+	expect3={"font-size":'72px'};
+	bar.msg('abcdefg2',{"font-size":'72px'},function($msg,msg,style){
+		result1=$msg.text()==expect1&&$msg instanceof $;
+		result2=msg;
+		result3=style;
+	});
+	tester.getMsgArea().find('span').trigger('click');
+	ok(result1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2,"msg is the msg applied.");
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
+	
+	//case
+	bar.cls();
+	var _obj=$.tag('div').text('hello,world')
+	expect1=$.tag('span').append(_obj.clone()).html();
+	expect2=_obj;
+	expect3={"color":"#abcdef"};
+	bar.msg(_obj,'#abcdef',function($msg,msg,style){
+		result1=$msg.html();
+		result2=msg;
+		result3=style;
+	});
+	tester.getMsgArea().find('span').trigger('click');
+	equal(result1,expect1,"$msg is message wrapped as jQuery object");
+	equal(result2,expect2," msg is the msg applied.jQuery object and passing by reference,expect:"+expect2.html());//the msg is the jQuery object itself(referenced)
+	deepEqual(result3,expect3,"sytle is the style object applied on the message.expect:"+JSON.stringify(expect3));
+});
+
+
 test("bar.log(text)", function () {
 	bar.cls();
 	var expect='<div>hello,world</div>';
@@ -402,4 +511,30 @@ test("bar.delCache()", function () {
 	equal(bar.cache('delCache'),'this will be delete','check the key "delCache" is existed');
 	bar.delCache('delCache');
 	equal(bar.cache('delCache'),undefined,'check the  key "delCache"  have been deleted');
+});
+
+test("bar.warn()", function () {
+	var expect;
+	var result;
+	bar.cls();
+	bar.warn('test1');
+	
+	//default setting warn.
+	expect='<span style="color: red; font-size: 50px;">test1</span>';
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.warn("test1"):'+expect);
+	
+	bar.cls();
+	bar.warn($.tag('div',{style:'font-size:20px'}).text('test2'));
+	expect='<span style="color: red; font-size: 50px;"><div style="font-size:20px">test2</div></span>';
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.warn($object):'+expect);
+	
+	
+	bar.cls();
+	bar.warn('test3').warn('test4');
+	expect='<span style="color: red; font-size: 50px;">test3</span><span style="color: red; font-size: 50px;">test4</span>';
+	result=tester.getMsgArea().html();
+	equal(result,expect,'bar.warn("test1").warn("test4"):'+expect);
+	bar.cls();
 });

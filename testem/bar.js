@@ -9,7 +9,9 @@ var menu =HelperBar.menu.addTree('abc')
 				.addItem('z');
 	
 
-var bar = HelperBar.buildBar({safe_mode:'unsafe'});	
+var bar = HelperBar.buildBar({
+	safe_mode:'unsafe',
+});	
 
 
 	
