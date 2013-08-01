@@ -208,7 +208,7 @@ test("bar.addmsg(text,sytle)", function () {
 test("bar.addmsg(text,func)", function () {
 	bar.cls();
 	var expect1,expect2,expect3,
-		result1,result2,result3;
+		result1,result2,result3,result;
 	
 	//case
 	expect1='<span>abc</span>';
@@ -263,7 +263,7 @@ test("bar.addmsg(text,func)", function () {
 test("bar.addmsg(text,style,func)", function () {
 	bar.cls();
 	var expect1,expect2,expect3,
-		result1,result2,result3;
+		result1,result2,result3,result;
 	
 	//case
 	expect1='<span style="font-size: 50px;">abc</span>';
@@ -347,7 +347,7 @@ test("bar.msg(text,sytle)", function () {
 test("bar.msg(text,func)", function () {
 	bar.cls();
 	var expect1,expect2,expect3,
-		result1,result2,result3;
+		result1,result2,result3,result;
 	
 	//case
 	expect1='<span>abc432</span>';
@@ -401,7 +401,7 @@ test("bar.msg(text,func)", function () {
 test("bar.msg(text,style,func)", function () {
 	bar.cls();
 	var expect1,expect2,expect3,
-		result1,result2,result3;
+		result1,result2,result3,result;
 	
 	//case
 	expect1='<span style="font-size: 50px;">abc1</span>';
