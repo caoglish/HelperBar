@@ -8,6 +8,11 @@ GreaseMonkey/TamperMonkey Plugin Development Framework. Its purpose is to quick 
 Dependency:
 jQuery 1.7+
 
+
+##document
+[API and Source Code Document](http://www.caoglish.com/Helperbar/?helperbar.js)
+
+##Demo:
 ###Simplest start:
 1. [Empty Default bar](http://jsfiddle.net/caoglish/ZRM3y/)
 1. [Hello world](http://jsfiddle.net/caoglish/ZRM3y/1/)
