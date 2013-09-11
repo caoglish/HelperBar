@@ -16,8 +16,8 @@ jQuery 1.7+
 1. [Full Demo](http://jsfiddle.net/caoglish/8aqdn/)
 
 
-###Minified js location
-##HelperBar 0.5.0
+##Minified js location
+###HelperBar 0.5.0
 [http://caoglish.github.io/HelperBar-Framework/lib/0.5.0/HelperBar.min.js](http://caoglish.github.io/HelperBar-Framework/lib/0.5.0/HelperBar.min.js)
 
 
