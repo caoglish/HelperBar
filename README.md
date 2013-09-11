@@ -16,19 +16,16 @@ jQuery 1.7+
 1. [Full Demo](http://jsfiddle.net/caoglish/8aqdn/)
 
 
+###Minified js location
+##HelperBar 0.5.0
+[http://caoglish.github.io/HelperBar-Framework/lib/0.5.0/HelperBar.min.js](http://caoglish.github.io/HelperBar-Framework/lib/0.5.0/HelperBar.min.js)
+
+
+###License
+Licensed under [MIT](http://opensource.org/licenses/mit-license.php)
 
 
 
 
 
 
-About this project
-
-This is personal project. During the development, it helps me to learn:
-
-1.  how to develop with jQuery
-2.  how to develop a jQuery plugin
-3.  how to program an OO JavaScript 
-4.  how to write unit test code
-5.  how to use git and github
-6.  how to use program tools to improve JavaScript module.
