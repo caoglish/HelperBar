@@ -15,7 +15,7 @@ jQuery 1.7+
 ##Demo:
 ###Simplest start:
 1. [Empty Default bar](http://jsfiddle.net/caoglish/ZRM3y/3/)
-1. [Hello world](http://jsfiddle.net/caoglish/ZRM3y/2/)
+1. [Hello world](http://jsfiddle.net/caoglish/ZRM3y/4/)
 
 ###Complex Example
 1. [Full Demo](http://jsfiddle.net/caoglish/8aqdn/1/)
