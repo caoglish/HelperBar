@@ -23,7 +23,7 @@ jQuery 1.7+
 
 ##Minified js location
 ###HelperBar 0.5.0
-[http://caoglish.github.io/HelperBar-Framework/lib/0.5.0/HelperBar.min.js](http://caoglish.github.io/HelperBar-Framework/lib/0.5.0/HelperBar.min.js)
+[http://caoglish.github.io/HelperBar/lib/0.5.0/HelperBar.min.js](http://caoglish.github.io/HelperBar/lib/0.5.0/HelperBar.min.js)
 
 
 ###License
