@@ -71,9 +71,6 @@
     	},
     	getSettings: function() {
     		return _settings;
-    	},
-    	getInternalUsingUtilts: function() {
-    		return $.extend({}, _);
     	}
     };
      // Method calling logic

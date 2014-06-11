@@ -103,7 +103,4 @@
  	} else {
  		$.error('Wrong Type of Hide Mode');
  	}
-
-
-
  }
