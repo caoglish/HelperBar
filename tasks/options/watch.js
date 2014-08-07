@@ -6,11 +6,22 @@ module.exports = {
     files: ['src/*.js'],
     //tasks: ['jshint', 'concat', 'uglify'],
     // tasks: [ 'jshint','browserify'],
-    tasks: [ 'browserify' , 'uglify'],
+    tasks: [ 'browserify:dist' , 'uglify'],
     options: {
       spawn: false,
     }
   },
+
+  srcModuleUnitTest: {
+    files: ['SrcModuleUnitTest/src/**/*.js'],
+    tasks: [ 'browserify:moduleUnitTest' ],
+    options: {
+      spawn: false,
+    }
+  },
+
+
+
   css: {
     files: ['src/*.less'],
     //tasks: ['less', 'autoprefixer', 'cssmin'],
