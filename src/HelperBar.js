@@ -1,8 +1,7 @@
-"use strict";
 var _ = require("./helper");
 var menuBuilder = require("./menuBuilder");
 
-var VERSION='0.5.1';
+var VERSION = '0.5.1';
 
 
 var _menubar, _settings, _helperbar_fn = {};
@@ -41,7 +40,9 @@ var registerMethodToPrototype = function(force) {
 		} else {
 			//if not force, only extend the functions which are not existedon HelperBar.
 			for (var fn in _helperbar_fn) {
-				if (!(fn in HelperBar.prototype)) HelperBar.prototype[fn] = _helperbar_fn[fn];
+				if (!(fn in HelperBar.prototype)) {
+					HelperBar.prototype[fn] = _helperbar_fn[fn];
+				}
 			}
 		}
 	} else {
@@ -53,7 +54,9 @@ function HelperBar(menu_tree_list, options) {
 	_menubar = _.tag('div').helperbar(menu_tree_list, options, this);
 	_settings = _menubar.helperbar('getSettings');
 	set_action_on_bar(this);
-	if (_settings.safe_mode !== "unsafe") delUnsafeMethod();
+	if (_settings.safe_mode !== "unsafe") {
+		delUnsafeMethod();
+	}
 	registerMethodToPrototype(_settings.safe_mode === "unsafe"); //unsafe mode can overwrite orignial method.
 	//Check body is existed or not, if existed, append into body, if not existed, waiting for page fully loaded then append into body.		
 	if ($('body').size() > 0) {
@@ -208,9 +211,11 @@ HelperBar.prototype.warn = function(msg) {
 HelperBar.prototype.clickClsMsg = function(msg, style, func) {
 	this.msg(msg, style, function($msg, msg, style) {
 		$msg.on('click', function() {
-			$(this).remove()
+			$(this).remove();
 		});
-		if ($.isFunction(func)) func.apply(this, [$msg, msg, style]);
+		if ($.isFunction(func)) {
+			func.apply(this, [$msg, msg, style]);
+		}
 	});
 };
 // ### #API#bar.cls():		
@@ -295,9 +300,13 @@ HelperBar.prototype.hide = function(speed) {
 HelperBar.prototype.data = function(key, value) {
 	if (arguments.length > 1) {
 		localStorage.setItem(key, JSON.stringify(value));
-		if (this instanceof HelperBar) return this;
+		if (this instanceof HelperBar) {
+			return this;
+		}
 	} else if (arguments.length > 0) {
-		if (typeof key !== 'string') $.error('data() key must be string');
+		if (typeof key !== 'string') {
+			$.error('data() key must be string');
+		}
 		try {
 			return JSON.parse(localStorage.getItem(key));
 		} catch (e) {
@@ -314,7 +323,9 @@ HelperBar.prototype.data = function(key, value) {
 HelperBar.prototype.delData = function(key) {
 	if (typeof key === 'string') {
 		localStorage.removeItem(key);
-		if (this instanceof HelperBar) return this;
+		if (this instanceof HelperBar) {
+			return this;
+		}
 	} else {
 		$.error('delData() has not key or key is not string');
 	}
@@ -330,7 +341,9 @@ HelperBar.prototype.cache = function(key, value) {
 		_menubar.data(key, value);
 		return this;
 	} else if (arguments.length > 0) {
-		if (typeof key !== 'string') $.error('cache() key must be string');
+		if (typeof key !== 'string') {
+			$.error('cache() key must be string');
+		}
 		return _menubar.data(key);
 	} else {
 		$.error('cache() must has a key');
@@ -475,4 +488,3 @@ module.exports = (function() {
 	exports.fn.extend = exports.extend = $.extend;
 	return exports;
 })();
-

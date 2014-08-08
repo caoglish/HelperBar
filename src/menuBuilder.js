@@ -11,9 +11,9 @@ module.exports = {
 		var root;
 		if (typeof menu_array.root === 'object') {
 			return menu_array;
-		} else if (menu_array.root == 'first') {
+		} else if (menu_array.root === 'first') {
 			root = menu_array.list.shift();
-		} else if (menu_array.root == 'last' ||
+		} else if (menu_array.root === 'last' ||
 			!menu_array.root) {
 			root = menu_array.list.pop();
 		} else {
@@ -23,8 +23,11 @@ module.exports = {
 	},
 	//set a menuList for menu builder. 
 	set: function(menuList) {
-		if (!this.hasMenu()) this.menu_tree_list = $.merge([], menuList);
-		else $.error('Menu have been created');
+		if (!this.hasMenu()) {
+			this.menu_tree_list = $.merge([], menuList);
+		} else {
+			$.error('Menu have been created');
+		}
 	},
 	//reset(empty) menu tree of menu builder.
 	reset: function() {
@@ -64,7 +67,9 @@ module.exports = {
 				"click": $.isFunction(click) ? click : _.empty_func,
 				"id": id
 			};
-			if (!this.hasMenu()) $.error("no Menu Tree.");
+			if (!this.hasMenu()) {
+				$.error("no Menu Tree.");
+			}
 			var list = this.menu_tree_list[this.menu_tree_list.length - 1].list;
 			list.push(item);
 		} else {
@@ -85,8 +90,11 @@ module.exports = {
 		if (typeof menu_tree_list === 'object') {
 			menu_tree = $.extend(true, [], menu_tree_list);
 		} else if (menu_tree_list === true) {
-			if (this.hasMenu) menu_tree = $.extend(true, [], this.menu_tree_list);
-			else $.error('menu is empty');
+			if (this.hasMenu) {
+				menu_tree = $.extend(true, [], this.menu_tree_list);
+			} else {
+				$.error('menu is empty');
+			}
 		} else {
 			$.error('build() no such argv.');
 		}

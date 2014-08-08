@@ -1,4 +1,3 @@
-"use strict";
 var helper = {
 	//_.cropFirstSymbol(string) crop the first string if first string is # or .
 	//sync the element name which are in both html and javascript

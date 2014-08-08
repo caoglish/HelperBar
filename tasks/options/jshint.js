@@ -7,7 +7,8 @@ module.exports = {
 		globals: {
 			$: true,
 			module: true,
-			jQuery: true
+			jQuery: true,
+			require:true
 		},
 	},
 	beforeconcat: ['src/*.js']

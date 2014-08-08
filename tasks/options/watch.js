@@ -6,7 +6,7 @@ module.exports = {
     files: ['src/*.js'],
     //tasks: ['jshint', 'concat', 'uglify'],
     // tasks: [ 'jshint','browserify'],
-    tasks: [ 'browserify:dist' , 'uglify'],
+    tasks: [ 'jshint','browserify:dist' , 'uglify'],
     options: {
       spawn: false,
     }
@@ -22,14 +22,14 @@ module.exports = {
 
 
 
-  css: {
-    files: ['src/*.less'],
-    //tasks: ['less', 'autoprefixer', 'cssmin'],
-    tasks: ['less'],
-    options: {
-      spawn: false,
-    }
-  },
+  // css: {
+  //   files: ['src/*.less'],
+  //   //tasks: ['less', 'autoprefixer', 'cssmin'],
+  //   tasks: ['less'],
+  //   options: {
+  //     spawn: false,
+  //   }
+  // },
   // images: {
   //   files: ['images/**/*.{png,jpg,gif}', 'images/*.{png,jpg,gif}'],
   //   tasks: ['imagemin'],

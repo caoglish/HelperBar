@@ -1,71 +1,71 @@
 var _ = require("./helper");
 
-module.exports={
+module.exports = {
 
- bar_title: 'Helper Bar',
+	bar_title: 'Helper Bar',
 
- bar_foot: '',
+	bar_foot: '',
 
- foot_mode: 'hide',
+	foot_mode: 'hide',
 
- foot_size: '6px',
+	foot_size: '6px',
 
- safe_mode: 'safe',
+	safe_mode: 'safe',
 
- hide_mode: 'notOnMenu',
+	hide_mode: 'notOnMenu',
 
- hide_effect: 'none',
+	hide_effect: 'none',
 
- warn_size: '50px',
- warn_color: 'red',
- warn_mode: 'append',
+	warn_size: '50px',
+	warn_color: 'red',
+	warn_mode: 'append',
 
- warn_callback: _.empty_func,
-
-
- border_radius: '56px',
-
- bar_bg_color: 'black',
-
- bar_opacity: '0.8',
-
- bar_font_color: 'white',
-
- menu_width: 'auto',
-
- menu_show_effect: 'none',
+	warn_callback: _.empty_func,
 
 
+	border_radius: '56px',
 
- menu_separator_color: 'black',
+	bar_bg_color: 'black',
+
+	bar_opacity: '0.8',
+
+	bar_font_color: 'white',
+
+	menu_width: 'auto',
+
+	menu_show_effect: 'none',
 
 
 
- menu_bg_color: '#111111',
+	menu_separator_color: 'black',
 
 
 
- menu_hover_bg_color: '#333333',
+	menu_bg_color: '#111111',
 
 
 
- font_family: 'Arial,Helvetica,Sans-Serif',
+	menu_hover_bg_color: '#333333',
 
 
 
- menu_font_color: '#EAFFED',
+	font_family: 'Arial,Helvetica,Sans-Serif',
 
 
 
- menu_shadow: '0px 0px 6px 2px black',
+	menu_font_color: '#EAFFED',
 
 
 
- bar_shadow: '6px 0px 6px 2px black',
+	menu_shadow: '0px 0px 6px 2px black',
 
 
- msg_click: _.empty_func,
+
+	bar_shadow: '6px 0px 6px 2px black',
 
 
- bar_click: _.empty_func
+	msg_click: _.empty_func,
+
+
+	bar_click: _.empty_func
 };
